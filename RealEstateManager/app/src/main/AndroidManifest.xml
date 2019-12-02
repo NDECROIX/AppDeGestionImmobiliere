@@ -13,12 +13,13 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.openclassrooms.realestatemanager.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.openclassrooms.realestatemanager.SecondActivity"></activity>
+        <activity android:name="com.openclassrooms.realestatemanager.SecondActivity"/>
     </application>
 
 </manifest>
