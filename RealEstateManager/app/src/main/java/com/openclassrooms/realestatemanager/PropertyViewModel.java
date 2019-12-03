@@ -45,8 +45,8 @@ public class PropertyViewModel extends ViewModel {
      *
      * @return List of all property
      */
-    public LiveData<List<Property>> getPropertys() {
-        return propertyDataRepository.getPropertys();
+    public LiveData<List<Property>> getProperties() {
+        return propertyDataRepository.getProperties();
     }
 
     /**

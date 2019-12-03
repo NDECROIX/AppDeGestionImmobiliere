@@ -19,7 +19,7 @@ public class PropertyDataRepository {
      * Get all property from the application database
      * @return List of all property
      */
-    public LiveData<List<Property>> getPropertys() {
+    public LiveData<List<Property>> getProperties() {
         return this.propertyDao.getAll();
     }
 
