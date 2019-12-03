@@ -1,0 +1,33 @@
+package com.openclassrooms.realestatemanager.database;
+
+import android.content.Context;
+
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
+
+@Database(entities = {Property.class}, version = 1, exportSchema = false)
+public abstract class AppDatabase extends RoomDatabase {
+
+    //--- SINGLETON ---
+    private static volatile AppDatabase INSTANCE;
+
+    //--- DAO ---
+    public abstract PropertyDao propertyDAO();
+
+    //--- INSTANCE ---
+    public static AppDatabase getInstance(Context context) {
+        if (INSTANCE == null) {
+            synchronized (AppDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            AppDatabase.class, "DatabaseREM.db").build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+}

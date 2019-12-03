@@ -1,73 +1,91 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.model;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Property {
 
     /**
      * The unique identifier of property
      */
+    @PrimaryKey(autoGenerate = true)
     private long id;
 
     /**
      * Type of property.
      */
+    @ColumnInfo(name = "type")
     private String type;
 
     /**
      * Real estate price.
      */
+    @ColumnInfo(name = "price")
     private Double price;
 
     /**
      * Surface in square meters m2.
      */
+    @ColumnInfo(name = "surface")
     private Double surface;
 
     /**
      * The number of rooms.
      */
+    @ColumnInfo(name = "rooms")
     private int rooms;
 
     /**
      * Description of the property.
      */
+    @ColumnInfo(name = "description")
     private String description;
 
     /**
      * Uri photos of the property.
      */
+    @ColumnInfo(name = "photos_uri")
     private List<String> photosUri;
 
     /**
      * Address of the property.
      */
+    @ColumnInfo(name = "address")
     private String address;
 
     /**
      * Points of interest.
      */
+    @ColumnInfo(name = "poi")
     private List<String> POI;
 
     /**
      * Status of the property. True if the property has been sold.
      */
+    @ColumnInfo(name = "status")
     private boolean status;
 
     /**
      * The date on which the property entered the market.
      */
+    @ColumnInfo(name = "entry_date")
     private Date entryDate;
 
     /**
      * Date on which the property was sold.
      */
+    @ColumnInfo(name = "sale_date")
     private Date saleDate;
 
     /**
      * The real estate agent in charge of this property.
      */
+    @ColumnInfo(name = "agent")
     private String agent;
 
     public Property(String type, Double price, Double surface, int rooms, String description, List<String> photosUri, String address, List<String> POI, Date entryDate, String agent) {
