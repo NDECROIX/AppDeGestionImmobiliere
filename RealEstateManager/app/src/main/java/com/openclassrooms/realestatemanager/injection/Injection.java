@@ -2,7 +2,7 @@ package com.openclassrooms.realestatemanager.injection;
 
 import android.content.Context;
 
-import com.openclassrooms.realestatemanager.PropertyDataRepository;
+import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 

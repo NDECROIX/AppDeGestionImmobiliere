@@ -1,9 +1,10 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 
 import java.util.List;
 import java.util.concurrent.Executor;

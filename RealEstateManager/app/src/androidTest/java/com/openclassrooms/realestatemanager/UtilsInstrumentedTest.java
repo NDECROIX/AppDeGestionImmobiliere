@@ -5,6 +5,9 @@ import android.content.Context;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
+import com.openclassrooms.realestatemanager.controllers.MainActivity;
+import com.openclassrooms.realestatemanager.utils.Utils;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
