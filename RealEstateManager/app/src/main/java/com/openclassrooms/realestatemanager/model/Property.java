@@ -14,6 +14,7 @@ public class Property {
      * The unique identifier of property
      */
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private long id;
 
     /**
