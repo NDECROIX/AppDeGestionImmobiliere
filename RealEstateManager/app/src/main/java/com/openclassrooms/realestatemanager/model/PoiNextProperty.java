@@ -2,6 +2,8 @@ package com.openclassrooms.realestatemanager.model;
 
 import android.content.ContentValues;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -24,10 +26,11 @@ public class PoiNextProperty {
     /**
      * Name of the point of interest next to the property
      */
+    @NonNull
     @ColumnInfo(name = "poi_name")
     private String poiName;
 
-    public PoiNextProperty(long propertyID, String poiName) {
+    public PoiNextProperty(long propertyID,@NonNull String poiName) {
         this.propertyID = propertyID;
         this.poiName = poiName;
     }

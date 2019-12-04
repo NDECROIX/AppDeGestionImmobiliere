@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.model;
 
 import android.content.ContentValues;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -11,6 +12,7 @@ import androidx.room.PrimaryKey;
 public class Poi {
 
     @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "name")
     private String name;
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface PropertyDAO {
 
-    @Query("SELECT * FROM property")
+    @Query("SELECT * FROM Property")
     LiveData<List<Property>> getAll();
 
     @Query("SELECT * FROM property")
