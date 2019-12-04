@@ -2,16 +2,16 @@ package com.openclassrooms.realestatemanager.repositories;
 
 import androidx.lifecycle.LiveData;
 
-import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
+import com.openclassrooms.realestatemanager.database.dao.PropertyDAO;
 import com.openclassrooms.realestatemanager.model.Property;
 
 import java.util.List;
 
 public class PropertyDataRepository {
 
-    private final PropertyDao propertyDao;
+    private final PropertyDAO propertyDao;
 
-    public PropertyDataRepository(PropertyDao propertyDao){
+    public PropertyDataRepository(PropertyDAO propertyDao){
         this.propertyDao = propertyDao;
     }
 

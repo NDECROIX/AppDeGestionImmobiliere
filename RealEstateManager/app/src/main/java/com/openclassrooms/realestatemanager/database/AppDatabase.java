@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
+import com.openclassrooms.realestatemanager.database.dao.PropertyDAO;
 
 @Database(entities = {Property.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
@@ -16,7 +16,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     //--- DAO ---
-    public abstract PropertyDao propertyDAO();
+    public abstract PropertyDAO propertyDAO();
 
     //--- INSTANCE ---
     public static AppDatabase getInstance(Context context) {

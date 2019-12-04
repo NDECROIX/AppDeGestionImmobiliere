@@ -4,10 +4,8 @@ import android.content.ContentValues;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Property {
@@ -49,22 +47,10 @@ public class Property {
     private String description;
 
     /**
-     * Uri photos of the property.
-     */
-    @ColumnInfo(name = "photos_uri")
-    private List<String> photosUri;
-
-    /**
      * Address of the property.
      */
     @ColumnInfo(name = "address")
     private String address;
-
-    /**
-     * Points of interest.
-     */
-    @ColumnInfo(name = "poi")
-    private List<String> POI;
 
     /**
      * Status of the property. True if the property has been sold.
@@ -76,13 +62,13 @@ public class Property {
      * The date on which the property entered the market.
      */
     @ColumnInfo(name = "entry_date")
-    private Date entryDate;
+    private String entryDate;
 
     /**
      * Date on which the property was sold.
      */
     @ColumnInfo(name = "sale_date")
-    private Date saleDate;
+    private String saleDate;
 
     /**
      * The real estate agent in charge of this property.
@@ -90,23 +76,21 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, Double price, Double surface, int rooms, String description, List<String> photosUri, String address, List<String> POI, Date entryDate, String agent) {
+    public Property(String type, Double price, Double surface, int rooms, String description, String address, String entryDate, String agent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.rooms = rooms;
         this.description = description;
-        this.photosUri = photosUri;
         this.address = address;
-        this.POI = POI;
         this.status = false;
         this.entryDate = entryDate;
         this.saleDate = null;
         this.agent = agent;
     }
 
+    @Ignore
     public Property() {
-
     }
 
     // --- UTILS ---
@@ -116,12 +100,11 @@ public class Property {
         if (values.containsKey("price")) property.setPrice(values.getAsDouble("price"));
         if (values.containsKey("surface")) property.setSurface(values.getAsDouble("surface"));
         if (values.containsKey("rooms")) property.setRooms(values.getAsInteger("rooms"));
-        if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
-        if (values.containsKey("photosUri")) property.setPhotosUri((List<String>) values.get("photosUri"));
-        if (values.containsKey("POI")) property.setPOI((List<String>) values.get("POI"));
+        if (values.containsKey("description"))
+            property.setDescription(values.getAsString("description"));
         if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
-        if (values.containsKey("entryDate")) property.setEntryDate((Date) values.get("entryDate"));
-        if (values.containsKey("saleDate")) property.setSaleDate((Date) values.get("saleDate"));
+        if (values.containsKey("entryDate")) property.setEntryDate(values.getAsString("entryDate"));
+        if (values.containsKey("saleDate")) property.setSaleDate(values.getAsString("saleDate"));
         if (values.containsKey("agent")) property.setAgent(values.getAsString("agent"));
         return property;
     }
@@ -152,27 +135,19 @@ public class Property {
         return description;
     }
 
-    public List<String> getPhotosUri() {
-        return photosUri;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public List<String> getPOI() {
-        return POI;
     }
 
     public boolean isStatus() {
         return status;
     }
 
-    public Date getEntryDate() {
+    public String getEntryDate() {
         return entryDate;
     }
 
-    public Date getSaleDate() {
+    public String getSaleDate() {
         return saleDate;
     }
 
@@ -206,27 +181,19 @@ public class Property {
         this.description = description;
     }
 
-    public void setPhotosUri(List<String> photosUri) {
-        this.photosUri = photosUri;
-    }
-
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public void setPOI(List<String> POI) {
-        this.POI = POI;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public void setEntryDate(Date entryDate) {
+    public void setEntryDate(String entryDate) {
         this.entryDate = entryDate;
     }
 
-    public void setSaleDate(Date saleDate) {
+    public void setSaleDate(String saleDate) {
         this.saleDate = saleDate;
     }
 
