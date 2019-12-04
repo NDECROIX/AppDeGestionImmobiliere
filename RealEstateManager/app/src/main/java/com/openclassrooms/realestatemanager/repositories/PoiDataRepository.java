@@ -3,7 +3,7 @@ package com.openclassrooms.realestatemanager.repositories;
 import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.database.dao.PoiDAO;
-import com.openclassrooms.realestatemanager.model.POI;
+import com.openclassrooms.realestatemanager.model.Poi;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class PoiDataRepository {
      *
      * @return List of all POI
      */
-    public LiveData<List<POI>> getPOIs() {
+    public LiveData<List<Poi>> getPOIs() {
         return this.poiDAO.getAll();
     }
 
@@ -29,7 +29,7 @@ public class PoiDataRepository {
      *
      * @param poi New POI
      */
-    public void insertPoiNextProperty(POI poi) {
+    public void insertPoiNextProperty(Poi poi) {
         this.poiDAO.insertPOI(poi);
     }
 }

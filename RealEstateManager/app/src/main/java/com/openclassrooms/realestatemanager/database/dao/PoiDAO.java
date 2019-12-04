@@ -6,18 +6,18 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.openclassrooms.realestatemanager.model.POI;
+import com.openclassrooms.realestatemanager.model.Poi;
 
 import java.util.List;
 
 public interface PoiDAO {
 
-    @Query("SELECT * FROM poi")
-    LiveData<List<POI>> getAll();
+    @Query("SELECT * FROM Poi")
+    LiveData<List<Poi>> getAll();
 
-    @Query("SELECT * FROM poi")
+    @Query("SELECT * FROM Poi")
     Cursor getAllWithCursor();
 
     @Insert
-    void insertPOI(POI poi);
+    void insertPOI(Poi poi);
 }

@@ -13,7 +13,7 @@ import androidx.room.Index;
                 parentColumns = "id",
                 childColumns = "property_id"),
         indices = @Index(value = "property_id"))
-public class POINextProperty {
+public class PoiNextProperty {
 
     /**
      * Refers to a real estate property
@@ -27,19 +27,19 @@ public class POINextProperty {
     @ColumnInfo(name = "poi_name")
     private String poiName;
 
-    public POINextProperty(long propertyID, String poiName) {
+    public PoiNextProperty(long propertyID, String poiName) {
         this.propertyID = propertyID;
         this.poiName = poiName;
     }
 
     @Ignore
-    public POINextProperty() {
+    public PoiNextProperty() {
     }
 
     // --- UTILS ---
 
-    public static POINextProperty fromContentValues(ContentValues values) {
-        final POINextProperty poiNextProperty = new POINextProperty();
+    public static PoiNextProperty fromContentValues(ContentValues values) {
+        final PoiNextProperty poiNextProperty = new PoiNextProperty();
         if (values.containsKey("propertyID")) poiNextProperty.setPropertyID(values.getAsLong("propertyID"));
         if (values.containsKey("poiName")) poiNextProperty.setPoiName(values.getAsString("poiName"));
         return poiNextProperty;

@@ -9,14 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.database.AppDatabase;
-import com.openclassrooms.realestatemanager.model.POI;
-import com.openclassrooms.realestatemanager.model.POINextProperty;
+import com.openclassrooms.realestatemanager.model.Poi;
 
 public class PoiContentProvider extends ContentProvider {
 
     // FOR DATA
     public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider";
-    public static final String TABLE_NAME = POI.class.getSimpleName();
+    public static final String TABLE_NAME = Poi.class.getSimpleName();
     public static final Uri URI_POI = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 
     @Override

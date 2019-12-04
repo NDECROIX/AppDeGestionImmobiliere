@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.database.AppDatabase;
-import com.openclassrooms.realestatemanager.model.POI;
 import com.openclassrooms.realestatemanager.model.Photo;
 
 public class PhotoContentProvider extends ContentProvider {

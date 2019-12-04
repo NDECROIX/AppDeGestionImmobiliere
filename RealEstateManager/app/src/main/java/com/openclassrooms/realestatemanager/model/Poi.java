@@ -8,25 +8,25 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class POI {
+public class Poi {
 
     @PrimaryKey
     @ColumnInfo(name = "name")
     private String name;
 
-    public POI(String name) {
+    public Poi(String name) {
         this.name = name;
     }
 
     @Ignore
-    public POI(){
+    public Poi(){
 
     }
 
     // --- UTILS ---
 
-    public static POI fromContentValues(ContentValues values) {
-        final POI poi = new POI();
+    public static Poi fromContentValues(ContentValues values) {
+        final Poi poi = new Poi();
         if (values.containsKey("name")) poi.setName(values.getAsString("name"));
         return poi;
     }
