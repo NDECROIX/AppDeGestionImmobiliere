@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.database.dao;
 
+import android.database.Cursor;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -14,6 +16,9 @@ public interface PhotoDAO {
 
     @Query("SELECT * FROM photo WHERE property_id LIKE :propertyID")
     LiveData<List<Photo>> getPropertyPhotos(long propertyID);
+
+    @Query("SELECT * FROM photo")
+    Cursor getAllWithCursor();
 
     @Insert
     void insertPhotos(Photo photo);

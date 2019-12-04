@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.openclassrooms.realestatemanager.database.AppDatabase;
-import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.POI;
+import com.openclassrooms.realestatemanager.model.Photo;
 
-public class PropertyContentProvider extends ContentProvider {
+public class PhotoContentProvider extends ContentProvider {
 
     // FOR DATA
     public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider";
-    public static final String TABLE_NAME = Property.class.getSimpleName();
-    public static final Uri URI_PROPERTY = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+    public static final String TABLE_NAME = Photo.class.getSimpleName();
+    public static final Uri URI_PHOTO = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 
     @Override
     public boolean onCreate() {
@@ -27,7 +28,7 @@ public class PropertyContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         if (getContext() != null) {
-            final Cursor cursor = AppDatabase.getInstance(getContext()).propertyDAO().getAllWithCursor();
+            final Cursor cursor = AppDatabase.getInstance(getContext()).photoDAO().getAllWithCursor();
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
             return cursor;
         }
@@ -37,7 +38,7 @@ public class PropertyContentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return "vnd.android.cursor.property/" + AUTHORITY + "." + TABLE_NAME;
+        return "vnd.android.cursor.photo/" + AUTHORITY + "." + TABLE_NAME;
     }
 
     @Nullable
