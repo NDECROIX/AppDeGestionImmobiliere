@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface PhotoDAO {
 
-    @Query("SELECT * FROM photo WHERE propertyID LIKE :propertyID")
+    @Query("SELECT * FROM photo WHERE property_id LIKE :propertyID")
     LiveData<List<Photo>> getPropertyPhotos(long propertyID);
 
     @Insert

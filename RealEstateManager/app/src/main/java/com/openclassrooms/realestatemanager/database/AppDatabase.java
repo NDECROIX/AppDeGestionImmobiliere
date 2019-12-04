@@ -6,6 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.openclassrooms.realestatemanager.database.dao.PoiDAO;
+import com.openclassrooms.realestatemanager.database.dao.PoiNextPropertyDAO;
+import com.openclassrooms.realestatemanager.database.dao.PhotoDAO;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.database.dao.PropertyDAO;
 
@@ -16,6 +19,9 @@ public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     //--- DAO ---
+    public abstract PhotoDAO photoDAO();
+    public abstract PoiDAO poiDAO();
+    public abstract PoiNextPropertyDAO poiNextPropertyDAO();
     public abstract PropertyDAO propertyDAO();
 
     //--- INSTANCE ---

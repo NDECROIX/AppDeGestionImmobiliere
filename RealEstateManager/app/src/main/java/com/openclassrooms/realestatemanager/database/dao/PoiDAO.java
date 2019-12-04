@@ -8,7 +8,7 @@ import com.openclassrooms.realestatemanager.model.POI;
 
 import java.util.List;
 
-public interface POIDAO {
+public interface PoiDAO {
 
     @Query("SELECT * FROM poi")
     LiveData<List<POI>> getAll();
