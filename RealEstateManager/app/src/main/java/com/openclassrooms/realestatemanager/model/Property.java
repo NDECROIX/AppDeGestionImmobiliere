@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.model;
 
+import android.content.ContentValues;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -101,6 +103,27 @@ public class Property {
         this.entryDate = entryDate;
         this.saleDate = null;
         this.agent = agent;
+    }
+
+    public Property() {
+
+    }
+
+    // --- UTILS ---
+    public static Property fromContentValues(ContentValues values) {
+        final Property property = new Property();
+        if (values.containsKey("type")) property.setType(values.getAsString("type"));
+        if (values.containsKey("price")) property.setPrice(values.getAsDouble("price"));
+        if (values.containsKey("surface")) property.setSurface(values.getAsDouble("surface"));
+        if (values.containsKey("rooms")) property.setRooms(values.getAsInteger("rooms"));
+        if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
+        if (values.containsKey("photosUri")) property.setPhotosUri((List<String>) values.get("photosUri"));
+        if (values.containsKey("POI")) property.setPOI((List<String>) values.get("POI"));
+        if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
+        if (values.containsKey("entryDate")) property.setEntryDate((Date) values.get("entryDate"));
+        if (values.containsKey("saleDate")) property.setSaleDate((Date) values.get("saleDate"));
+        if (values.containsKey("agent")) property.setAgent(values.getAsString("agent"));
+        return property;
     }
 
     // GETTER

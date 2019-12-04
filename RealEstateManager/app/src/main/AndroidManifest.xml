@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name="com.openclassrooms.realestatemanager.controllers.SecondActivity"/>
+        <provider
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:name=".provider.PropertyContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>
