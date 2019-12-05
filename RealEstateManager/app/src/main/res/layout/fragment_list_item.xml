@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/fragment_list_item_photo"
+        android:layout_width="100dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:text="Penthouse"
+        app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
+        app:layout_constraintTop_toTopOf="@id/fragment_list_item_photo"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:textColor="@color/colorAccent"
+        android:text="Upper East Side"
+        app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_type"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textColor="@color/colorAccent"
+        android:text="$41,480,000"
+        app:layout_constraintTop_toTopOf="@id/fragment_list_item_photo"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_bathroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:drawableStart="@drawable/ic_bathroom_24"
+        android:text="2"
+        app:layout_constraintStart_toEndOf="@id/fragment_list_item_bedroom"
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_bedroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:drawableStart="@drawable/ic_bedroom_24"
+        android:text="4"
+        app:layout_constraintStart_toEndOf="@id/fragment_list_item_home"
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:drawableStart="@drawable/ic_home_24"
+        android:text="8"
+        app:layout_constraintStart_toEndOf="@id/fragment_list_item_surface"
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+
+    <TextView
+        android:id="@+id/fragment_list_item_surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:drawableStart="@drawable/ic_surface_24"
+        android:text="750"
+        app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
