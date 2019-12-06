@@ -6,15 +6,25 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/fragment_detail_item_photo"
+        android:id="@+id/activity_edit_item_photo"
         android:layout_width="150dp"
         android:layout_height="170dp"
         android:background="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/activity_edit_item_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="null"
+        android:padding="5dp"
+        android:src="@drawable/ic_delete_24"
+        app:layout_constraintTop_toTopOf="@id/activity_edit_item_photo"
+        app:layout_constraintEnd_toEndOf="@id/activity_edit_item_photo"/>
+
     <TextView
-        android:id="@+id/fragment_detail_item_title"
+        android:id="@+id/activity_edit_item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constrainedWidth="true"
@@ -22,8 +32,8 @@
         android:text="Facade"
         android:textColor="@android:color/white"
         android:background="#99000000"
-        app:layout_constraintStart_toStartOf="@id/fragment_detail_item_photo"
-        app:layout_constraintBottom_toBottomOf="@id/fragment_detail_item_photo"
-        app:layout_constraintEnd_toEndOf="@id/fragment_detail_item_photo"/>
+        app:layout_constraintStart_toStartOf="@id/activity_edit_item_photo"
+        app:layout_constraintBottom_toBottomOf="@id/activity_edit_item_photo"
+        app:layout_constraintEnd_toEndOf="@id/activity_edit_item_photo"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
