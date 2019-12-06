@@ -24,9 +24,13 @@ public class Photo {
     @ColumnInfo(name = "property_id")
     private long propertyID;
 
-    public Photo(@NonNull String uri, @NonNull long propertyID) {
+    @ColumnInfo(name = "description")
+    private String description;
+
+    public Photo(@NonNull String uri, @NonNull long propertyID, String description) {
         this.uri = uri;
         this.propertyID = propertyID;
+        this.description =description;
     }
 
     @Ignore
@@ -40,6 +44,7 @@ public class Photo {
         final Photo photo = new Photo();
         if (values.containsKey("uri")) photo.setUri(values.getAsString("uri"));
         if (values.containsKey("propertyID")) photo.setPropertyID(values.getAsLong("propertyID"));
+        if (values.containsKey("description")) photo.setDescription(values.getAsString("description"));
         return photo;
     }
 
@@ -53,6 +58,10 @@ public class Photo {
         return propertyID;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     // --- SETTER ---
 
     public void setUri(String uri) {
@@ -61,5 +70,9 @@ public class Photo {
 
     public void setPropertyID(long propertyID) {
         this.propertyID = propertyID;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
