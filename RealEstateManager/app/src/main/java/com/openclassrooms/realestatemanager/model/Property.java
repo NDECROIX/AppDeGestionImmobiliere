@@ -42,6 +42,18 @@ public class Property {
     private int rooms;
 
     /**
+     * The number of bathrooms.
+     */
+    @ColumnInfo(name = "bathrooms")
+    private int bathrooms;
+
+    /**
+     * The number of bedrooms.
+     */
+    @ColumnInfo(name = "bedrooms")
+    private int bedrooms;
+
+    /**
      * Description of the property.
      */
     @ColumnInfo(name = "description")
@@ -77,11 +89,13 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, Double price, Double surface, int rooms, String description, String address, String entryDate, String agent) {
+    public Property(String type, Double price, Double surface, int rooms, int bathrooms, int bedrooms, String description, String address, String entryDate, String agent) {
         this.type = type;
         this.price = price;
         this.surface = surface;
         this.rooms = rooms;
+        this.bathrooms = bathrooms;
+        this.bedrooms = bedrooms;
         this.description = description;
         this.address = address;
         this.status = false;
@@ -101,8 +115,11 @@ public class Property {
         if (values.containsKey("price")) property.setPrice(values.getAsDouble("price"));
         if (values.containsKey("surface")) property.setSurface(values.getAsDouble("surface"));
         if (values.containsKey("rooms")) property.setRooms(values.getAsInteger("rooms"));
+        if (values.containsKey("bathrooms")) property.setBathrooms(values.getAsInteger("bathrooms"));
+        if (values.containsKey("bedrooms")) property.setBedrooms(values.getAsInteger("bedrooms"));
         if (values.containsKey("description"))
             property.setDescription(values.getAsString("description"));
+        if (values.containsKey("address")) property.setAddress(values.getAsString("address"));
         if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
         if (values.containsKey("entryDate")) property.setEntryDate(values.getAsString("entryDate"));
         if (values.containsKey("saleDate")) property.setSaleDate(values.getAsString("saleDate"));
@@ -130,6 +147,14 @@ public class Property {
 
     public int getRooms() {
         return rooms;
+    }
+
+    public int getBathrooms() {
+        return bathrooms;
+    }
+
+    public int getBedrooms() {
+        return bedrooms;
     }
 
     public String getDescription() {
@@ -176,6 +201,14 @@ public class Property {
 
     public void setRooms(int rooms) {
         this.rooms = rooms;
+    }
+
+    public void setBathrooms(int bathrooms) {
+        this.bathrooms = bathrooms;
+    }
+
+    public void setBedrooms(int bedrooms) {
+        this.bedrooms = bedrooms;
     }
 
     public void setDescription(String description) {
