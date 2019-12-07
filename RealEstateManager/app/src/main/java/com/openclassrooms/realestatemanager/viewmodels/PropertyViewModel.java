@@ -106,6 +106,14 @@ public class PropertyViewModel extends ViewModel {
     }
 
     /**
+     * Obtain all photos from AppDatabase
+     * @return Photos
+     */
+    public LiveData<List<Photo>> getPhotos(){
+        return photoDataRepository.getPhotos();
+    }
+
+    /**
      * Insert a property photo in the AppDatabase
      * @param photo Photo to insert
      */

@@ -18,10 +18,20 @@ public class PhotoDataRepository {
     /**
      * Get all Property photos from the AppDatabase
      *
+     * @param propertyID Property ID
      * @return List of all photos
      */
     public LiveData<List<Photo>> getPropertyPhotos(long propertyID) {
         return this.photoDAO.getPropertyPhotos(propertyID);
+    }
+
+    /**
+     * Get all photos from the AppDatabase
+     *
+     * @return All photos
+     */
+    public LiveData<List<Photo>> getPhotos() {
+        return this.photoDAO.getAll();
     }
 
     /**
