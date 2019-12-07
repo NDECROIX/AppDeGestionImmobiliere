@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -20,8 +21,15 @@ public class Property {
     /**
      * Type of property.
      */
+    @ForeignKey(entity = Type.class, parentColumns = "name", childColumns = "type")
     @ColumnInfo(name = "type")
     private String type;
+
+    /**
+     * Borough of the property
+     */
+    @ColumnInfo(name = "borough")
+    private String borough;
 
     /**
      * Real estate price.
@@ -89,8 +97,9 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, Double price, Double surface, int rooms, int bathrooms, int bedrooms, String description, String address, String entryDate, String agent) {
+    public Property(String type, String borough, Double price, Double surface, int rooms, int bathrooms, int bedrooms, String description, String address, String entryDate, String agent) {
         this.type = type;
+        this.borough = borough;
         this.price = price;
         this.surface = surface;
         this.rooms = rooms;
@@ -112,6 +121,7 @@ public class Property {
     public static Property fromContentValues(ContentValues values) {
         final Property property = new Property();
         if (values.containsKey("type")) property.setType(values.getAsString("type"));
+        if (values.containsKey("borough")) property.setBorough(values.getAsString("borough"));
         if (values.containsKey("price")) property.setPrice(values.getAsDouble("price"));
         if (values.containsKey("surface")) property.setSurface(values.getAsDouble("surface"));
         if (values.containsKey("rooms")) property.setRooms(values.getAsInteger("rooms"));
@@ -135,6 +145,10 @@ public class Property {
 
     public String getType() {
         return type;
+    }
+
+    public String getBorough() {
+        return borough;
     }
 
     public Double getPrice() {
@@ -189,6 +203,10 @@ public class Property {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setBorough(String borough) {
+        this.borough = borough;
     }
 
     public void setPrice(Double price) {

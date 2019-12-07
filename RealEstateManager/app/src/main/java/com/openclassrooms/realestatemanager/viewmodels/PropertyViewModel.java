@@ -7,10 +7,12 @@ import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.Type;
 import com.openclassrooms.realestatemanager.repositories.PhotoDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiNextPropertyDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
+import com.openclassrooms.realestatemanager.repositories.TypeDataRepository;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -20,6 +22,7 @@ public class PropertyViewModel extends ViewModel {
     // REPOSITORY
     private final PhotoDataRepository photoDataRepository;
     private final PoiDataRepository poiDataRepository;
+    private final TypeDataRepository typeDataRepository;
     private final PoiNextPropertyDataRepository poiNextPropertyDataRepository;
     private final PropertyDataRepository propertyDataRepository;
     private final Executor executor;
@@ -29,10 +32,12 @@ public class PropertyViewModel extends ViewModel {
 
     public PropertyViewModel(PhotoDataRepository photoDataRepository,
                              PoiDataRepository poiDataRepository,
+                             TypeDataRepository typeDataRepository,
                              PoiNextPropertyDataRepository poiNextPropertyDataRepository,
                              PropertyDataRepository propertyDataRepository, Executor executor) {
         this.photoDataRepository = photoDataRepository;
         this.poiDataRepository = poiDataRepository;
+        this.typeDataRepository = typeDataRepository;
         this.poiNextPropertyDataRepository = poiNextPropertyDataRepository;
         this.propertyDataRepository = propertyDataRepository;
         this.executor = executor;
@@ -121,11 +126,31 @@ public class PropertyViewModel extends ViewModel {
     }
 
     /**
-     * Insert an point of interest in the AppDatabase
+     * Insert a point of interest in the AppDatabase
      * @param poi Point of interest to add
      */
     public void insertPoi(Poi poi){
         executor.execute(()-> poiDataRepository.insertPoiNextProperty(poi));
+    }
+
+    //---------------
+    //--- FOR TYPE ---
+    //---------------
+
+    /**
+     * Get all Type from the AppDatabase
+     * @return All types
+     */
+    public LiveData<List<Type>> getTypes(){
+        return typeDataRepository.getTypes();
+    }
+
+    /**
+     * Insert a type in the AppDatabase
+     * @param type Type to add
+     */
+    public void insertType(Type type){
+        executor.execute(()-> typeDataRepository.insertType(type));
     }
 
     //-----------------------------

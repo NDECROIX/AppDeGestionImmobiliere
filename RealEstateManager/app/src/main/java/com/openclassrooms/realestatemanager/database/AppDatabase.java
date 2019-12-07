@@ -10,6 +10,7 @@ import com.openclassrooms.realestatemanager.database.dao.PhotoDAO;
 import com.openclassrooms.realestatemanager.database.dao.PoiDAO;
 import com.openclassrooms.realestatemanager.database.dao.PoiNextPropertyDAO;
 import com.openclassrooms.realestatemanager.database.dao.PropertyDAO;
+import com.openclassrooms.realestatemanager.database.dao.TypeDAO;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
@@ -29,6 +30,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract PoiNextPropertyDAO poiNextPropertyDAO();
 
     public abstract PropertyDAO propertyDAO();
+
+    public abstract TypeDAO typeDAO();
 
     //--- INSTANCE ---
     public static AppDatabase getInstance(Context context) {
