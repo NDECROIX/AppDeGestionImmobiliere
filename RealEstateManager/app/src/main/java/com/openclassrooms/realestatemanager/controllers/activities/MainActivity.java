@@ -7,27 +7,54 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
+import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
+import com.openclassrooms.realestatemanager.injection.Injection;
+import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.view.ListPropertyRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
+EditActivity.startEditActivityListener{
 
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.main_activity_toolbar)
     Toolbar toolbar;
 
+    private PropertyViewModel propertyViewModel;
+
+    //Fragments
+    private final ListFragment listFragment = new ListFragment();
+    private final DetailFragment detailFragment = new DetailFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        configViewModel();
+        this.getSupportFragmentManager().beginTransaction()
+                .add(R.id.activity_main_frame_layout, listFragment)
+                .commitNow();
         configToolbar();
         configDrawerLayout();
+    }
+
+    private void configViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
     }
 
     private void configToolbar() {
@@ -68,5 +95,15 @@ public class MainActivity extends BaseActivity {
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    public void onClickListener(Property property, List<Photo> photos) {
+        // Start detail activity
+    }
+
+    @Override
+    public void createProperty() {
+        startActivity(EditActivity.newIntent(this));
     }
 }
