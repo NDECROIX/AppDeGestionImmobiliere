@@ -29,13 +29,13 @@
         app:layout_constraintTop_toTopOf="@id/fragment_list_item_photo"/>
 
     <TextView
-        android:id="@+id/fragment_list_item_city"
+        android:id="@+id/fragment_list_item_borough"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:textColor="@color/colorAccent"
-        android:text="Upper East Side"
+        android:text="Brooklyn"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
         app:layout_constraintTop_toBottomOf="@id/fragment_list_item_type"/>
 
@@ -59,7 +59,7 @@
         android:drawableStart="@drawable/ic_bathroom_24"
         android:text="2"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_bedroom"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
 
     <TextView
         android:id="@+id/fragment_list_item_bedroom"
@@ -70,7 +70,7 @@
         android:drawableStart="@drawable/ic_bedroom_24"
         android:text="4"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_home"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
 
     <TextView
         android:id="@+id/fragment_list_item_home"
@@ -81,7 +81,7 @@
         android:drawableStart="@drawable/ic_home_24"
         android:text="8"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_surface"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
 
     <TextView
         android:id="@+id/fragment_list_item_surface"
@@ -92,6 +92,6 @@
         android:drawableStart="@drawable/ic_surface_24"
         android:text="750"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_city"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
