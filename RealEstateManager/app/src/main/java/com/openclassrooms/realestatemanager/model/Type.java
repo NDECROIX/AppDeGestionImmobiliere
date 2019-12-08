@@ -25,6 +25,18 @@ public class Type {
 
     }
 
+    @Ignore
+    public static Type[] getAllTypes(){
+        return new Type[]{
+                new Type("Apartment"),
+                new Type("House"),
+                new Type("Penthouse"),
+                new Type("Duplex"),
+                new Type("HOA"),
+                new Type("COA")
+        };
+    }
+
     // --- UTILS ---
 
     public static Type fromContentValues(ContentValues values) {

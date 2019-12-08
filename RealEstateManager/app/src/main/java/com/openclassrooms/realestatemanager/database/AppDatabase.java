@@ -1,10 +1,14 @@
 package com.openclassrooms.realestatemanager.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.openclassrooms.realestatemanager.database.dao.PhotoDAO;
 import com.openclassrooms.realestatemanager.database.dao.PoiDAO;
@@ -15,8 +19,9 @@ import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.model.Type;
 
-@Database(entities = {Property.class, Photo.class, Poi.class, PoiNextProperty.class}, version = 1, exportSchema = false)
+@Database(entities = {Property.class, Photo.class, Poi.class, PoiNextProperty.class, Type.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     //--- SINGLETON ---
@@ -39,10 +44,39 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "DatabaseREM.db").build();
+                            AppDatabase.class, "DatabaseREM.db")
+                            .addCallback(prePopulateDatabase())
+                            .build();
                 }
             }
         }
         return INSTANCE;
+    }
+
+    private static Callback prePopulateDatabase() {
+        return new Callback() {
+            @Override
+            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                super.onCreate(db);
+                for (Poi poi : Poi.getAllPoi()){
+                    db.insert("Poi", OnConflictStrategy.IGNORE, insertPoi(poi));
+                }
+                for (Type type : Type.getAllTypes()){
+                    db.insert("Type", OnConflictStrategy.IGNORE, insertType(type));
+                }
+            }
+        };
+    }
+
+    private static ContentValues insertPoi(Poi poi) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", poi.getName());
+        return contentValues;
+    }
+
+    private static ContentValues insertType(Type type) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", type.getName());
+        return contentValues;
     }
 }

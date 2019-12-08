@@ -25,6 +25,28 @@ public class Poi {
 
     }
 
+    @Ignore
+    public static Poi[] getAllPoi(){
+        return new Poi[]{
+                new Poi("School"),
+                new Poi("Police"),
+                new Poi("Shops"),
+                new Poi("Park"),
+                new Poi("Gym"),
+                new Poi("Restaurant"),
+                new Poi("Garage"),
+                new Poi("Churches"),
+                new Poi("Bank"),
+                new Poi("Cafe"),
+                new Poi("Dentist"),
+                new Poi("Doctors"),
+                new Poi("Theatre"),
+                new Poi("Cinema"),
+                new Poi("Nightclub"),
+                new Poi("Casino")
+        };
+    }
+
     // --- UTILS ---
 
     public static Poi fromContentValues(ContentValues values) {
