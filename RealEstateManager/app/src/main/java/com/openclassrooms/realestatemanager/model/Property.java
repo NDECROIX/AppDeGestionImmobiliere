@@ -8,15 +8,18 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Entity
 public class Property {
 
     /**
      * The unique identifier of property
      */
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     @ColumnInfo(name = "id")
-    private long id;
+    private String id;
 
     /**
      * Type of property.
@@ -68,10 +71,40 @@ public class Property {
     private String description;
 
     /**
-     * Address of the property.
+     * Street number of the property.
      */
-    @ColumnInfo(name = "address")
-    private String address;
+    @ColumnInfo(name = "street_number")
+    private int streetNumber;
+
+    /**
+     * Street name of the property.
+     */
+    @ColumnInfo(name = "street_name")
+    private String streetName;
+
+    /**
+     * Address supplement of the property.
+     */
+    @ColumnInfo(name = "address_supplement")
+    private String addressSupplement;
+
+    /**
+     * City of the property.
+     */
+    @ColumnInfo(name = "city")
+    private String city;
+
+    /**
+     * Zip code of the property.
+     */
+    @ColumnInfo(name = "zip")
+    private int zip;
+
+    /**
+     * Country of the property.
+     */
+    @ColumnInfo(name = "country")
+    private String country;
 
     /**
      * Status of the property. True if the property has been sold.
@@ -83,7 +116,7 @@ public class Property {
      * The date on which the property entered the market.
      */
     @ColumnInfo(name = "entry_date")
-    private String entryDate;
+    private long entryDate;
 
     /**
      * Date on which the property was sold.
@@ -97,7 +130,10 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String type, String borough, Double price, Double surface, int rooms, int bathrooms, int bedrooms, String description, String address, String entryDate, String agent) {
+    public Property(String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
+                    int bedrooms, String description, int streetNumber, String streetName,
+                    String addressSupplement, String city, int zip, String country, long entryDate, String agent) {
+        this.id = id;
         this.type = type;
         this.borough = borough;
         this.price = price;
@@ -106,7 +142,12 @@ public class Property {
         this.bathrooms = bathrooms;
         this.bedrooms = bedrooms;
         this.description = description;
-        this.address = address;
+        this.streetNumber = streetNumber;
+        this.streetName = streetName;
+        this.addressSupplement = addressSupplement;
+        this.zip = zip;
+        this.city = city;
+        this.country = country;
         this.status = false;
         this.entryDate = entryDate;
         this.saleDate = null;
@@ -120,26 +161,47 @@ public class Property {
     // --- UTILS ---
     public static Property fromContentValues(ContentValues values) {
         final Property property = new Property();
+        if (values.containsKey("id")) property.setId(values.getAsString("id"));
         if (values.containsKey("type")) property.setType(values.getAsString("type"));
         if (values.containsKey("borough")) property.setBorough(values.getAsString("borough"));
         if (values.containsKey("price")) property.setPrice(values.getAsDouble("price"));
         if (values.containsKey("surface")) property.setSurface(values.getAsDouble("surface"));
         if (values.containsKey("rooms")) property.setRooms(values.getAsInteger("rooms"));
-        if (values.containsKey("bathrooms")) property.setBathrooms(values.getAsInteger("bathrooms"));
+        if (values.containsKey("bathrooms"))
+            property.setBathrooms(values.getAsInteger("bathrooms"));
         if (values.containsKey("bedrooms")) property.setBedrooms(values.getAsInteger("bedrooms"));
         if (values.containsKey("description"))
             property.setDescription(values.getAsString("description"));
-        if (values.containsKey("address")) property.setAddress(values.getAsString("address"));
+        if (values.containsKey("streetNumber"))
+            property.setStreetNumber(values.getAsInteger("streetNumber"));
+        if (values.containsKey("streetName"))
+            property.setStreetName(values.getAsString("streetName"));
+        if (values.containsKey("addressSupplement"))
+            property.setAddressSupplement(values.getAsString("addressSupplement"));
+        if (values.containsKey("city")) property.setCity(values.getAsString("city"));
+        if (values.containsKey("zip")) property.setZip(values.getAsInteger("zip"));
+        if (values.containsKey("country")) property.setCountry(values.getAsString("country"));
         if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
-        if (values.containsKey("entryDate")) property.setEntryDate(values.getAsString("entryDate"));
+        if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
         if (values.containsKey("saleDate")) property.setSaleDate(values.getAsString("saleDate"));
         if (values.containsKey("agent")) property.setAgent(values.getAsString("agent"));
         return property;
     }
 
+    /**
+     * New york city borough
+     *
+     * @return New york city borough
+     */
+    @Ignore
+    public static List<String> getBoroughs() {
+        return Arrays.asList("The Bronx", "Brooklyn", "Manhattan",
+                "Queens", "Staten Island", "Outside NYC");
+    }
+
     // GETTER
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -175,15 +237,35 @@ public class Property {
         return description;
     }
 
-    public String getAddress() {
-        return address;
+    public int getStreetNumber() {
+        return streetNumber;
+    }
+
+    public String getStreetName() {
+        return streetName;
+    }
+
+    public String getAddressSupplement() {
+        return addressSupplement;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public boolean isStatus() {
         return status;
     }
 
-    public String getEntryDate() {
+    public long getEntryDate() {
         return entryDate;
     }
 
@@ -197,7 +279,7 @@ public class Property {
 
     // SETTER
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -233,15 +315,35 @@ public class Property {
         this.description = description;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreetNumber(int streetNumber) {
+        this.streetNumber = streetNumber;
+    }
+
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public void setAddressSupplement(String addressSupplement) {
+        this.addressSupplement = addressSupplement;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setZip(int zip) {
+        this.zip = zip;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public void setEntryDate(String entryDate) {
+    public void setEntryDate(long entryDate) {
         this.entryDate = entryDate;
     }
 

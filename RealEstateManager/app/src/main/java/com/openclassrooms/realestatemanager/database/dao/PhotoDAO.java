@@ -15,7 +15,7 @@ import java.util.List;
 public interface PhotoDAO {
 
     @Query("SELECT * FROM Photo WHERE property_id LIKE :propertyID")
-    LiveData<List<Photo>> getPropertyPhotos(long propertyID);
+    LiveData<List<Photo>> getPropertyPhotos(String propertyID);
 
     @Query("SELECT * FROM photo")
     LiveData<List<Photo>> getAll();

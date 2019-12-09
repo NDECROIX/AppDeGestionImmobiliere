@@ -15,7 +15,7 @@ import java.util.List;
 public interface PoiNextPropertyDAO {
 
     @Query("SELECT * FROM PoiNextProperty WHERE property_id LIKE :propertyID")
-    LiveData<List<PoiNextProperty>> getPoiNextProperty(long propertyID);
+    LiveData<List<PoiNextProperty>> getPoiNextProperty(String propertyID);
 
     @Query("SELECT * FROM PoiNextProperty")
     Cursor getAllWithCursor();

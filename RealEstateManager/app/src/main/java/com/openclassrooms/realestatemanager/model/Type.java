@@ -8,6 +8,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity
 public class Type {
 
@@ -43,6 +45,19 @@ public class Type {
         final Type type = new Type();
         if (values.containsKey("name")) type.setName(values.getAsString("name"));
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Type type = (Type) o;
+        return name.toLowerCase().equals(type.name.toLowerCase());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     // --- GETTER ---

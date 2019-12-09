@@ -21,7 +21,7 @@ public class PoiNextProperty {
      * Refers to a real estate property
      */
     @ColumnInfo(name = "property_id")
-    private long propertyID;
+    private String propertyID;
 
     /**
      * Name of the point of interest next to the property
@@ -30,7 +30,7 @@ public class PoiNextProperty {
     @ColumnInfo(name = "poi_name")
     private String poiName;
 
-    public PoiNextProperty(long propertyID,@NonNull String poiName) {
+    public PoiNextProperty(String propertyID,@NonNull String poiName) {
         this.propertyID = propertyID;
         this.poiName = poiName;
     }
@@ -43,14 +43,14 @@ public class PoiNextProperty {
 
     public static PoiNextProperty fromContentValues(ContentValues values) {
         final PoiNextProperty poiNextProperty = new PoiNextProperty();
-        if (values.containsKey("propertyID")) poiNextProperty.setPropertyID(values.getAsLong("propertyID"));
+        if (values.containsKey("propertyID")) poiNextProperty.setPropertyID(values.getAsString("propertyID"));
         if (values.containsKey("poiName")) poiNextProperty.setPoiName(values.getAsString("poiName"));
         return poiNextProperty;
     }
 
     // --- GETTER ---
 
-    public long getPropertyID() {
+    public String getPropertyID() {
         return propertyID;
     }
 
@@ -60,7 +60,7 @@ public class PoiNextProperty {
 
     // --- SETTER ---
 
-    public void setPropertyID(long propertyID) {
+    public void setPropertyID(String propertyID) {
         this.propertyID = propertyID;
     }
 

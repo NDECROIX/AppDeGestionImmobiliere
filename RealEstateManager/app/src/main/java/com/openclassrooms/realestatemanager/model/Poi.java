@@ -8,6 +8,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity
 public class Poi {
 
@@ -53,6 +55,19 @@ public class Poi {
         final Poi poi = new Poi();
         if (values.containsKey("name")) poi.setName(values.getAsString("name"));
         return poi;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Poi poi = (Poi) o;
+        return name.toLowerCase().equals(poi.name.toLowerCase());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     // --- GETTER ---
