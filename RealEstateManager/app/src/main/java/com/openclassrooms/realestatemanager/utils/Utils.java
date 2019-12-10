@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,5 +58,28 @@ public class Utils {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    /**
+     * Convert string to 32 HEX
+     * @param data Data to hash
+     * @return 32 Hex
+     */
+    public static String convertStringMd5(String data) {
+        String theHash = null;
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(data.getBytes(), 0, data.length());
+            StringBuilder dataBuilder = new StringBuilder(new BigInteger(1, messageDigest.digest()).toString(16));
+            while (dataBuilder.length() < 32) {
+                dataBuilder.insert(0, "0");
+            }
+            data = dataBuilder.toString();
+            theHash = data;
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
+        }
+        return theHash;
     }
 }
