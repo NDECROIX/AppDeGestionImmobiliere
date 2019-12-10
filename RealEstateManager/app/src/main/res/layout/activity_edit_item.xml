@@ -9,6 +9,7 @@
         android:id="@+id/activity_edit_item_photo"
         android:layout_width="150dp"
         android:layout_height="170dp"
+        android:scaleType="centerCrop"
         android:background="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
