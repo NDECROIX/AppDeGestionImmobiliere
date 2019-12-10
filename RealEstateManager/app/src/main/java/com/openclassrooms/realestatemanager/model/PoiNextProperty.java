@@ -20,6 +20,7 @@ public class PoiNextProperty {
     /**
      * Refers to a real estate property
      */
+    @NonNull
     @ColumnInfo(name = "property_id")
     private String propertyID;
 
@@ -30,7 +31,7 @@ public class PoiNextProperty {
     @ColumnInfo(name = "poi_name")
     private String poiName;
 
-    public PoiNextProperty(String propertyID,@NonNull String poiName) {
+    public PoiNextProperty(@NonNull String propertyID,@NonNull String poiName) {
         this.propertyID = propertyID;
         this.poiName = poiName;
     }

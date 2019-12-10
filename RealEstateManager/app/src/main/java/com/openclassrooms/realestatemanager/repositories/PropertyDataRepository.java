@@ -24,6 +24,14 @@ public class PropertyDataRepository {
     }
 
     /**
+     * Get property from the application database
+     * @return Property with id as parameter
+     */
+    public LiveData<List<Property>> getPropertie(String propertyID) {
+        return this.propertyDao.getProperty(propertyID);
+    }
+
+    /**
      * Insert a property in the database
      * @param property New property
      */

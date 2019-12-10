@@ -18,6 +18,9 @@ public interface PropertyDAO {
     @Query("SELECT * FROM Property")
     LiveData<List<Property>> getAll();
 
+    @Query("SELECT * FROM Property WHERE id LIKE :propertyID")
+    LiveData<List<Property>> getProperty(String propertyID);
+
     @Query("SELECT * FROM property")
     Cursor getAllWithCursor();
 

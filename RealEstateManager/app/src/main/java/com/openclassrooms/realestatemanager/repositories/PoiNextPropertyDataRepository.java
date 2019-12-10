@@ -21,7 +21,7 @@ public class PoiNextPropertyDataRepository {
      * @param propertyID Property id
      * @return List of all property
      */
-    public LiveData<List<PoiNextProperty>> getProperties(long propertyID) {
+    public LiveData<List<PoiNextProperty>> getProperties(String propertyID) {
         return this.poiNextPropertyDAO.getPoiNextProperty(propertyID);
     }
 

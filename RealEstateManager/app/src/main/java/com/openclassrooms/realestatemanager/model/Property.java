@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.model;
 
 import android.content.ContentValues;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -18,6 +19,7 @@ public class Property {
      * The unique identifier of property
      */
     @PrimaryKey()
+    @NonNull
     @ColumnInfo(name = "id")
     private String id;
 
@@ -130,7 +132,7 @@ public class Property {
     @ColumnInfo(name = "agent")
     private String agent;
 
-    public Property(String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
+    public Property(@NonNull String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
                     int bedrooms, String description, int streetNumber, String streetName,
                     String addressSupplement, String city, int zip, String country, long entryDate, String agent) {
         this.id = id;
@@ -197,6 +199,23 @@ public class Property {
     public static List<String> getBoroughs() {
         return Arrays.asList("The Bronx", "Brooklyn", "Manhattan",
                 "Queens", "Staten Island", "Outside NYC");
+    }
+
+    /**
+     * Base to create the Property id
+     * @return String of all data notnull
+     */
+    @Ignore
+    public String getStringToHash(){
+        return this.getType() +
+                this.getRooms() +
+                this.getPrice() +
+                this.getStreetNumber() +
+                this.getStreetName() +
+                this.getZip() +
+                this.getCity() +
+                this.getEntryDate() +
+                this.getAgent();
     }
 
     // GETTER

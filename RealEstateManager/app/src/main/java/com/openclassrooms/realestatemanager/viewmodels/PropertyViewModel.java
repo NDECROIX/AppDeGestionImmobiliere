@@ -66,12 +66,21 @@ public class PropertyViewModel extends ViewModel {
     //--------------------
 
     /**
-     * Get all property from the application database
+     * Get all properties from the application database
      *
      * @return List of all property
      */
     public LiveData<List<Property>> getProperties() {
         return propertyDataRepository.getProperties();
+    }
+
+    /**
+     * Get property from the application database
+     *
+     * @return Property with id as parameter
+     */
+    public LiveData<List<Property>> getProperty(String propertyID) {
+        return propertyDataRepository.getPropertie(propertyID);
     }
 
     /**
@@ -101,7 +110,7 @@ public class PropertyViewModel extends ViewModel {
      * @param propertyId Property id
      * @return Photo from property
      */
-    public LiveData<List<Photo>> getPropertyPhotos(long propertyId){
+    public LiveData<List<Photo>> getPropertyPhotos(String propertyId){
         return photoDataRepository.getPropertyPhotos(propertyId);
     }
 
@@ -170,7 +179,7 @@ public class PropertyViewModel extends ViewModel {
      * @param propertyID Property for which we want the POIs
      * @return All POI next the property
      */
-    public LiveData<List<PoiNextProperty>> getPoiNextProperty(long propertyID){
+    public LiveData<List<PoiNextProperty>> getPoiNextProperty(String propertyID){
         return poiNextPropertyDataRepository.getProperties(propertyID);
     }
 

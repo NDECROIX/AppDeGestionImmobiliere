@@ -21,7 +21,7 @@ public class PhotoDataRepository {
      * @param propertyID Property ID
      * @return List of all photos
      */
-    public LiveData<List<Photo>> getPropertyPhotos(long propertyID) {
+    public LiveData<List<Photo>> getPropertyPhotos(String propertyID) {
         return this.photoDAO.getPropertyPhotos(propertyID);
     }
 

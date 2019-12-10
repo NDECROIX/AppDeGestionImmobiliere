@@ -21,6 +21,7 @@ public class Photo {
     @NonNull
     private String uri;
 
+    @NonNull
     @ColumnInfo(name = "property_id")
     private String propertyID;
 
