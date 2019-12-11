@@ -14,6 +14,7 @@ import com.openclassrooms.realestatemanager.repositories.PoiNextPropertyDataRepo
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 import com.openclassrooms.realestatemanager.repositories.TypeDataRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -29,6 +30,7 @@ public class PropertyViewModel extends ViewModel {
 
     // CURRENT PROPERTY
     private Property currentProperty;
+    private List<Photo> currentPhoto;
 
     public PropertyViewModel(PhotoDataRepository photoDataRepository,
                              PoiDataRepository poiDataRepository,
@@ -48,8 +50,9 @@ public class PropertyViewModel extends ViewModel {
      *
      * @param property Current property
      */
-    public void setCurrentProperty(Property property) {
+    public void setCurrentProperty(Property property, List<Photo> photos) {
         this.currentProperty = property;
+        this.currentPhoto = new ArrayList<>(photos);
     }
 
     /**
@@ -59,6 +62,15 @@ public class PropertyViewModel extends ViewModel {
      */
     public Property getCurrentProperty() {
         return currentProperty;
+    }
+
+    /**
+     * Get photos from the last property
+     *
+     * @return Photos from property
+     */
+    public List<Photo> getPhotosProperty() {
+        return currentPhoto;
     }
 
     //--------------------

@@ -99,7 +99,10 @@ EditActivity.startEditActivityListener{
 
     @Override
     public void onClickListener(Property property, List<Photo> photos) {
-        // Start detail activity
+        propertyViewModel.setCurrentProperty(property, photos);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.activity_main_frame_layout, detailFragment)
+                .commitNow();
     }
 
     @Override
