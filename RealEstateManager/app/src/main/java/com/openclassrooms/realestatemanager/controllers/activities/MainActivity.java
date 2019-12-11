@@ -81,7 +81,6 @@ EditActivity.startEditActivityListener{
                 break;
             case R.id.menu_activity_main_search:
                 showToastMessage("Search for a real estate.");
-
         }
         return super.onOptionsItemSelected(item);
     }
