@@ -13,6 +13,7 @@ import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.view.holders.PropertyViewHolder;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         List<Photo> photos = new ArrayList<>();
         holder.propertyType.setText(property.getType());
         holder.propertyBorough.setText(property.getBorough());
-        holder.propertyPrice.setText(String.valueOf(property.getPrice()));
+        holder.propertyPrice.setText(String.valueOf(new DecimalFormat("#").format(property.getPrice())));
         holder.propertyNumberRooms.setText(String.valueOf(property.getRooms()));
         holder.propertySquareMeter.setText(String.valueOf(property.getSurface()));
         holder.propertyNumberBedroom.setText(String.valueOf(property.getBedrooms()));
