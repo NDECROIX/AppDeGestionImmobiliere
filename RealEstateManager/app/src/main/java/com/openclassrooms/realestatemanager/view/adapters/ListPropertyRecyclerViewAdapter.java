@@ -64,7 +64,7 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         holder.propertyNumberBedroom.setText(String.valueOf(property.getBedrooms()));
         holder.propertyNumberBathrooms.setText(String.valueOf(property.getBathrooms()));
         for (Photo photo : photoList) {
-            if (photo.getPropertyID() == property.getId()) {
+            if (photo.getPropertyID().equals(property.getId())) {
                 photos.add(photo);
             }
         }

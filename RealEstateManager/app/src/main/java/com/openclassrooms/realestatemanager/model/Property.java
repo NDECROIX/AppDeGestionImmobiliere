@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Property {
@@ -216,6 +217,19 @@ public class Property {
                 this.getCity() +
                 this.getEntryDate() +
                 this.getAgent();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Property property = (Property) o;
+        return id.equals(property.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     // GETTER

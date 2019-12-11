@@ -13,11 +13,11 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
-import com.openclassrooms.realestatemanager.injection.Injection;
+import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.view.ListPropertyRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.util.List;

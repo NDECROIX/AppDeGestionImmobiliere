@@ -5,10 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,12 +18,8 @@ import android.view.ViewGroup;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.EditActivity;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
-import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.view.ListPropertyRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,8 +73,9 @@ public class ListFragment extends Fragment {
      * Get data from database
      */
     private void getDataFromViewModel(){
-        propertyViewModel.getProperties().observe(this, properties ->
-                adapter.setPropertyList(properties));
+        propertyViewModel.getProperties().observe(this, properties ->{
+            adapter.setPropertyList(properties);
+        });
         propertyViewModel.getPhotos().observe(this, photos ->
                 adapter.setPhotoList(photos));
     }

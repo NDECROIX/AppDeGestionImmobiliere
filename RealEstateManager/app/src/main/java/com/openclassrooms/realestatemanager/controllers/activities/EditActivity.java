@@ -49,8 +49,11 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -144,6 +147,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private List<Poi> pois;
     private List<Poi> allPois;
     private Property property;
+    private List<Property> properties;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +207,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             if (insertPropertyInDatabase()){
                 insertPoiInDatabase();
                 insertPhotoInDatabase();
+                startActivity(new Intent(this, MainActivity.class));
             }
             else {
                 showToastMessage("Property already exist!");
@@ -218,6 +223,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private void configObserver() {
         propertyViewModel.getTypes().observe(this, this::updateTypeRadioBtn);
         propertyViewModel.getAllPoi().observe(this, this::updatePoiCheckBox);
+        propertyViewModel.getProperties().observe(this, properties -> this.properties = properties);
     }
 
     /**
@@ -386,11 +392,13 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 .setPositiveButton("ADD", (dialog, id) -> {
                     if (bitmap != null) {
                         galleryAddPic();
+                    } else {
+                        saveBitmapToThePath(data);
                     }
                     String path = (data == null) ? currentPhotoPath : data.toString();
                     if (path != null) {
                         TextInputEditText title = view.findViewById(R.id.activity_edit_dialog_tie_title);
-                        Photo photo = new Photo(path, null, (title.getText() == null)? "" :title.getText().toString());
+                        Photo photo = new Photo(currentPhotoPath, null, (title.getText() == null)? "" :title.getText().toString());
                         adapter.setPhoto(photo);
                         dialog.dismiss();
                     } else {
@@ -399,6 +407,21 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
         builder.create().show();
+    }
+
+    private void saveBitmapToThePath(Uri data) {
+        try {
+            InputStream iStream = getContentResolver().openInputStream(data);
+            byte[] inputData = new byte[0];
+            if (iStream != null) {
+                inputData = Utils.getBytes(iStream);
+            }
+            FileOutputStream out = new FileOutputStream(createImageFile());
+            out.write(inputData);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -690,8 +713,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     private boolean insertPropertyInDatabase(){
         property.setId(Utils.convertStringMd5(property.getStringToHash()));
-        List<Property> properties = propertyViewModel.getProperty(property.getId()).getValue();
-        if (properties != null && !properties.isEmpty()){
+        if (!properties.contains(property)){
             propertyViewModel.insertProperty(property);
             return true;
         }
