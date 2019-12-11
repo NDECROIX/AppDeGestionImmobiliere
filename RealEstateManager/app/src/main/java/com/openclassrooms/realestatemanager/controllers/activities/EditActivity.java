@@ -155,7 +155,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         configRecyclerView();
         configViewModel();
         configToolbar();
-        configLists();
+        configObserver();
         configViews();
     }
 
@@ -215,7 +215,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
     }
 
-    private void configLists() {
+    private void configObserver() {
         propertyViewModel.getTypes().observe(this, this::updateTypeRadioBtn);
         propertyViewModel.getAllPoi().observe(this, this::updatePoiCheckBox);
     }
