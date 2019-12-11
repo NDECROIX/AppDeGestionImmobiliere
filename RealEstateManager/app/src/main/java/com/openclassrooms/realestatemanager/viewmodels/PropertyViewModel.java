@@ -107,26 +107,29 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Obtain all photos from property
+     *
      * @param propertyId Property id
      * @return Photo from property
      */
-    public LiveData<List<Photo>> getPropertyPhotos(String propertyId){
+    public LiveData<List<Photo>> getPropertyPhotos(String propertyId) {
         return photoDataRepository.getPropertyPhotos(propertyId);
     }
 
     /**
      * Obtain all photos from AppDatabase
+     *
      * @return Photos
      */
-    public LiveData<List<Photo>> getPhotos(){
+    public LiveData<List<Photo>> getPhotos() {
         return photoDataRepository.getPhotos();
     }
 
     /**
      * Insert a property photo in the AppDatabase
+     *
      * @param photo Photo to insert
      */
-    public void insertPropertyPhoto(Photo photo){
+    public void insertPropertyPhoto(Photo photo) {
         executor.execute(() -> photoDataRepository.insertPropertyPhoto(photo));
     }
 
@@ -136,18 +139,20 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Get all Points of interest from the AppDatabase
+     *
      * @return All Points of interest
      */
-    public LiveData<List<Poi>> getAllPoi(){
+    public LiveData<List<Poi>> getAllPoi() {
         return poiDataRepository.getPOIs();
     }
 
     /**
      * Insert a point of interest in the AppDatabase
+     *
      * @param poi Point of interest to add
      */
-    public void insertPoi(Poi poi){
-        executor.execute(()-> poiDataRepository.insertPoiNextProperty(poi));
+    public void insertPoi(Poi poi) {
+        executor.execute(() -> poiDataRepository.insertPoiNextProperty(poi));
     }
 
     //---------------
@@ -156,18 +161,20 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Get all Type from the AppDatabase
+     *
      * @return All types
      */
-    public LiveData<List<Type>> getTypes(){
+    public LiveData<List<Type>> getTypes() {
         return typeDataRepository.getTypes();
     }
 
     /**
      * Insert a type in the AppDatabase
+     *
      * @param type Type to add
      */
-    public void insertType(Type type){
-        executor.execute(()-> typeDataRepository.insertType(type));
+    public void insertType(Type type) {
+        executor.execute(() -> typeDataRepository.insertType(type));
     }
 
     //-----------------------------
@@ -176,18 +183,20 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Get all points of interest next a property
+     *
      * @param propertyID Property for which we want the POIs
      * @return All POI next the property
      */
-    public LiveData<List<PoiNextProperty>> getPoiNextProperty(String propertyID){
+    public LiveData<List<PoiNextProperty>> getPoiNextProperty(String propertyID) {
         return poiNextPropertyDataRepository.getProperties(propertyID);
     }
 
     /**
      * Insert a point of interest next property in the AppDatabase
+     *
      * @param poiNextProperty Point of interest next a property to insert
      */
-    public void insertPoiNextProperty(PoiNextProperty poiNextProperty){
+    public void insertPoiNextProperty(PoiNextProperty poiNextProperty) {
         executor.execute(() -> poiNextPropertyDataRepository.insertPoiNextProperty(poiNextProperty));
     }
 }
