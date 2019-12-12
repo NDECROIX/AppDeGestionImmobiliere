@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.openclassrooms.realestatemanager.R;
@@ -21,6 +22,7 @@ import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerVi
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,6 +38,7 @@ EditActivity.startEditActivityListener{
     private PropertyViewModel propertyViewModel;
 
     //Fragments
+    private Fragment activeFragment = new Fragment();
     private final ListFragment listFragment = new ListFragment();
     private final DetailFragment detailFragment = new DetailFragment();
 
@@ -45,8 +48,9 @@ EditActivity.startEditActivityListener{
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         configViewModel();
+        activeFragment = listFragment;
         this.getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_main_frame_layout, listFragment)
+                .add(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
         configToolbar();
         configDrawerLayout();
@@ -60,7 +64,22 @@ EditActivity.startEditActivityListener{
     private void configToolbar() {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
+            getSupportActionBar().show();
             getSupportActionBar().setTitle(R.string.app_name);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (activeFragment == detailFragment){
+            activeFragment = listFragment;
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_frame_layout, activeFragment)
+                    .commitNow();
+            configToolbar();
+            configDrawerLayout();
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -81,6 +100,10 @@ EditActivity.startEditActivityListener{
                 break;
             case R.id.menu_activity_main_search:
                 showToastMessage("Search for a real estate.");
+                break;
+            case android.R.id.home:
+                if (activeFragment == detailFragment) onBackPressed();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -99,8 +122,9 @@ EditActivity.startEditActivityListener{
     @Override
     public void onClickListener(Property property, List<Photo> photos) {
         propertyViewModel.setCurrentProperty(property, photos);
+        activeFragment = detailFragment;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_main_frame_layout, detailFragment)
+                .replace(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
     }
 
