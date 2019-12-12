@@ -597,6 +597,11 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         }
 
+        // Check description
+        if (tieDescription.getText() != null && !tieDescription.getText().toString().isEmpty()){
+            property.setDescription(tieDescription.getText().toString());
+        }
+
         // Check if we have at least one photo
         if (adapter.getItemCount() == 0) {
             showToastMessage("You need at least one photo");
@@ -667,7 +672,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check the points of interests
-        if (tiePoi.getText() != null) {
+        if (tiePoi.getText() != null && !tiePoi.getText().toString().isEmpty()) {
             String stringPoi = tiePoi.getText().toString().replace(" ", "");
             String[] poiList = stringPoi.split(",");
             for (String poi : poiList) {
@@ -686,7 +691,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             return false;
         }
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm/dd/yyyy", Locale.US);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
             Date date = simpleDateFormat.parse(tieEntryDate.getText().toString());
             property.setEntryDate(date.getTime());
         } catch (ParseException p) {
@@ -698,7 +703,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         if (tieAgent.getText() == null || tieAgent.getText().toString().isEmpty()) {
             showToastMessage("Pleas add a real estate manager");
             return false;
+        } else {
+            property.setAgent(tieAgent.getText().toString());
         }
+
         showToastMessage("Verification done! all is ok.");
         return true;
     }
