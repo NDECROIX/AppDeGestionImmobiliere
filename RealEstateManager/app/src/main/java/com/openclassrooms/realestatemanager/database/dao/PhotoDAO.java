@@ -24,5 +24,5 @@ public interface PhotoDAO {
     Cursor getAllWithCursor();
 
     @Insert
-    void insertPhotos(Photo photo);
+    void insertPhoto(Photo photo);
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PhotoDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiNextPropertyDataRepository;
@@ -40,6 +41,11 @@ public class Injection {
         return new PropertyDataRepository(database.propertyDAO());
     }
 
+    public static AgentDataRepository provideAgentDataSource(Context context) {
+        AppDatabase database = AppDatabase.getInstance(context);
+        return new AgentDataRepository(database.agentDAO());
+    }
+
     public static Executor provideExecutor() {
         return Executors.newSingleThreadExecutor();
     }
@@ -50,8 +56,9 @@ public class Injection {
         TypeDataRepository typeDataRepository = provideTypeDataSource(context);
         PoiNextPropertyDataRepository poiNextPropertyDataRepository = providePoiNextPropertyDataSource(context);
         PropertyDataRepository dataSourceProperty = providePropertyDataSource(context);
+        AgentDataRepository agentDataRepository = provideAgentDataSource(context);
         Executor executor = provideExecutor();
-        return new ViewModelFactory(photoDataRepository, poiDataRepository, typeDataRepository, poiNextPropertyDataRepository, dataSourceProperty, executor);
+        return new ViewModelFactory(photoDataRepository, poiDataRepository, typeDataRepository, poiNextPropertyDataRepository, dataSourceProperty, agentDataRepository, executor);
     }
 
 }

@@ -158,7 +158,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
 
         type.setText(property.getType());
         description.setText(property.getDescription());
-        price.setText(new DecimalFormat("#").format(property.getPrice()));
+        price.setText(String.format("Price : %s $", new DecimalFormat("#").format(property.getPrice())));
         surface.append(String.valueOf(property.getSurface()));
         room.append(String.valueOf(property.getRooms()));
         bathroom.append(String.valueOf(property.getBathrooms()));
@@ -170,7 +170,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
         calendar.setTimeInMillis(property.getEntryDate());
         date.setText(String.format(Locale.getDefault(),"%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        agent.setText(property.getAgent());
+        agent.setText(property.getAgentID());
     }
 
     private void getPropertyPoiFromDatabase(){

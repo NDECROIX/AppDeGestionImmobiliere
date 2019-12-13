@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DatePickerFragment;
@@ -101,10 +100,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     LinearLayout checkBoxGrpRight;
     @BindView(R.id.activity_edit_recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.activity_edit_til_type)
-    TextInputLayout tilType;
-    @BindView(R.id.activity_edit_tie_type)
-    TextInputEditText tieType;
     @BindView(R.id.activity_edit_tie_date)
     TextInputEditText tieEntryDate;
     @BindView(R.id.activity_edit_tie_price)
@@ -131,8 +126,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     TextInputEditText tieZipCode;
     @BindView(R.id.activity_edit_tie_country)
     TextInputEditText tieCountry;
-    @BindView(R.id.activity_edit_tie_poi)
-    TextInputEditText tiePoi;
     @BindView(R.id.activity_edit_tie_agent)
     TextInputEditText tieAgent;
 
@@ -142,9 +135,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     private String type;
     private String borough;
-    private List<Type> types;
     private List<Poi> pois;
-    private List<Poi> allPois;
     private Property property;
     private List<Property> properties;
 
@@ -164,13 +155,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     private void configViews() {
         displayBoroughRadioBtn();
-        tieType.setOnFocusChangeListener((view, focus) -> {
-            if (focus) {
-                radioGroupTypeRight.clearCheck();
-                radioGroupTypeLeft.clearCheck();
-                type = null;
-            }
-        });
     }
 
     private void configRecyclerView() {
@@ -232,7 +216,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      */
     private void updateTypeRadioBtn(List<Type> types) {
         boolean left = true;
-        this.types = new ArrayList<>(types);
         for (Type type : types) {
             RadioButton radioButton = new RadioButton(getApplicationContext());
             radioButton.setText(type.getName());
@@ -243,8 +226,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                     radioGroupTypeRight.clearCheck();
                 }
                 this.type = type.getName();
-                tieType.clearFocus();
-                tieType.setText("");
             });
             if (left) {
                 radioGroupTypeLeft.addView(radioButton);
@@ -288,7 +269,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      */
     private void updatePoiCheckBox(List<Poi> POIs) {
         boolean left = true;
-        allPois = new ArrayList<>(POIs);
         for (Poi poi : POIs) {
             CheckBox checkBox = new CheckBox(getApplicationContext());
             checkBox.setText(poi.getName());
@@ -374,6 +354,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      * Display a dialog to add title.
      * The photo is not added to database so we don't need to add the property id.
      * We inflate the view in the dialog.
+     *
      * @param data   Uri
      * @param bitmap photo from the camera
      */
@@ -522,17 +503,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     private boolean champNotEmpty() {
         // Check than at least one type is selected and if it does not exist in the database, add it.
-        if (this.type == null && tieType.getText() != null && tieType.getText().toString().isEmpty()) {
+        if (this.type == null) {
             showToastMessage("Please add a type");
             return false;
         } else {
-            if (this.type == null) {
-                type = tieType.getEditableText().toString();
-                Type propertyType = new Type(type);
-                if (!types.contains(propertyType)) {
-                    propertyViewModel.insertType(propertyType);
-                }
-            }
             property.setType(type);
         }
 
@@ -598,7 +572,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check description
-        if (tieDescription.getText() != null && !tieDescription.getText().toString().isEmpty()){
+        if (tieDescription.getText() != null && !tieDescription.getText().toString().isEmpty()) {
             property.setDescription(tieDescription.getText().toString());
         }
 
@@ -671,20 +645,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             property.setBorough(borough);
         }
 
-        // Check the points of interests
-        if (tiePoi.getText() != null && !tiePoi.getText().toString().isEmpty()) {
-            String stringPoi = tiePoi.getText().toString().replace(" ", "");
-            String[] poiList = stringPoi.split(",");
-            for (String poi : poiList) {
-                Poi newPoi = new Poi();
-                newPoi.setName(poi);
-                if (!allPois.contains(newPoi)) {
-                    propertyViewModel.insertPoi(newPoi);
-                    pois.add(newPoi);
-                }
-            }
-        }
-
         // Check date
         if (tieEntryDate.getText() == null || tieEntryDate.getText().toString().isEmpty()) {
             showToastMessage("Please choose a date");
@@ -704,7 +664,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             showToastMessage("Pleas add a real estate manager");
             return false;
         } else {
-            property.setAgent(tieAgent.getText().toString());
+            property.setAgentID(tieAgent.getText().toString());
         }
 
         showToastMessage("Verification done! all is ok.");

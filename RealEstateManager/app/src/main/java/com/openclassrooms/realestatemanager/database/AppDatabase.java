@@ -10,18 +10,20 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.openclassrooms.realestatemanager.database.dao.AgentDao;
 import com.openclassrooms.realestatemanager.database.dao.PhotoDAO;
 import com.openclassrooms.realestatemanager.database.dao.PoiDAO;
 import com.openclassrooms.realestatemanager.database.dao.PoiNextPropertyDAO;
 import com.openclassrooms.realestatemanager.database.dao.PropertyDAO;
 import com.openclassrooms.realestatemanager.database.dao.TypeDAO;
+import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
 
-@Database(entities = {Property.class, Photo.class, Poi.class, PoiNextProperty.class, Type.class}, version = 1, exportSchema = false)
+@Database(entities = {Property.class, Photo.class, Poi.class, PoiNextProperty.class, Type.class, Agent.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     //--- SINGLETON ---
@@ -37,6 +39,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract PropertyDAO propertyDAO();
 
     public abstract TypeDAO typeDAO();
+
+    public abstract AgentDao agentDAO();
 
     //--- INSTANCE ---
     public static AppDatabase getInstance(Context context) {

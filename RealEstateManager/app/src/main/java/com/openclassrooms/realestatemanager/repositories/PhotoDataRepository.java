@@ -40,6 +40,6 @@ public class PhotoDataRepository {
      * @param photo New Photo
      */
     public void insertPropertyPhoto(Photo photo) {
-        this.photoDAO.insertPhotos(photo);
+        this.photoDAO.insertPhoto(photo);
     }
 }

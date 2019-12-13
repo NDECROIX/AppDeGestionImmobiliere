@@ -130,12 +130,13 @@ public class Property {
     /**
      * The real estate agent in charge of this property.
      */
-    @ColumnInfo(name = "agent")
-    private String agent;
+    @ColumnInfo(name = "agent_id")
+    @ForeignKey(entity = Agent.class, parentColumns = "id", childColumns = "agentID")
+    private String agentID;
 
     public Property(@NonNull String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
                     int bedrooms, String description, int streetNumber, String streetName,
-                    String addressSupplement, String city, int zip, String country, long entryDate, String agent) {
+                    String addressSupplement, String city, int zip, String country, long entryDate, String agentID) {
         this.id = id;
         this.type = type;
         this.borough = borough;
@@ -154,7 +155,7 @@ public class Property {
         this.status = false;
         this.entryDate = entryDate;
         this.saleDate = null;
-        this.agent = agent;
+        this.agentID = agentID;
     }
 
     @Ignore
@@ -187,7 +188,7 @@ public class Property {
         if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
         if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
         if (values.containsKey("saleDate")) property.setSaleDate(values.getAsString("saleDate"));
-        if (values.containsKey("agent")) property.setAgent(values.getAsString("agent"));
+        if (values.containsKey("agentID")) property.setAgentID(values.getAsString("agentID"));
         return property;
     }
 
@@ -216,7 +217,7 @@ public class Property {
                 this.getZip() +
                 this.getCity() +
                 this.getEntryDate() +
-                this.getAgent();
+                this.getAgentID();
     }
 
     @Override
@@ -306,8 +307,8 @@ public class Property {
         return saleDate;
     }
 
-    public String getAgent() {
-        return agent;
+    public String getAgentID() {
+        return agentID;
     }
 
     // SETTER
@@ -384,7 +385,7 @@ public class Property {
         this.saleDate = saleDate;
     }
 
-    public void setAgent(String agent) {
-        this.agent = agent;
+    public void setAgentID(String agentID) {
+        this.agentID = agentID;
     }
 }

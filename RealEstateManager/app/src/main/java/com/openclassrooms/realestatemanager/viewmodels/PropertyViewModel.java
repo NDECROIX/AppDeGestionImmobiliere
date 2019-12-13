@@ -3,11 +3,13 @@ package com.openclassrooms.realestatemanager.viewmodels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
+import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PhotoDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiNextPropertyDataRepository;
@@ -26,6 +28,7 @@ public class PropertyViewModel extends ViewModel {
     private final TypeDataRepository typeDataRepository;
     private final PoiNextPropertyDataRepository poiNextPropertyDataRepository;
     private final PropertyDataRepository propertyDataRepository;
+    private final AgentDataRepository agentDataRepository;
     private final Executor executor;
 
     // CURRENT PROPERTY
@@ -36,12 +39,13 @@ public class PropertyViewModel extends ViewModel {
                              PoiDataRepository poiDataRepository,
                              TypeDataRepository typeDataRepository,
                              PoiNextPropertyDataRepository poiNextPropertyDataRepository,
-                             PropertyDataRepository propertyDataRepository, Executor executor) {
+                             PropertyDataRepository propertyDataRepository, AgentDataRepository agentDataRepository, Executor executor) {
         this.photoDataRepository = photoDataRepository;
         this.poiDataRepository = poiDataRepository;
         this.typeDataRepository = typeDataRepository;
         this.poiNextPropertyDataRepository = poiNextPropertyDataRepository;
         this.propertyDataRepository = propertyDataRepository;
+        this.agentDataRepository = agentDataRepository;
         this.executor = executor;
     }
 
@@ -211,4 +215,34 @@ public class PropertyViewModel extends ViewModel {
     public void insertPoiNextProperty(PoiNextProperty poiNextProperty) {
         executor.execute(() -> poiNextPropertyDataRepository.insertPoiNextProperty(poiNextProperty));
     }
+
+    //-----------------
+    //--- FOR AGENT ---
+    //-----------------
+
+    /**
+     * Get Agents from the AppDatabase
+     * @return List of agent
+     */
+    public LiveData<List<Agent>> getAgents(){
+        return agentDataRepository.getAgents();
+    }
+
+    /**
+     * Get an agent from the database
+     * @param agentID agent id
+     * @return agent with id passed in parameter
+     */
+    public LiveData<Agent> getAgent(String agentID){
+        return agentDataRepository.getAgent(agentID);
+    }
+
+    /**
+     * Insert an agent in the database
+     * @param agent agent to insert
+     */
+    public void insertAgent(Agent agent){
+        executor.execute(() -> agentDataRepository.insertAgent(agent));
+    }
+
 }
