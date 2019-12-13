@@ -163,8 +163,10 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
         room.append(String.valueOf(property.getRooms()));
         bathroom.append(String.valueOf(property.getBathrooms()));
         bedroom.append(String.valueOf(property.getBedrooms()));
-        address.setText(String.format(Locale.getDefault(), "%d %s\n%s\n%s\n%d\n%s",
-                property.getStreetNumber(), property.getStreetName(), property.getAddressSupplement(),
+        String supplement = property.getAddressSupplement();
+        supplement = (supplement == null)? "" : "\n"+supplement;
+        address.setText(String.format(Locale.getDefault(), "%d %s %s\n%s\n%d\n%s",
+                property.getStreetNumber(), property.getStreetName(), supplement,
                 property.getCity(), property.getZip(), property.getCountry()));
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTimeInMillis(property.getEntryDate());

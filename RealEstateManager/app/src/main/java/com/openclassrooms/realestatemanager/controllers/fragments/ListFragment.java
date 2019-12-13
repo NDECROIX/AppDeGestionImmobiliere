@@ -3,6 +3,9 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -10,10 +13,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.EditActivity;
@@ -72,8 +71,8 @@ public class ListFragment extends Fragment {
     /**
      * Get data from database
      */
-    private void getDataFromViewModel(){
-        propertyViewModel.getProperties().observe(this, properties ->{
+    private void getDataFromViewModel() {
+        propertyViewModel.getProperties().observe(this, properties -> {
             adapter.setPropertyList(properties);
         });
         propertyViewModel.getPhotos().observe(this, photos ->
@@ -81,7 +80,7 @@ public class ListFragment extends Fragment {
     }
 
     @OnClick(R.id.fragment_list_fab)
-    public void startEditActivity(){
+    public void startEditActivity() {
         ((EditActivity.startEditActivityListener) context).createProperty();
     }
 }

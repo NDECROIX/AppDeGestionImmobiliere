@@ -22,13 +22,12 @@ import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerVi
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
-EditActivity.startEditActivityListener{
+        EditActivity.startEditActivityListener {
 
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
@@ -71,7 +70,7 @@ EditActivity.startEditActivityListener{
 
     @Override
     public void onBackPressed() {
-        if (activeFragment == detailFragment){
+        if (activeFragment == detailFragment) {
             activeFragment = listFragment;
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_main_frame_layout, activeFragment)
@@ -99,7 +98,7 @@ EditActivity.startEditActivityListener{
                 showToastMessage("Edit a real estate.");
                 break;
             case R.id.menu_activity_main_search:
-                showToastMessage("Search for a real estate.");
+                showToastMessage("Search option");
                 break;
             case android.R.id.home:
                 if (activeFragment == detailFragment) onBackPressed();
