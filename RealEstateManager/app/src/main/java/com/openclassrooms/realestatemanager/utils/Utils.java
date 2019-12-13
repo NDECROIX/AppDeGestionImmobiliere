@@ -73,7 +73,7 @@ public class Utils {
         MessageDigest messageDigest;
         try {
             messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(data.getBytes(), 0, data.length());
+            messageDigest.update(data.toLowerCase().getBytes(), 0, data.length());
             StringBuilder dataBuilder = new StringBuilder(new BigInteger(1, messageDigest.digest()).toString(16));
             while (dataBuilder.length() < 32) {
                 dataBuilder.insert(0, "0");

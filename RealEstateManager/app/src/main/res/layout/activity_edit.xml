@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/activity_edit_appbar"
@@ -12,7 +13,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:theme="@style/ToolBarStyle"
-        android:fitsSystemWindows="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,10 +21,6 @@
             android:id="@+id/activity_edit_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:paddingBottom="5dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -75,30 +71,6 @@
             </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/activity_edit_til_type"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Other type"
-                app:hintEnabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_radio_grp_type_left">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_edit_tie_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:nextFocusDown="@id/activity_edit_til_price"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_price"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
@@ -113,7 +85,7 @@
 
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_surface"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_type">
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_radio_grp_type_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_edit_tie_price"
@@ -140,7 +112,7 @@
                 app:hintEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_price"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_type">
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_radio_grp_type_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_edit_tie_surface"
@@ -455,7 +427,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_country"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginTop="@dimen/margin_screen"
@@ -536,31 +508,6 @@
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_tv_poi" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/activity_edit_til_poi"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Points of interests"
-                app:helperText="Separate by comma"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_check_box_grp_poi_left">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_edit_tie_poi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:maxLines="1"
-                    android:nextFocusDown="@+id/activity_edit_til_date" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_date"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="150dp"
@@ -572,7 +519,7 @@
                 android:hint="Entry date"
                 app:helperText="*month/day/years"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_poi">
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_check_box_grp_poi_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/activity_edit_tie_date"
@@ -580,7 +527,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="date"
                     android:imeOptions="actionNext"
-                    android:nextFocusDown="@+id/activity_edit_til_agent" />
+                    android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -594,27 +541,29 @@
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_date"
                 app:layout_constraintTop_toTopOf="@+id/activity_edit_til_date" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/activity_edit_til_agent"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/activity_edit_ib_agent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="*Real estate manager"
+                android:layout_margin="@dimen/margin_screen"
+                android:src="@drawable/ic_person_add_24"
+                android:background="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date"/>
+
+            <TextView
+                android:id="@+id/activity_edit_tv_agent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="agent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date">
+                app:layout_constraintStart_toEndOf="@id/activity_edit_ib_agent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_edit_tie_agent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
 
-            </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

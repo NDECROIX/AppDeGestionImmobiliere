@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +43,7 @@ import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DatePickerFragment;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
@@ -126,8 +131,8 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     TextInputEditText tieZipCode;
     @BindView(R.id.activity_edit_tie_country)
     TextInputEditText tieCountry;
-    @BindView(R.id.activity_edit_tie_agent)
-    TextInputEditText tieAgent;
+    @BindView(R.id.activity_edit_tv_agent)
+    TextView tvAgent;
 
     private PropertyViewModel propertyViewModel;
     private EditActivityPhotoRecyclerViewAdapter adapter;
@@ -138,6 +143,8 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private List<Poi> pois;
     private Property property;
     private List<Property> properties;
+    private List<Agent> agents;
+    private Agent agent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +178,27 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
     }
 
+    @OnClick(R.id.activity_edit_ib_agent)
+    public void onClickAgent(){
+        if (this.agents.size() == 0){
+            showToastMessage("No agents");
+            return;
+        }
+        String[] agents = new String[this.agents.size()];
+        int count = 0;
+        for (Agent agent : this.agents){
+            agents[count] = String.format("%s %s", agent.getFirstName(), agent.getLastName());
+            count++;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Agents")
+                .setItems(agents, (dialog, which) -> {
+                    tvAgent.setText(agents[which]);
+                    agent = this.agents.get(which);
+                });
+        builder.create().show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_edit_toolbar_menu, menu);
@@ -190,11 +218,24 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             if (insertPropertyInDatabase()) {
                 insertPoiInDatabase();
                 insertPhotoInDatabase();
+                propertyAddedToast();
                 startActivity(new Intent(this, MainActivity.class));
             } else {
                 showToastMessage("Property already exist!");
             }
         }
+    }
+
+    /**
+     * Create a customized toast to notify the user when a property is added.
+     */
+    private void propertyAddedToast() {
+        Toast toast = Toast.makeText(this, type + " added!", Toast.LENGTH_SHORT);
+        View view = toast.getView();
+        view.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimaryDark), PorterDuff.Mode.DARKEN);
+        TextView text = view.findViewById(android.R.id.message);
+        text.setTextColor(Color.WHITE);
+        toast.show();
     }
 
     private void configViewModel() {
@@ -206,6 +247,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         propertyViewModel.getTypes().observe(this, this::updateTypeRadioBtn);
         propertyViewModel.getAllPoi().observe(this, this::updatePoiCheckBox);
         propertyViewModel.getProperties().observe(this, properties -> this.properties = properties);
+        propertyViewModel.getAgents().observe(this, agents -> this.agents = agents);
     }
 
     /**
@@ -660,14 +702,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check agent
-        if (tieAgent.getText() == null || tieAgent.getText().toString().isEmpty()) {
-            showToastMessage("Pleas add a real estate manager");
-            return false;
-        } else {
-            property.setAgentID(tieAgent.getText().toString());
+        if (agent != null){
+            property.setAgentID(agent.getId());
         }
-
-        showToastMessage("Verification done! all is ok.");
         return true;
     }
 
