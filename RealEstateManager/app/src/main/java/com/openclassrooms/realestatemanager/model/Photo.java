@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.model;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -15,7 +17,7 @@ import androidx.room.Index;
                 parentColumns = "id",
                 childColumns = "property_id"),
         indices = @Index(value = "property_id"))
-public class Photo {
+public class Photo implements Parcelable {
 
     @ColumnInfo(name = "uri")
     @NonNull
@@ -40,6 +42,8 @@ public class Photo {
     }
 
     // --- UTILS ---
+
+
 
     public static Photo fromContentValues(ContentValues values) {
         final Photo photo = new Photo();
@@ -76,4 +80,34 @@ public class Photo {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uri);
+        dest.writeString(propertyID);
+        dest.writeString(description);
+    }
+
+    protected Photo(Parcel in) {
+        uri = in.readString();
+        propertyID = in.readString();
+        description = in.readString();
+    }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
 }

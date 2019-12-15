@@ -17,14 +17,20 @@ import java.util.List;
 
 public class EditActivityPhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
 
+    public interface OnClickPhotoListener {
+        void onClickDeletePhoto(Photo photo);
+    }
+
+    private OnClickPhotoListener callback;
     private List<Photo> photos;
 
-    public EditActivityPhotoRecyclerViewAdapter() {
+    public EditActivityPhotoRecyclerViewAdapter(OnClickPhotoListener callback) {
+        this.callback = callback;
         this.photos = new ArrayList<>();
     }
 
     public void setPhotos(List<Photo> photos) {
-        photos.clear();
+        this.photos.clear();
         this.photos.addAll(photos);
         notifyDataSetChanged();
     }
@@ -53,6 +59,7 @@ public class EditActivityPhotoRecyclerViewAdapter extends RecyclerView.Adapter<P
         Glide.with(holder.itemView).load(photo.getUri()).into(holder.photo);
         holder.title.setText(photo.getDescription());
         holder.deleteBtn.setOnClickListener(l -> {
+            callback.onClickDeletePhoto(photo);
             photos.remove(photo);
             notifyDataSetChanged();
         });

@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,7 +61,9 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,14 +77,31 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class EditActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
+public class EditActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, EditActivityPhotoRecyclerViewAdapter.OnClickPhotoListener {
+
+    private static final String PROPERTY = "property";
+    private static final String POIS = "pois";
+    private static final String PHOTOS = "photos";
 
     public interface startEditActivityListener {
         void createProperty();
     }
 
-    public static Intent newIntent(Context context) {
-        return new Intent(context, EditActivity.class);
+    public static Intent newIntent(Context context, @Nullable Property property, @Nullable List<PoiNextProperty> pois,
+                                   @Nullable List<Photo> photos) {
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(context, EditActivity.class);
+        if (property != null) {
+            bundle.putSerializable(PROPERTY, property);
+        }
+        if (pois != null) {
+            bundle.putParcelableArrayList(POIS, (ArrayList<? extends Parcelable>) pois);
+        }
+        if (photos != null) {
+            bundle.putParcelableArrayList(PHOTOS, (ArrayList<? extends Parcelable>) photos);
+        }
+        intent.putExtras(bundle);
+        return intent;
     }
 
     private static final int RC_IMAGE_PERMS = 666;
@@ -146,11 +166,18 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private List<Agent> agents;
     private Agent agent;
 
+    // Update
+    private Property propertyToUpdate;
+    private List<PoiNextProperty> poisNextProperty;
+    private List<String> poisPropertyName;
+    private List<Photo> propertyPhotos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         ButterKnife.bind(this);
+        getExtras();
         pois = new ArrayList<>();
         property = new Property();
         configRecyclerView();
@@ -160,14 +187,62 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         configViews();
     }
 
+    private void getExtras() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            propertyToUpdate = (Property) bundle.getSerializable(PROPERTY);
+            List<PoiNextProperty> bundlePois = bundle.getParcelableArrayList(POIS);
+            if (bundlePois != null) {
+                poisNextProperty = new ArrayList<>(bundlePois);
+                poisPropertyName = new ArrayList<>();
+                for (PoiNextProperty poi : poisNextProperty) {
+                    poisPropertyName.add(poi.getPoiName());
+                }
+            }
+            List<Photo> bundlePhotos = bundle.getParcelableArrayList(PHOTOS);
+            if (bundlePhotos != null) {
+                propertyPhotos = new ArrayList<>(bundlePhotos);
+            }
+        }
+    }
+
+    private void completeFieldsWithProperty(Property property) {
+        tiePrice.setText(String.valueOf(property.getPrice()));
+        tieSurface.setText(String.valueOf(property.getSurface()));
+        tieRooms.setText(String.valueOf(property.getRooms()));
+        tieBedroom.setText(String.valueOf(property.getBedrooms()));
+        tieBathroom.setText(String.valueOf(property.getBathrooms()));
+        tieDescription.setText(property.getDescription());
+        tieStreetNumber.setText(String.valueOf(property.getStreetNumber()));
+        tieStreetName.setText(String.valueOf(property.getStreetName()));
+        if (property.getAddressSupplement() != null)
+            tieStreetSupplement.setText(property.getAddressSupplement());
+        tieCity.setText(property.getCity());
+        tieZipCode.setText(String.valueOf(property.getZip()));
+        tieCountry.setText(property.getCountry());
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(property.getEntryDate());
+        tieEntryDate.setText(String.format(Locale.getDefault(),"%d/%d/%d",
+                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        if (property.getAgentID() != null && !property.getAgentID().isEmpty())
+            propertyViewModel.getAgent(property.getAgentID()).observe(this, agent ->
+                    tvAgent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
+    }
+
     private void configViews() {
         displayBoroughRadioBtn();
+        if (propertyToUpdate != null) {
+            completeFieldsWithProperty(propertyToUpdate);
+        }
     }
 
     private void configRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        adapter = new EditActivityPhotoRecyclerViewAdapter();
+        adapter = new EditActivityPhotoRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
+        if (propertyPhotos != null) {
+            adapter.setPhotos(propertyPhotos);
+        }
     }
 
     private void configToolbar() {
@@ -179,14 +254,14 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     @OnClick(R.id.activity_edit_ib_agent)
-    public void onClickAgent(){
-        if (this.agents.size() == 0){
+    public void onClickAgent() {
+        if (this.agents.size() == 0) {
             showToastMessage("No agents");
             return;
         }
         String[] agents = new String[this.agents.size()];
         int count = 0;
-        for (Agent agent : this.agents){
+        for (Agent agent : this.agents) {
             agents[count] = String.format("%s %s", agent.getFirstName(), agent.getLastName());
             count++;
         }
@@ -275,6 +350,11 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 radioGroupTypeRight.addView(radioButton);
             }
             left = !left;
+            if (propertyToUpdate != null && propertyToUpdate.getType().equals(type.getName())) {
+                radioButton.setChecked(true);
+                this.type = type.getName();
+            }
+
         }
     }
 
@@ -301,6 +381,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 radioGroupBoroughRight.addView(radioButton);
             }
             left = !left;
+            if (propertyToUpdate != null && propertyToUpdate.getBorough().equals(borough)) {
+                radioButton.setChecked(true);
+                this.borough = borough;
+            }
+
+
         }
     }
 
@@ -327,6 +413,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 checkBoxGrpRight.addView(checkBox);
             }
             left = !left;
+            if (poisPropertyName != null && poisPropertyName.contains(poi.getName())) {
+                checkBox.setChecked(true);
+            }
+
         }
     }
 
@@ -702,34 +792,68 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check agent
-        if (agent != null){
+        if (agent != null) {
             property.setAgentID(agent.getId());
         }
         return true;
     }
 
     private boolean insertPropertyInDatabase() {
-        property.setId(Utils.convertStringMd5(property.getStringToHash()));
+        if (propertyToUpdate == null) {
+            property.setId(Utils.convertStringMd5(property.getStringToHash()));
+        } else {
+            property.setId(propertyToUpdate.getId());
+        }
         if (!properties.contains(property)) {
             propertyViewModel.insertProperty(property);
+            return true;
+        } else if (propertyToUpdate != null) {
+            propertyViewModel.updateProperty(property);
             return true;
         }
         return false;
     }
 
+    /**
+     * Insert points of interests next the property and delete the old ones if they exist
+     */
     private void insertPoiInDatabase() {
         for (Poi poi : pois) {
             PoiNextProperty poiNextProperty = new PoiNextProperty();
             poiNextProperty.setPoiName(poi.getName());
             poiNextProperty.setPropertyID(property.getId());
-            propertyViewModel.insertPoiNextProperty(poiNextProperty);
+            if (this.poisNextProperty != null && this.poisNextProperty.contains(poiNextProperty)) {
+                this.poisNextProperty.remove(poiNextProperty);
+            } else {
+                propertyViewModel.insertPoiNextProperty(poiNextProperty);
+            }
         }
+        if (this.poisNextProperty != null && !this.poisNextProperty.isEmpty())
+            for (PoiNextProperty poiNextProperty : poisNextProperty) {
+                propertyViewModel.deletePoiNextProperty(poiNextProperty);
+            }
     }
 
     private void insertPhotoInDatabase() {
         for (Photo photo : adapter.getPhotos()) {
             photo.setPropertyID(property.getId());
-            propertyViewModel.insertPropertyPhoto(photo);
+            if (propertyPhotos == null || !propertyPhotos.remove(photo)) {
+                propertyViewModel.insertPropertyPhoto(photo);
+            }
+        }
+        if (this.propertyPhotos != null && !this.propertyPhotos.isEmpty())
+            for (Photo photo : propertyPhotos) {
+                propertyViewModel.deletePhoto(photo);
+                File fileToDelete = new File(photo.getUri());
+                fileToDelete.deleteOnExit();
+            }
+    }
+
+    @Override
+    public void onClickDeletePhoto(Photo photo) {
+        if (propertyToUpdate != null) {
+            File photoToDelete = new File(photo.getUri());
+            photoToDelete.deleteOnExit();
         }
     }
 }

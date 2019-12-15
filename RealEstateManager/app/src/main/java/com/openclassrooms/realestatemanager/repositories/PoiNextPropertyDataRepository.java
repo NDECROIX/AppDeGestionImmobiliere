@@ -28,10 +28,19 @@ public class PoiNextPropertyDataRepository {
     /**
      * Insert a POI next to a property in the database
      *
-     * @param poiNextProperty New property
+     * @param poiNextProperty New property poi
      */
     public void insertPoiNextProperty(PoiNextProperty poiNextProperty) {
         this.poiNextPropertyDAO.insertPoiNextProperty(poiNextProperty);
+    }
+
+    /**
+     * Delete a POI next a property in the database
+     *
+     * @param poiNextProperty Poi to delete
+     */
+    public void deletePoiNextProperty(PoiNextProperty poiNextProperty) {
+        this.poiNextPropertyDAO.deletePoiNextProperty(poiNextProperty);
     }
 
 }

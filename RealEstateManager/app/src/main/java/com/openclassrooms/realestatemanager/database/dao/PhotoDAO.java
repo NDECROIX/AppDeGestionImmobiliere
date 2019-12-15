@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.database.dao;
 import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Dao;
@@ -25,4 +26,7 @@ public interface PhotoDAO {
 
     @Insert
     void insertPhoto(Photo photo);
+
+    @Delete
+    void deletePhoto(Photo photo);
 }

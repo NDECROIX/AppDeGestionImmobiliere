@@ -2,17 +2,14 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 
 import android.content.Context;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -134,17 +131,9 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_fragment_detail_edit){
-            Toast.makeText(context, "Item Edit", Toast.LENGTH_SHORT).show();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void configRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        DetailFragmentPhotoRecyclerViewAdapter adapter = new DetailFragmentPhotoRecyclerViewAdapter(this, propertyViewModel.getPhotosProperty());
+        DetailFragmentPhotoRecyclerViewAdapter adapter = new DetailFragmentPhotoRecyclerViewAdapter(this, propertyViewModel.getCurrentPhotosProperty());
         recyclerView.setAdapter(adapter);
     }
 
@@ -181,6 +170,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     }
 
     private void displayPoi(List<PoiNextProperty> poiNextProperty){
+        propertyViewModel.setCurrentPoisNextProperty(poiNextProperty);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(10,10,10,10);
         boolean left = true;

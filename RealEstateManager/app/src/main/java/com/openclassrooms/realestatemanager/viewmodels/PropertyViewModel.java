@@ -34,6 +34,7 @@ public class PropertyViewModel extends ViewModel {
     // CURRENT PROPERTY
     private Property currentProperty;
     private List<Photo> currentPhoto;
+    private List<PoiNextProperty> currentPoisNextProperty;
 
     public PropertyViewModel(PhotoDataRepository photoDataRepository,
                              PoiDataRepository poiDataRepository,
@@ -73,8 +74,16 @@ public class PropertyViewModel extends ViewModel {
      *
      * @return Photos from property
      */
-    public List<Photo> getPhotosProperty() {
+    public List<Photo> getCurrentPhotosProperty() {
         return currentPhoto;
+    }
+
+    public List<PoiNextProperty> getCurrentPoisNextProperty() {
+        return currentPoisNextProperty;
+    }
+
+    public void setCurrentPoisNextProperty(List<PoiNextProperty> currentPoisNextProperty) {
+        this.currentPoisNextProperty = currentPoisNextProperty;
     }
 
     //--------------------
@@ -95,8 +104,8 @@ public class PropertyViewModel extends ViewModel {
      *
      * @return Property with id as parameter
      */
-    public LiveData<List<Property>> getProperty(String propertyID) {
-        return propertyDataRepository.getPropertie(propertyID);
+    public LiveData<Property> getProperty(String propertyID) {
+        return propertyDataRepository.getProperty(propertyID);
     }
 
     /**
@@ -147,6 +156,14 @@ public class PropertyViewModel extends ViewModel {
      */
     public void insertPropertyPhoto(Photo photo) {
         executor.execute(() -> photoDataRepository.insertPropertyPhoto(photo));
+    }
+
+    /**
+     * Delete a photo from the database
+     * @param photo Photo to delete
+     */
+    public void deletePhoto(Photo photo){
+        executor.execute(() -> photoDataRepository.deletePhoto(photo));
     }
 
     //---------------
@@ -214,6 +231,15 @@ public class PropertyViewModel extends ViewModel {
      */
     public void insertPoiNextProperty(PoiNextProperty poiNextProperty) {
         executor.execute(() -> poiNextPropertyDataRepository.insertPoiNextProperty(poiNextProperty));
+    }
+
+    /**
+     * Delete a point of interest next property in the AppDatabase
+     *
+     * @param poiNextProperty Point of interest next a property to delete
+     */
+    public void deletePoiNextProperty(PoiNextProperty poiNextProperty) {
+        executor.execute(() -> poiNextPropertyDataRepository.deletePoiNextProperty(poiNextProperty));
     }
 
     //-----------------

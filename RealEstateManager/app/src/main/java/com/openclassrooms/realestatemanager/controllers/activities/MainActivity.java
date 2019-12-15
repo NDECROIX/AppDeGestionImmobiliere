@@ -97,6 +97,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             case R.id.menu_activity_main_edit:
                 showToastMessage("Edit a real estate.");
                 break;
+            case R.id.menu_fragment_detail_edit:
+                editProperty();
+                break;
             case R.id.menu_activity_main_search:
                 showToastMessage("Search option");
                 break;
@@ -105,6 +108,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void editProperty() {
+        startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty(),
+                 propertyViewModel.getCurrentPoisNextProperty() ,propertyViewModel.getCurrentPhotosProperty()));
     }
 
     /**
@@ -129,6 +137,6 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     public void createProperty() {
-        startActivity(EditActivity.newIntent(this));
+        startActivity(EditActivity.newIntent(this, null, null, null));
     }
 }

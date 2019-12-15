@@ -9,12 +9,13 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Property {
+public class Property implements Serializable {
 
     /**
      * The unique identifier of property
@@ -125,7 +126,7 @@ public class Property {
      * Date on which the property was sold.
      */
     @ColumnInfo(name = "sale_date")
-    private String saleDate;
+    private long saleDate;
 
     /**
      * The real estate agent in charge of this property.
@@ -154,7 +155,7 @@ public class Property {
         this.country = country;
         this.status = false;
         this.entryDate = entryDate;
-        this.saleDate = null;
+        this.saleDate = 0;
         this.agentID = agentID;
     }
 
@@ -187,7 +188,7 @@ public class Property {
         if (values.containsKey("country")) property.setCountry(values.getAsString("country"));
         if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
         if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
-        if (values.containsKey("saleDate")) property.setSaleDate(values.getAsString("saleDate"));
+        if (values.containsKey("saleDate")) property.setSaleDate(values.getAsLong("saleDate"));
         if (values.containsKey("agentID")) property.setAgentID(values.getAsString("agentID"));
         return property;
     }
@@ -205,10 +206,11 @@ public class Property {
 
     /**
      * Base to create the Property id
+     *
      * @return String of all data notnull
      */
     @Ignore
-    public String getStringToHash(){
+    public String getStringToHash() {
         return this.getType() +
                 this.getRooms() +
                 this.getPrice() +
@@ -303,7 +305,7 @@ public class Property {
         return entryDate;
     }
 
-    public String getSaleDate() {
+    public long getSaleDate() {
         return saleDate;
     }
 
@@ -381,11 +383,12 @@ public class Property {
         this.entryDate = entryDate;
     }
 
-    public void setSaleDate(String saleDate) {
+    public void setSaleDate(long saleDate) {
         this.saleDate = saleDate;
     }
 
     public void setAgentID(String agentID) {
         this.agentID = agentID;
     }
+
 }

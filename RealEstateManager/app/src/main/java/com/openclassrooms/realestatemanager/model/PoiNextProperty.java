@@ -1,21 +1,24 @@
 package com.openclassrooms.realestatemanager.model;
 
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 
+import java.util.Objects;
+
 @Entity(primaryKeys = {"property_id", "poi_name"},
         foreignKeys = @ForeignKey(entity = Property.class,
                 parentColumns = "id",
                 childColumns = "property_id"),
         indices = @Index(value = "property_id"))
-public class PoiNextProperty {
+public class PoiNextProperty implements Parcelable {
 
     /**
      * Refers to a real estate property
@@ -31,7 +34,7 @@ public class PoiNextProperty {
     @ColumnInfo(name = "poi_name")
     private String poiName;
 
-    public PoiNextProperty(@NonNull String propertyID,@NonNull String poiName) {
+    public PoiNextProperty(@NonNull String propertyID, @NonNull String poiName) {
         this.propertyID = propertyID;
         this.poiName = poiName;
     }
@@ -42,10 +45,29 @@ public class PoiNextProperty {
 
     // --- UTILS ---
 
+    protected PoiNextProperty(Parcel in) {
+        propertyID = in.readString();
+        poiName = in.readString();
+    }
+
+    public static final Creator<PoiNextProperty> CREATOR = new Creator<PoiNextProperty>() {
+        @Override
+        public PoiNextProperty createFromParcel(Parcel in) {
+            return new PoiNextProperty(in);
+        }
+
+        @Override
+        public PoiNextProperty[] newArray(int size) {
+            return new PoiNextProperty[size];
+        }
+    };
+
     public static PoiNextProperty fromContentValues(ContentValues values) {
         final PoiNextProperty poiNextProperty = new PoiNextProperty();
-        if (values.containsKey("propertyID")) poiNextProperty.setPropertyID(values.getAsString("propertyID"));
-        if (values.containsKey("poiName")) poiNextProperty.setPoiName(values.getAsString("poiName"));
+        if (values.containsKey("propertyID"))
+            poiNextProperty.setPropertyID(values.getAsString("propertyID"));
+        if (values.containsKey("poiName"))
+            poiNextProperty.setPoiName(values.getAsString("poiName"));
         return poiNextProperty;
     }
 
@@ -67,5 +89,30 @@ public class PoiNextProperty {
 
     public void setPoiName(String poiName) {
         this.poiName = poiName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(propertyID);
+        dest.writeString(poiName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PoiNextProperty that = (PoiNextProperty) o;
+        return propertyID.equals(that.propertyID) &&
+                poiName.equals(that.poiName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(propertyID, poiName);
     }
 }

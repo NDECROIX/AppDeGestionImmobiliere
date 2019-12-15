@@ -42,4 +42,12 @@ public class PhotoDataRepository {
     public void insertPropertyPhoto(Photo photo) {
         this.photoDAO.insertPhoto(photo);
     }
+
+    /**
+     * Delete a photo from the database
+     * @param photo Photo to delete
+     */
+    public void deletePhoto(Photo photo){
+        this.deletePhoto(photo);
+    }
 }

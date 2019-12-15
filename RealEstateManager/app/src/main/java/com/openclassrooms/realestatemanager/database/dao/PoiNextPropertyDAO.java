@@ -4,9 +4,11 @@ import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 
 import java.util.List;
@@ -22,4 +24,7 @@ public interface PoiNextPropertyDAO {
 
     @Insert
     void insertPoiNextProperty(PoiNextProperty poiNextProperty);
+
+    @Delete
+    void deletePoiNextProperty(PoiNextProperty poiNextProperty);
 }
