@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.openclassrooms.realestatemanager.model.Agent;
 
@@ -25,4 +26,7 @@ public interface AgentDao {
 
     @Insert
     void insertAgent(Agent agent);
+
+    @Update
+    void updateAgent(Agent agent);
 }

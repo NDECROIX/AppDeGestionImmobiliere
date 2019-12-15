@@ -271,4 +271,12 @@ public class PropertyViewModel extends ViewModel {
         executor.execute(() -> agentDataRepository.insertAgent(agent));
     }
 
+    /**
+     * Update an agent in the database
+     * @param agent agent to update
+     */
+    public void updateAgent(Agent agent){
+        executor.execute(() -> agentDataRepository.updateAgent(agent));
+    }
+
 }

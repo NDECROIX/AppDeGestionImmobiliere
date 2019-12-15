@@ -10,6 +10,8 @@ import androidx.room.PrimaryKey;
 
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.util.Objects;
+
 @Entity
 public class Agent {
 
@@ -41,6 +43,16 @@ public class Agent {
     @Ignore
     public Agent() {
 
+    }
+
+    /**
+     * Create the id if the empty constructor has been used.
+     */
+    public void createId(){
+        if (this.id != null && !this.id.isEmpty()){
+            return;
+        }
+        this.id = Utils.convertStringMd5(String.format("%s%s%s", firstName, lastName, email));
     }
 
     // --- UTILS ---
@@ -92,5 +104,18 @@ public class Agent {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Agent agent = (Agent) o;
+        return id.equals(agent.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

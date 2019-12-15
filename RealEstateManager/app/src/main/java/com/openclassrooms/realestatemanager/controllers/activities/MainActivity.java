@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
@@ -33,6 +35,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     DrawerLayout drawerLayout;
     @BindView(R.id.main_activity_toolbar)
     Toolbar toolbar;
+    @BindView(R.id.activity_main_navigation_view)
+    NavigationView navigationView;
 
     private PropertyViewModel propertyViewModel;
 
@@ -48,6 +52,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         ButterKnife.bind(this);
         configViewModel();
         activeFragment = listFragment;
+        navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
         this.getSupportFragmentManager().beginTransaction()
                 .add(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
@@ -92,16 +97,19 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_activity_main_add:
-                showToastMessage("Add a real estate.");
+                showToastMessage(this, "Add a real estate.");
                 break;
             case R.id.menu_activity_main_edit:
-                showToastMessage("Edit a real estate.");
+                showToastMessage(this,"Edit a real estate.");
                 break;
             case R.id.menu_fragment_detail_edit:
                 editProperty();
                 break;
             case R.id.menu_activity_main_search:
-                showToastMessage("Search option");
+                showToastMessage(this,"Search option");
+                break;
+            case R.id.activity_main_drawer_agent:
+                startActivity(new Intent(this, AgentActivity.class));
                 break;
             case android.R.id.home:
                 if (activeFragment == detailFragment) onBackPressed();
@@ -112,7 +120,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     private void editProperty() {
         startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty(),
-                 propertyViewModel.getCurrentPoisNextProperty() ,propertyViewModel.getCurrentPhotosProperty()));
+                propertyViewModel.getCurrentPoisNextProperty(), propertyViewModel.getCurrentPhotosProperty()));
     }
 
     /**

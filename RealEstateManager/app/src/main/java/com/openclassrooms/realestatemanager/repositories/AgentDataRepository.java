@@ -41,4 +41,13 @@ public class AgentDataRepository {
     public void insertAgent(Agent agent) {
         this.agentDao.insertAgent(agent);
     }
+
+    /**
+     * Update an agent in the database
+     *
+     * @param agent Agent to update
+     */
+    public void updateAgent(Agent agent) {
+        this.agentDao.updateAgent(agent);
+    }
 }
