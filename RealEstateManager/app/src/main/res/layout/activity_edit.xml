@@ -72,7 +72,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_price"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -82,7 +81,6 @@
                 android:hint="Price"
                 app:hintEnabled="true"
                 app:helperText="*Dollars"
-
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_surface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_radio_grp_type_left">
@@ -100,7 +98,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_surface"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -137,7 +134,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_rooms"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -163,7 +159,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_bathroom"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -189,7 +184,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_bedroom"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -215,7 +209,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_description"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -306,7 +299,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_street_number"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -330,7 +322,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_street_name"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -354,7 +345,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_street_supplement"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -378,7 +368,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_city"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -402,7 +391,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_zip"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -426,7 +414,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_country"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
@@ -509,7 +496,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_date"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_screen"
