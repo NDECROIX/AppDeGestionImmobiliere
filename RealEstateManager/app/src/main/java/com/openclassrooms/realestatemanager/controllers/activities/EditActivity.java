@@ -290,19 +290,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             if (insertPropertyInDatabase()) {
                 insertPoiInDatabase();
                 insertPhotoInDatabase();
-                propertyAddedToast();
+                customToast(this, type + ((propertyToUpdate == null) ? " added!" : " updated!"));
                 startActivity(new Intent(this, MainActivity.class));
             } else {
                 showToastMessage(this, "Property already exist!");
             }
         }
-    }
-
-    /**
-     * Create a customized toast to notify the user when a property is added.
-     */
-    private void propertyAddedToast() {
-        customToast(this, type + " added!");
     }
 
     private void configViewModel() {
@@ -377,8 +370,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 radioButton.setChecked(true);
                 this.borough = borough;
             }
-
-
         }
     }
 
@@ -408,7 +399,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             if (poisPropertyName != null && poisPropertyName.contains(poi.getName())) {
                 checkBox.setChecked(true);
             }
-
         }
     }
 
@@ -728,7 +718,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check the address supplement
-        if (tieStreetSupplement.getText() != null && tieStreetSupplement.getText().toString().isEmpty()) {
+        if (tieStreetSupplement.getText() != null && !tieStreetSupplement.getText().toString().isEmpty()) {
             property.setAddressSupplement(tieStreetSupplement.getText().toString());
         }
 

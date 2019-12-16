@@ -105,7 +105,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     private void configToolbar() {
         // Hide main toolbar
         ActionBar supportActionBar = ((MainActivity) context).getSupportActionBar();
-        if (supportActionBar != null){
+        if (supportActionBar != null) {
             supportActionBar.hide();
         }
 
@@ -113,7 +113,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
         setHasOptionsMenu(true);
         ((MainActivity) context).setSupportActionBar(toolbar);
         ActionBar actionBar = ((MainActivity) context).getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle("Detail");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -142,9 +142,8 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
 
     }
 
-    private void displayPropertyData(){
+    private void displayPropertyData() {
         Property property = propertyViewModel.getCurrentProperty();
-
         type.setText(property.getType());
         description.setText(property.getDescription());
         price.setText(String.format("Price : %s $", new DecimalFormat("#").format(property.getPrice())));
@@ -153,32 +152,36 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
         bathroom.append(String.valueOf(property.getBathrooms()));
         bedroom.append(String.valueOf(property.getBedrooms()));
         String supplement = property.getAddressSupplement();
-        supplement = (supplement == null)? "" : "\n"+supplement;
+        supplement = (supplement == null) ? "" : "\n" + supplement;
         address.setText(String.format(Locale.getDefault(), "%d %s %s\n%s\n%d\n%s",
                 property.getStreetNumber(), property.getStreetName(), supplement,
                 property.getCity(), property.getZip(), property.getCountry()));
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTimeInMillis(property.getEntryDate());
-        date.setText(String.format(Locale.getDefault(),"%d/%d/%d",
+        date.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        agent.setText(property.getAgentID());
+        if (property.getAgentID() != null && !property.getAgentID().isEmpty()) {
+            agent.setText(property.getAgentID());
+            propertyViewModel.getAgent(property.getAgentID()).observe(getViewLifecycleOwner(), agent ->
+                    this.agent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
+        }
     }
 
-    private void getPropertyPoiFromDatabase(){
+    private void getPropertyPoiFromDatabase() {
         propertyViewModel.getPoiNextProperty(propertyViewModel.getCurrentProperty().getId())
-                .observe(this, this::displayPoi);
+                .observe(getViewLifecycleOwner(), this::displayPoi);
     }
 
-    private void displayPoi(List<PoiNextProperty> poiNextProperty){
+    private void displayPoi(List<PoiNextProperty> poiNextProperty) {
         propertyViewModel.setCurrentPoisNextProperty(poiNextProperty);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(10,10,10,10);
+        params.setMargins(10, 10, 10, 10);
         boolean left = true;
-        for (PoiNextProperty poi : poiNextProperty){
+        for (PoiNextProperty poi : poiNextProperty) {
             TextView poiName = new TextView(getActivity());
             poiName.setText(poi.getPoiName());
             poiName.setLayoutParams(params);
-            if (left){
+            if (left) {
                 poiGrpLeft.addView(poiName);
             } else {
                 poiGrpRight.addView(poiName);
