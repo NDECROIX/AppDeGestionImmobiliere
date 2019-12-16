@@ -6,14 +6,262 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".controllers.fragments.FilterDialogFragment">
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/slider"
+    <TextView
+        android:id="@+id/fragment_filter_dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:valueFrom="20f"
-        android:valueTo="70f"
-        android:stepSize="10"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Filter"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_title"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="Type of property"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <RadioGroup
+                android:id="@+id/fragment_filter_dialog_radio_grp_type_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_screen"
+                app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_radio_grp_type_right"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_type">
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/fragment_filter_dialog_radio_grp_type_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_screen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fragment_filter_dialog_radio_grp_type_left"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_type">
+
+            </RadioGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_filter_dialog_til_price_min"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:hint="Min price"
+                app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_til_price_max"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_type_left"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_filter_dialog_tie_price_min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:drawableStart="@drawable/ic_dollar_24"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_max" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_filter_dialog_til_price_max"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:hint="Max price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_type_left"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_price_min">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_filter_dialog_tie_price_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:drawableStart="@drawable/ic_dollar_24"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_min" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_filter_dialog_til_surface_min"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:hint="Min surface"
+                app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_til_surface_max"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_price_min"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_filter_dialog_tie_surface_min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:drawableStart="@drawable/ic_surface_24"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_max" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fragment_filter_dialog_til_surface_max"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:hint="Max surface"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_price_max"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_surface_min">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_filter_dialog_tie_surface_max"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:drawableStart="@drawable/ic_surface_24"
+                    android:imeOptions="actionNext"
+                    android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_min" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_photos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:text="Photos :"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_surface_min"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_photos_nbr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:text="1"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_surface_min"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_tv_photos"/>
+
+            <SeekBar
+                android:id="@+id/fragment_filter_dialog_slider_photos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:max="9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_photos" />
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_borough"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:layout_marginEnd="@dimen/margin_screen"
+                android:layout_marginBottom="@dimen/margin_screen"
+                android:text="Borough"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_slider_photos" />
+
+            <RadioGroup
+                android:id="@+id/fragment_filter_dialog_radio_grp_borough_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_screen"
+                app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_radio_grp_borough_right"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_borough">
+
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/fragment_filter_dialog_radio_grp_borough_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_radio_grp_borough_left"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_borough">
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_poi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="Points of interests next the property"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_borough_left"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_filter_dialog_check_box_grp_poi_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_check_box_grp_poi_right"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_poi" />
+
+            <LinearLayout
+                android:id="@+id/fragment_filter_dialog_check_box_grp_poi_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_check_box_grp_poi_left"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_poi" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
+import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -106,7 +107,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 editProperty();
                 break;
             case R.id.menu_activity_main_search:
-                showToastMessage(this,"Search option");
+                startFilterDialogFragment();
                 break;
             case R.id.activity_main_drawer_agent:
                 startActivity(new Intent(this, AgentActivity.class));
@@ -116,6 +117,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startFilterDialogFragment(){
+        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, this.getLayoutInflater());
+        agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 
     private void editProperty() {
