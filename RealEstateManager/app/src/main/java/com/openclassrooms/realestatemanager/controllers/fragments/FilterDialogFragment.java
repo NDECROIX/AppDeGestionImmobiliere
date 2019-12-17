@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.model.Poi;
@@ -38,6 +40,13 @@ import butterknife.ButterKnife;
  */
 public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSeekBarChangeListener {
 
+    public interface FilterListener {
+        void onApplyFilter(Filter filter);
+        void filterError(String message);
+    }
+
+    private FilterListener callback;
+
     @BindView(R.id.fragment_filter_dialog_radio_grp_type_left)
     RadioGroup radioGroupTypeLeft;
     @BindView(R.id.fragment_filter_dialog_radio_grp_type_right)
@@ -54,6 +63,15 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     SeekBar seekBar;
     @BindView(R.id.fragment_filter_dialog_tv_photos_nbr)
     TextView nbrPhotos;
+    @BindView(R.id.fragment_filter_dialog_tie_price_min)
+    TextInputEditText minPrice;
+    @BindView(R.id.fragment_filter_dialog_tie_price_max)
+    TextInputEditText maxPrice;
+    @BindView(R.id.fragment_filter_dialog_tie_surface_min)
+    TextInputEditText minSurface;
+    @BindView(R.id.fragment_filter_dialog_tie_surface_max)
+    TextInputEditText maxSurface;
+
 
     private Context context;
     private LayoutInflater layoutInflater;
@@ -63,15 +81,21 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     private String type;
     private String borough;
     private List<Poi> pois;
+    private int photos;
+    private Filter filter;
 
-    public FilterDialogFragment(Context context,LayoutInflater layoutInflater) {
+    public FilterDialogFragment(Context context, FilterListener callback, LayoutInflater layoutInflater) {
+        this.photos = 1;
+        filter = new Filter();
         this.context = context;
+        this.callback = callback;
         this.layoutInflater = layoutInflater;
         this.propertyViewModel = ViewModelProviders.of((MainActivity) context).get(PropertyViewModel.class);
     }
 
     @NonNull
     @Override
+    @SuppressLint("InflateParams")
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final View view = layoutInflater.inflate(R.layout.fragment_filter_dialog, null);
@@ -80,10 +104,17 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         configViews();
         builder.setView(view)
                 .setPositiveButton("Apply", (dialog, id) -> {
-                    dialog.dismiss();
+                    // Overwrite in on show listener
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener( l ->
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+                    if (checkCast()){
+                        callback.onApplyFilter(createFilter());
+                        dialog.dismiss();
+                    }}));
+        return dialog;
     }
 
     private void configViews() {
@@ -180,6 +211,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     @Override
     public void onProgressChanged(SeekBar seekBar, int number, boolean b) {
         nbrPhotos.setText(String.valueOf(number + 1));
+        photos = number + 1;
     }
 
     @Override
@@ -190,5 +222,70 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    private boolean checkCast(){
+        if (minPrice.getText() != null && !minPrice.getText().toString().isEmpty()) {
+            try {
+                filter.minPrice = Double.parseDouble(minPrice.getText().toString());
+            } catch (NumberFormatException e) {
+                callback.filterError("Error in the min price format");
+                return false;
+            }
+        }
+
+        // Check max price
+        if (maxPrice.getText() != null && !maxPrice.getText().toString().isEmpty()) {
+            try {
+                filter.maxPrice = Double.parseDouble(maxPrice.getText().toString());
+            } catch (NumberFormatException e) {
+                callback.filterError("Error in the max price format");
+                return false;
+            }
+        }
+
+        // Check min surface
+        if (minSurface.getText() != null && !minSurface.getText().toString().isEmpty()) {
+            try {
+                filter.minSurface = Double.parseDouble(minSurface.getText().toString());
+            } catch (NumberFormatException e) {
+                callback.filterError("Error in the min surface format");
+                return false;
+            }
+        }
+
+        // Check max surface
+        if (maxSurface.getText() != null && !maxSurface.getText().toString().isEmpty()) {
+            try {
+                filter.maxSurface = Double.parseDouble(maxSurface.getText().toString());
+            } catch (NumberFormatException e) {
+                callback.filterError("Error in the max surface format");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Filter createFilter(){
+        filter.type = this.type;
+        filter.nbrPhotos = this.photos;
+        filter.borough = this.borough;
+        filter.pois.addAll(this.pois);
+        return filter;
+    }
+
+    public class Filter {
+        public String type;
+        public Double minPrice;
+        public Double maxPrice;
+        public Double minSurface;
+        public Double maxSurface;
+        public int nbrPhotos;
+        public String borough;
+        public List<Poi> pois;
+
+        public Filter() {
+            pois = new ArrayList<>();
+        }
     }
 }

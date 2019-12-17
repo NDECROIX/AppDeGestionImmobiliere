@@ -30,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
-        EditActivity.startEditActivityListener {
+        EditActivity.startEditActivityListener, FilterDialogFragment.FilterListener {
 
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     private void startFilterDialogFragment(){
-        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, this.getLayoutInflater());
+        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, this, this.getLayoutInflater());
         agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 
@@ -152,5 +152,15 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void createProperty() {
         startActivity(EditActivity.newIntent(this, null, null, null));
+    }
+
+    @Override
+    public void onApplyFilter(FilterDialogFragment.Filter filter) {
+        showToastMessage(this, filter.type);
+    }
+
+    @Override
+    public void filterError(String message) {
+        showToastMessage(this, message);
     }
 }
