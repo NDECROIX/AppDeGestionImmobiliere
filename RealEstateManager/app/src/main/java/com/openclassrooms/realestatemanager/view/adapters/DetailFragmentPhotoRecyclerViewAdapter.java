@@ -25,9 +25,15 @@ public class DetailFragmentPhotoRecyclerViewAdapter extends RecyclerView.Adapter
     private List<Photo> photos;
     private OnClickPhotoListener callback;
 
-    public DetailFragmentPhotoRecyclerViewAdapter(OnClickPhotoListener callback, List<Photo> photos) {
+    public DetailFragmentPhotoRecyclerViewAdapter(OnClickPhotoListener callback) {
         this.callback = callback;
-        this.photos = photos;
+        this.photos = new ArrayList<>();
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos.clear();
+        this.photos.addAll(photos);
+        notifyDataSetChanged();
     }
 
     @NonNull

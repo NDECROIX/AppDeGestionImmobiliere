@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.viewmodels;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.model.Agent;
@@ -32,9 +33,9 @@ public class PropertyViewModel extends ViewModel {
     private final Executor executor;
 
     // CURRENT PROPERTY
-    private Property currentProperty;
-    private List<Photo> currentPhoto;
-    private List<PoiNextProperty> currentPoisNextProperty;
+    private MutableLiveData<Property> currentProperty;
+    private MutableLiveData<List<Photo>> currentPhoto;
+    private MutableLiveData<List<PoiNextProperty>> currentPoisNextProperty;
 
     public PropertyViewModel(PhotoDataRepository photoDataRepository,
                              PoiDataRepository poiDataRepository,
@@ -48,6 +49,9 @@ public class PropertyViewModel extends ViewModel {
         this.propertyDataRepository = propertyDataRepository;
         this.agentDataRepository = agentDataRepository;
         this.executor = executor;
+        this.currentProperty = new MutableLiveData<>();
+        this.currentPhoto = new MutableLiveData<>();
+        this.currentPoisNextProperty = new MutableLiveData<>();
     }
 
     /**
@@ -56,8 +60,8 @@ public class PropertyViewModel extends ViewModel {
      * @param property Current property
      */
     public void setCurrentProperty(Property property, List<Photo> photos) {
-        this.currentProperty = property;
-        this.currentPhoto = new ArrayList<>(photos);
+        this.currentProperty.setValue(property);
+        this.currentPhoto.setValue(new ArrayList<>(photos));
     }
 
     /**
@@ -65,7 +69,7 @@ public class PropertyViewModel extends ViewModel {
      *
      * @return Last selected property
      */
-    public Property getCurrentProperty() {
+    public MutableLiveData<Property> getCurrentProperty() {
         return currentProperty;
     }
 
@@ -74,16 +78,16 @@ public class PropertyViewModel extends ViewModel {
      *
      * @return Photos from property
      */
-    public List<Photo> getCurrentPhotosProperty() {
+    public MutableLiveData<List<Photo>> getCurrentPhotosProperty() {
         return currentPhoto;
     }
 
-    public List<PoiNextProperty> getCurrentPoisNextProperty() {
+    public MutableLiveData<List<PoiNextProperty>> getCurrentPoisNextProperty() {
         return currentPoisNextProperty;
     }
 
     public void setCurrentPoisNextProperty(List<PoiNextProperty> currentPoisNextProperty) {
-        this.currentPoisNextProperty = currentPoisNextProperty;
+        this.currentPoisNextProperty.setValue(currentPoisNextProperty);
     }
 
     //--------------------

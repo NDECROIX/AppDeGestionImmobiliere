@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -40,6 +42,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     Toolbar toolbar;
     @BindView(R.id.activity_main_navigation_view)
     NavigationView navigationView;
+    @Nullable
+    @BindView(R.id.activity_main_frame_layout_detail)
+    FrameLayout frameLayoutDetail;
 
     private PropertyViewModel propertyViewModel;
 
@@ -56,11 +61,20 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         configViewModel();
         activeFragment = listFragment;
         navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
+        configFragment();
+        configToolbar();
+        configDrawerLayout();
+    }
+
+    private void configFragment() {
         this.getSupportFragmentManager().beginTransaction()
                 .add(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
-        configToolbar();
-        configDrawerLayout();
+        if (frameLayoutDetail != null){
+            this.getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_main_frame_layout_detail, detailFragment)
+                    .commitNow();
+        }
     }
 
     private void configViewModel() {
@@ -130,8 +144,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     private void editProperty() {
-        startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty(),
-                propertyViewModel.getCurrentPoisNextProperty(), propertyViewModel.getCurrentPhotosProperty()));
+        startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
+                propertyViewModel.getCurrentPoisNextProperty().getValue(), propertyViewModel.getCurrentPhotosProperty().getValue()));
     }
 
     /**
@@ -148,10 +162,12 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void onClickListener(Property property, List<Photo> photos) {
         propertyViewModel.setCurrentProperty(property, photos);
-        activeFragment = detailFragment;
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.activity_main_frame_layout, activeFragment)
-                .commitNow();
+        if (frameLayoutDetail == null){
+            activeFragment = detailFragment;
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_frame_layout, activeFragment)
+                    .commitNow();
+        }
     }
 
     @Override

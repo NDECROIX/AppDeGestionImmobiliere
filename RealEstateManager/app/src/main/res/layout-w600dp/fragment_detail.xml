@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/end_screen_margin"
+            tools:context=".controllers.fragments.DetailFragment">
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                android:text="Penthouse"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/fragment_detail_recycler_view_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_type"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_detail_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_type"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:listitem="@layout/fragment_detail_item"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_description_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:text="Description"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_recycler_view_scroll"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_description_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:text="@string/dummy_description_text"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_description_title"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:text="Price : 100 000 000 $"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_description_text"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_surface"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_surface_24"
+                android:text=" Surface : "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_price"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_home_24"
+                android:text=" Number of rooms : "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_surface"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_bedroom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_bedroom_24"
+                android:text=" Number of bedrooms : "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_room"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_bathroom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_bathroom_24"
+                android:text=" Number of bathroom : "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_bedroom"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:drawableStart="@drawable/ic_address_24"
+                android:gravity="top"
+                android:text="Location :"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_bathroom"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="740 Park Avenue\nApt 6/7A\nNew York\nNY 10021\United States"
+                app:layout_constraintTop_toTopOf="@id/fragment_detail_tv_location"
+                app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_location"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_poi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="Points of interests :"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_address"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_detail_tv_poi_left"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_screen"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_poi"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/fragment_detail_tv_poi_right"/>
+
+            <LinearLayout
+                android:id="@+id/fragment_detail_tv_poi_right"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_screen"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_poi"
+                app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_poi_left"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <ImageView
+                android:id="@+id/fragment_detail_map_view"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@color/colorAccent"
+                android:layout_marginTop="@dimen/end_screen_margin"
+                android:layout_marginBottom="@dimen/end_screen_margin"
+                android:layout_marginStart="@dimen/margin_screen"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_poi_left"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_marginTop="@dimen/margin_screen"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:text="12/12/2012"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_map_view"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_agent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:layout_marginStart="@dimen/margin_screen"
+                android:paddingBottom="50dp"
+                android:layout_marginBottom="@dimen/end_screen_margin"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:text="Real estate manager"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
  */
 public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
 
+    @Nullable
     @BindView(R.id.fragment_detail_toolbar)
     Toolbar toolbar;
     @BindView(R.id.fragment_detail_recycler_view)
@@ -95,10 +96,11 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
-        configToolbar();
+        if (getActivity().findViewById(R.id.activity_main_frame_layout_detail) == null){
+            configToolbar();
+        }
         configRecyclerView();
-        displayPropertyData();
-        getPropertyPoiFromDatabase();
+        getPropertyFromDatabase();
         return view;
     }
 
@@ -133,8 +135,9 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
 
     private void configRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        DetailFragmentPhotoRecyclerViewAdapter adapter = new DetailFragmentPhotoRecyclerViewAdapter(this, propertyViewModel.getCurrentPhotosProperty());
+        DetailFragmentPhotoRecyclerViewAdapter adapter = new DetailFragmentPhotoRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
+        propertyViewModel.getCurrentPhotosProperty().observe(getViewLifecycleOwner(), adapter::setPhotos);
     }
 
     @Override
@@ -142,15 +145,14 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
 
     }
 
-    private void displayPropertyData() {
-        Property property = propertyViewModel.getCurrentProperty();
+    private void displayPropertyData(Property property) {
         type.setText(property.getType());
         description.setText(property.getDescription());
         price.setText(String.format("Price : %s $", new DecimalFormat("#").format(property.getPrice())));
-        surface.append(String.valueOf(property.getSurface()));
-        room.append(String.valueOf(property.getRooms()));
-        bathroom.append(String.valueOf(property.getBathrooms()));
-        bedroom.append(String.valueOf(property.getBedrooms()));
+        surface.setText(String.format(Locale.getDefault(), "Surface : %s", property.getSurface()));
+        room.setText(String.format(Locale.getDefault(), "Number of rooms :%d", property.getRooms()));
+        bathroom.setText(String.format(Locale.getDefault(), "Number of bathrooms :%d", property.getBathrooms()));
+        bedroom.setText(String.format(Locale.getDefault(), "Number of bedrooms :%d", property.getBedrooms()));
         String supplement = property.getAddressSupplement();
         supplement = (supplement == null) ? "" : "\n" + supplement;
         address.setText(String.format(Locale.getDefault(), "%d %s %s\n%s\n%d\n%s",
@@ -167,15 +169,20 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
         }
     }
 
-    private void getPropertyPoiFromDatabase() {
-        propertyViewModel.getPoisNextProperty(propertyViewModel.getCurrentProperty().getId())
-                .observe(getViewLifecycleOwner(), this::displayPoi);
+    private void getPropertyFromDatabase() {
+        propertyViewModel.getCurrentProperty().observe(getViewLifecycleOwner(), property -> {
+            displayPropertyData(property);
+            propertyViewModel.getPoisNextProperty(property.getId())
+                    .observe(getViewLifecycleOwner(), this::displayPoi);
+        });
     }
 
     private void displayPoi(List<PoiNextProperty> poiNextProperty) {
         propertyViewModel.setCurrentPoisNextProperty(poiNextProperty);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(10, 10, 10, 10);
+        poiGrpRight.removeAllViews();
+        poiGrpLeft.removeAllViews();
         boolean left = true;
         for (PoiNextProperty poi : poiNextProperty) {
             TextView poiName = new TextView(getActivity());
