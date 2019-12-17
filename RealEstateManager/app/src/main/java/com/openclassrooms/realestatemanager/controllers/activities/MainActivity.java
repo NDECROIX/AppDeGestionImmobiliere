@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -19,6 +20,7 @@ import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFr
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
@@ -30,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
-        EditActivity.startEditActivityListener, FilterDialogFragment.FilterListener {
+        EditActivity.startEditActivityListener {
 
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
@@ -101,7 +103,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 showToastMessage(this, "Add a real estate.");
                 break;
             case R.id.menu_activity_main_edit:
-                showToastMessage(this,"Edit a real estate.");
+                showToastMessage(this, "Edit a real estate.");
                 break;
             case R.id.menu_fragment_detail_edit:
                 editProperty();
@@ -119,8 +121,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
-    private void startFilterDialogFragment(){
-        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, this, this.getLayoutInflater());
+    private void startFilterDialogFragment() {
+        if (activeFragment != listFragment){
+            return;
+        }
+        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, (ListFragment) activeFragment, this.getLayoutInflater());
         agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 
@@ -154,13 +159,4 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         startActivity(EditActivity.newIntent(this, null, null, null));
     }
 
-    @Override
-    public void onApplyFilter(FilterDialogFragment.Filter filter) {
-        showToastMessage(this, filter.type);
-    }
-
-    @Override
-    public void filterError(String message) {
-        showToastMessage(this, message);
-    }
 }

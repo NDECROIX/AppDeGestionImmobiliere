@@ -19,10 +19,19 @@ public class PoiNextPropertyDataRepository {
      * Get all POI next a property from the application database
      *
      * @param propertyID Property id
-     * @return List of all property
+     * @return List of all poi next the property
      */
-    public LiveData<List<PoiNextProperty>> getProperties(String propertyID) {
-        return this.poiNextPropertyDAO.getPoiNextProperty(propertyID);
+    public LiveData<List<PoiNextProperty>> getPoisNextProperty(String propertyID) {
+        return this.poiNextPropertyDAO.getPoisNextProperty(propertyID);
+    }
+
+    /**
+     * Get all POI next to the properties from the application database
+     *
+     * @return List of all poi next to the properties
+     */
+    public LiveData<List<PoiNextProperty>> getPoisNextProperties() {
+        return this.poiNextPropertyDAO.getPoisNextProperties();
     }
 
     /**

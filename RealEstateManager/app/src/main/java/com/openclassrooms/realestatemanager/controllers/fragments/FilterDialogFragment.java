@@ -4,6 +4,7 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
+import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
@@ -227,7 +229,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     private boolean checkCast(){
         if (minPrice.getText() != null && !minPrice.getText().toString().isEmpty()) {
             try {
-                filter.minPrice = Double.parseDouble(minPrice.getText().toString());
+                filter.setMinPrice(Double.parseDouble(minPrice.getText().toString()));
             } catch (NumberFormatException e) {
                 callback.filterError("Error in the min price format");
                 return false;
@@ -237,7 +239,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         // Check max price
         if (maxPrice.getText() != null && !maxPrice.getText().toString().isEmpty()) {
             try {
-                filter.maxPrice = Double.parseDouble(maxPrice.getText().toString());
+                filter.setMaxPrice(Double.parseDouble(maxPrice.getText().toString()));
             } catch (NumberFormatException e) {
                 callback.filterError("Error in the max price format");
                 return false;
@@ -247,7 +249,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         // Check min surface
         if (minSurface.getText() != null && !minSurface.getText().toString().isEmpty()) {
             try {
-                filter.minSurface = Double.parseDouble(minSurface.getText().toString());
+                filter.setMinSurface(Double.parseDouble(minSurface.getText().toString()));
             } catch (NumberFormatException e) {
                 callback.filterError("Error in the min surface format");
                 return false;
@@ -257,7 +259,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         // Check max surface
         if (maxSurface.getText() != null && !maxSurface.getText().toString().isEmpty()) {
             try {
-                filter.maxSurface = Double.parseDouble(maxSurface.getText().toString());
+                filter.setMaxSurface(Double.parseDouble(maxSurface.getText().toString()));
             } catch (NumberFormatException e) {
                 callback.filterError("Error in the max surface format");
                 return false;
@@ -267,25 +269,10 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     }
 
     private Filter createFilter(){
-        filter.type = this.type;
-        filter.nbrPhotos = this.photos;
-        filter.borough = this.borough;
-        filter.pois.addAll(this.pois);
+        filter.setType(this.type);
+        filter.setNbrPhotos(this.photos);
+        filter.setBorough(this.borough);
+        filter.setPois(this.pois);
         return filter;
-    }
-
-    public class Filter {
-        public String type;
-        public Double minPrice;
-        public Double maxPrice;
-        public Double minSurface;
-        public Double maxSurface;
-        public int nbrPhotos;
-        public String borough;
-        public List<Poi> pois;
-
-        public Filter() {
-            pois = new ArrayList<>();
-        }
     }
 }

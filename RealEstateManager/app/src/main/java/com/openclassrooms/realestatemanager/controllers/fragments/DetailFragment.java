@@ -168,7 +168,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     }
 
     private void getPropertyPoiFromDatabase() {
-        propertyViewModel.getPoiNextProperty(propertyViewModel.getCurrentProperty().getId())
+        propertyViewModel.getPoisNextProperty(propertyViewModel.getCurrentProperty().getId())
                 .observe(getViewLifecycleOwner(), this::displayPoi);
     }
 

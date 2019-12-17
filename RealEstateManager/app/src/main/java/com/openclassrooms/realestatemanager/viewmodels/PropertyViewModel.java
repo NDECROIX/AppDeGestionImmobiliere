@@ -220,8 +220,17 @@ public class PropertyViewModel extends ViewModel {
      * @param propertyID Property for which we want the POIs
      * @return All POI next the property
      */
-    public LiveData<List<PoiNextProperty>> getPoiNextProperty(String propertyID) {
-        return poiNextPropertyDataRepository.getProperties(propertyID);
+    public LiveData<List<PoiNextProperty>> getPoisNextProperty(String propertyID) {
+        return poiNextPropertyDataRepository.getPoisNextProperty(propertyID);
+    }
+
+    /**
+     * Get all points of interest next to the properties
+     *
+     * @return All POI next to the properties
+     */
+    public LiveData<List<PoiNextProperty>> getPoisNextProperties() {
+        return poiNextPropertyDataRepository.getPoisNextProperties();
     }
 
     /**
