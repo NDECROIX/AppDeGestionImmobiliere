@@ -116,11 +116,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_activity_main_add:
-                showToastMessage(this, "Add a real estate.");
+                createProperty();
                 break;
             case R.id.menu_activity_main_edit:
-                showToastMessage(this, "Edit a real estate.");
-                break;
             case R.id.menu_fragment_detail_edit:
                 editProperty();
                 break;
@@ -146,8 +144,12 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     private void editProperty() {
-        startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
-                propertyViewModel.getCurrentPoisNextProperty().getValue(), propertyViewModel.getCurrentPhotosProperty().getValue()));
+        if (propertyViewModel.getCurrentProperty() != null){
+            startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
+                    propertyViewModel.getCurrentPoisNextProperty().getValue(), propertyViewModel.getCurrentPhotosProperty().getValue()));
+        } else {
+            showToastMessage(this, "No property exist!");
+        }
     }
 
     /**
