@@ -23,7 +23,9 @@ import java.util.List;
 public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<PropertyViewHolder> {
 
     public interface PropertyOnClickListener {
-        void onClickListener(Property property, List<Photo> photos);
+        void onClickPropertyListener(Property property, List<Photo> photos);
+
+        void firstPropertyAdded(Property property, List<Photo> photos);
     }
 
     private PropertyOnClickListener callback;
@@ -82,10 +84,13 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         holder.propertyType.setText(property.getType());
         holder.propertyBorough.setText(property.getBorough());
         holder.propertyPrice.setText(String.valueOf(new DecimalFormat("#").format(property.getPrice())));
-        holder.propertyNumberRooms.setText(String.valueOf(property.getRooms()));
-        holder.propertySquareMeter.setText(String.valueOf(property.getSurface()));
-        holder.propertyNumberBedroom.setText(String.valueOf(property.getBedrooms()));
-        holder.propertyNumberBathrooms.setText(String.valueOf(property.getBathrooms()));
+        if (holder.propertyNumberRooms != null && holder.propertySquareMeter != null
+                && holder.propertyNumberBedroom != null && holder.propertyNumberBathrooms != null) {
+            holder.propertyNumberRooms.setText(String.valueOf(property.getRooms()));
+            holder.propertySquareMeter.setText(String.valueOf(property.getSurface()));
+            holder.propertyNumberBedroom.setText(String.valueOf(property.getBedrooms()));
+            holder.propertyNumberBathrooms.setText(String.valueOf(property.getBathrooms()));
+        }
         for (Photo photo : photoList) {
             if (photo.getPropertyID().equals(property.getId())) {
                 photos.add(photo);
@@ -94,7 +99,8 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         if (!photos.isEmpty()) {
             Glide.with(holder.itemView).load(photos.get(0).getUri()).into(holder.propertyPhoto);
         }
-        holder.itemView.setOnClickListener(l -> callback.onClickListener(property, photos));
+        holder.itemView.setOnClickListener(l -> callback.onClickPropertyListener(property, photos));
+        if (position == 0) callback.firstPropertyAdded(property, photos);
     }
 
     @Override
@@ -102,14 +108,14 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         return properties.size();
     }
 
-    private void filterProperty(){
-        if (filter == null){
+    private void filterProperty() {
+        if (filter == null) {
             return;
         }
         List<Property> cloneProperties = new ArrayList<>(propertiesBackUp);
         properties.clear();
         properties.addAll(propertiesBackUp);
-        for (Property property : cloneProperties){
+        for (Property property : cloneProperties) {
             int photos = 0;
             List<Poi> pois = new ArrayList<>();
             for (Photo photo : photoList) {
@@ -117,14 +123,14 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
                     photos++;
                 }
             }
-            for (PoiNextProperty poiNextProperty : poisNextProperty){
-                if (poiNextProperty.getPropertyID().equals(property.getId())){
+            for (PoiNextProperty poiNextProperty : poisNextProperty) {
+                if (poiNextProperty.getPropertyID().equals(property.getId())) {
                     Poi poi = new Poi();
                     poi.setName(poiNextProperty.getPoiName());
                     pois.add(poi);
                 }
             }
-            if (!filter.meetsCriteria(property, photos, pois)){
+            if (!filter.meetsCriteria(property, photos, pois)) {
                 properties.remove(property);
             }
         }

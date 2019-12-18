@@ -59,8 +59,16 @@ public class PropertyViewModel extends ViewModel {
      *
      * @param property Current property
      */
-    public void setCurrentProperty(Property property, List<Photo> photos) {
+    public void setCurrentProperty(Property property) {
         this.currentProperty.setValue(property);
+    }
+
+    /**
+     * Photos from the current property
+     *
+     * @param photos Photos
+     */
+    public void setCurrentPhotos(List<Photo> photos) {
         this.currentPhoto.setValue(new ArrayList<>(photos));
     }
 

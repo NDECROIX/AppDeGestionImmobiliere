@@ -11,14 +11,13 @@ import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.view.holders.DetailPhotoViewHolder;
-import com.openclassrooms.realestatemanager.view.holders.PhotoViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailFragmentPhotoRecyclerViewAdapter extends RecyclerView.Adapter<DetailPhotoViewHolder> {
 
-    public interface OnClickPhotoListener{
+    public interface OnClickPhotoListener {
         void onClickPhoto(Photo photo);
     }
 
@@ -50,7 +49,7 @@ public class DetailFragmentPhotoRecyclerViewAdapter extends RecyclerView.Adapter
         Photo photo = photos.get(position);
         Glide.with(holder.itemView).load(photo.getUri()).into(holder.photo);
         holder.title.setText(photo.getDescription());
-        holder.itemView.setOnClickListener( l -> callback.onClickPhoto(photo));
+        holder.itemView.setOnClickListener(l -> callback.onClickPhoto(photo));
     }
 
     @Override

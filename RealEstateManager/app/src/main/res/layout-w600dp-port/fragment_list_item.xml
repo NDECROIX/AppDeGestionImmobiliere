@@ -27,7 +27,6 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:text="Penthouse"
         android:maxLines="1"
-        app:layout_constraintEnd_toStartOf="@id/fragment_list_item_price"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
         app:layout_constraintTop_toTopOf="@id/fragment_list_item_photo"/>
 
@@ -52,52 +51,8 @@
         android:textColor="@color/colorAccent"
         android:drawableStart="@drawable/ic_dollar_24"
         android:text="41,480,000"
-        app:layout_constraintStart_toEndOf="@id/fragment_list_item_type"
-        app:layout_constraintTop_toTopOf="@id/fragment_list_item_photo"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/fragment_list_item_bathroom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:drawableStart="@drawable/ic_bathroom_24"
-        android:text="2"
-        app:layout_constraintStart_toEndOf="@id/fragment_list_item_bedroom"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
-
-    <TextView
-        android:id="@+id/fragment_list_item_bedroom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:drawableStart="@drawable/ic_bedroom_24"
-        android:text="4"
-        app:layout_constraintStart_toEndOf="@id/fragment_list_item_home"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
-
-    <TextView
-        android:id="@+id/fragment_list_item_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:drawableStart="@drawable/ic_home_24"
-        android:text="8"
-        app:layout_constraintStart_toEndOf="@id/fragment_list_item_surface"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
-
-    <TextView
-        android:id="@+id/fragment_list_item_surface"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:drawableStart="@drawable/ic_surface_24"
-        android:text="750"
         app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
-        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"/>
+        app:layout_constraintTop_toBottomOf="@id/fragment_list_item_borough"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,6 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +43,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
 
     public interface FilterListener {
         void onApplyFilter(Filter filter);
+
         void filterError(String message);
     }
 
@@ -110,12 +110,13 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> dialog.cancel());
         AlertDialog dialog = builder.create();
-        dialog.setOnShowListener( l ->
+        dialog.setOnShowListener(l ->
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                    if (checkCast()){
+                    if (checkCast()) {
                         callback.onApplyFilter(createFilter());
                         dialog.dismiss();
-                    }}));
+                    }
+                }));
         return dialog;
     }
 
@@ -226,7 +227,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
 
     }
 
-    private boolean checkCast(){
+    private boolean checkCast() {
         if (minPrice.getText() != null && !minPrice.getText().toString().isEmpty()) {
             try {
                 filter.setMinPrice(Double.parseDouble(minPrice.getText().toString()));
@@ -268,7 +269,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         return true;
     }
 
-    private Filter createFilter(){
+    private Filter createFilter() {
         filter.setType(this.type);
         filter.setNbrPhotos(this.photos);
         filter.setBorough(this.borough);

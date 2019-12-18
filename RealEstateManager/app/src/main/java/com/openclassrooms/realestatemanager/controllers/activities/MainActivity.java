@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -22,7 +21,6 @@ import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFr
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
@@ -68,11 +66,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     private void configFragment() {
         this.getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_main_frame_layout, activeFragment)
+                .replace(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
         if (frameLayoutDetail != null){
             this.getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_main_frame_layout_detail, detailFragment)
+                    .replace(R.id.activity_main_frame_layout_detail, detailFragment)
                     .commitNow();
         }
     }
@@ -106,7 +104,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main_toolbar_menu, menu);
+        if (frameLayoutDetail == null){
+            getMenuInflater().inflate(R.menu.activity_main_toolbar_menu, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.activity_main_toolbar_menu_tablet, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -160,14 +162,21 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     @Override
-    public void onClickListener(Property property, List<Photo> photos) {
-        propertyViewModel.setCurrentProperty(property, photos);
+    public void onClickPropertyListener(Property property, List<Photo> photos) {
+        propertyViewModel.setCurrentProperty(property);
+        propertyViewModel.setCurrentPhotos(photos);
         if (frameLayoutDetail == null){
             activeFragment = detailFragment;
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_main_frame_layout, activeFragment)
                     .commitNow();
         }
+    }
+
+    @Override
+    public void firstPropertyAdded(Property property, List<Photo> photos) {
+        propertyViewModel.setCurrentProperty(property);
+        propertyViewModel.setCurrentPhotos(photos);
     }
 
     @Override

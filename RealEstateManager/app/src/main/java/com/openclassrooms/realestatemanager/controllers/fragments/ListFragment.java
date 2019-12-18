@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.EditActivity;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
@@ -25,6 +27,7 @@ import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,7 +40,6 @@ public class ListFragment extends Fragment implements FilterDialogFragment.Filte
     private Context context;
     private ListPropertyRecyclerViewAdapter adapter;
     private PropertyViewModel propertyViewModel;
-    public Filter filter;
 
     public ListFragment() {
         // Required empty public constructor
@@ -80,14 +82,14 @@ public class ListFragment extends Fragment implements FilterDialogFragment.Filte
         propertyViewModel.getPoisNextProperties().observe(getViewLifecycleOwner(), adapter::setPoisNextProperty);
     }
 
+    @Optional
     @OnClick(R.id.fragment_list_fab)
-    public void startEditActivity() {
+    void startEditActivity() {
         ((EditActivity.startEditActivityListener) context).createProperty();
     }
 
     @Override
     public void onApplyFilter(Filter filter) {
-        this.filter = filter;
         adapter.setFilter(filter);
     }
 

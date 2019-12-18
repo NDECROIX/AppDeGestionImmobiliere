@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
@@ -22,12 +23,16 @@ public class PropertyViewHolder extends RecyclerView.ViewHolder {
     public TextView propertyBorough;
     @BindView(R.id.fragment_list_item_price)
     public TextView propertyPrice;
+    @Nullable
     @BindView(R.id.fragment_list_item_home)
     public TextView propertyNumberRooms;
+    @Nullable
     @BindView(R.id.fragment_list_item_surface)
     public TextView propertySquareMeter;
+    @Nullable
     @BindView(R.id.fragment_list_item_bathroom)
     public TextView propertyNumberBathrooms;
+    @Nullable
     @BindView(R.id.fragment_list_item_bedroom)
     public TextView propertyNumberBedroom;
 

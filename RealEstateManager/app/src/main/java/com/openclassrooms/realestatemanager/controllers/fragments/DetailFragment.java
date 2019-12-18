@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -71,6 +72,9 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     TextView date;
     @BindView(R.id.fragment_detail_tv_agent)
     TextView agent;
+    @Nullable
+    @BindView(R.id.fragment_detail_main_layout)
+    ConstraintLayout constraintLayout;
 
     private Context context;
     private PropertyViewModel propertyViewModel;
@@ -96,7 +100,7 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
-        if (getActivity().findViewById(R.id.activity_main_frame_layout_detail) == null){
+        if (getActivity() != null && getActivity().findViewById(R.id.activity_main_frame_layout_detail) == null){
             configToolbar();
         }
         configRecyclerView();
@@ -170,10 +174,16 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     }
 
     private void getPropertyFromDatabase() {
+        if (constraintLayout != null){
+            constraintLayout.setVisibility(View.GONE);
+        }
         propertyViewModel.getCurrentProperty().observe(getViewLifecycleOwner(), property -> {
             displayPropertyData(property);
             propertyViewModel.getPoisNextProperty(property.getId())
                     .observe(getViewLifecycleOwner(), this::displayPoi);
+            if (constraintLayout != null && constraintLayout.getVisibility() == View.GONE){
+                constraintLayout.setVisibility(View.VISIBLE);
+            }
         });
     }
 
