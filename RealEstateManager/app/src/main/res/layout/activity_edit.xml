@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="*Type of property :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -129,6 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="Number of :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_surface" />
 
@@ -235,6 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="*Photo(s) :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_description" />
 
@@ -294,6 +297,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="*Address :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_recycler_view_scroll" />
 
@@ -370,6 +374,7 @@
                 android:id="@+id/activity_edit_til_city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_weight="6"
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginTop="@dimen/margin_screen"
                 android:layout_marginEnd="@dimen/margin_screen"
@@ -391,8 +396,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/activity_edit_til_zip"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_weight="4"
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginTop="@dimen/margin_screen"
                 android:layout_marginEnd="@dimen/margin_screen"
@@ -438,6 +444,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="*Borough :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_country" />
 
@@ -471,6 +478,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="Points of interests next the property :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_radio_grp_borough_left"
                 app:layout_constraintStart_toStartOf="parent"/>
 

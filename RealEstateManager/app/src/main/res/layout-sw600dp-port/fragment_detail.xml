@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/fragment_detail_main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -144,6 +143,7 @@
                 android:drawableStart="@drawable/ic_address_24"
                 android:gravity="top"
                 android:text="Location :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_bathroom"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -162,6 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="Points of interests :"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_address"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

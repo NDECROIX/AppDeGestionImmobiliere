@@ -95,6 +95,12 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         this.propertyViewModel = ViewModelProviders.of((MainActivity) context).get(PropertyViewModel.class);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @NonNull
     @Override
     @SuppressLint("InflateParams")

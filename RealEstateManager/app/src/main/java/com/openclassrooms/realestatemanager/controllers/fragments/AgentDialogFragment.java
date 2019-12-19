@@ -60,6 +60,12 @@ public class AgentDialogFragment extends DialogFragment {
         this.layoutInflater = layoutInflater;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

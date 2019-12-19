@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -102,5 +103,11 @@ public class Utils {
             byteBuffer.write(buffer, 0, len);
         }
         return byteBuffer.toByteArray();
+    }
+
+    public static String getPrice(Double price){
+        NumberFormat format = NumberFormat.getInstance(Locale.US);
+        format.setMinimumFractionDigits(0);
+        return format.format(price);
     }
 }

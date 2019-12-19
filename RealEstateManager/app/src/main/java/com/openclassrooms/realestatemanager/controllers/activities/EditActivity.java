@@ -55,6 +55,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -204,7 +206,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     private void completeFieldsWithProperty(Property property) {
-        tiePrice.setText(String.valueOf(property.getPrice()));
+        tiePrice.setText(Utils.getPrice(property.getPrice()));
         tieSurface.setText(String.valueOf(property.getSurface()));
         tieRooms.setText(String.valueOf(property.getRooms()));
         tieBedroom.setText(String.valueOf(property.getBedrooms()));

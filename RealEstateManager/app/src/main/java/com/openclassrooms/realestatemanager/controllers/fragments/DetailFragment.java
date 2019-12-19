@@ -26,10 +26,12 @@ import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.DetailFragmentPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -152,11 +154,11 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     private void displayPropertyData(Property property) {
         type.setText(property.getType());
         description.setText(property.getDescription());
-        price.setText(String.format("Price : %s $", new DecimalFormat("#").format(property.getPrice())));
+        price.setText(String.format("Price : $ %s ", Utils.getPrice(property.getPrice())));
         surface.setText(String.format(Locale.getDefault(), "Surface : %s", property.getSurface()));
-        room.setText(String.format(Locale.getDefault(), "Number of rooms :%d", property.getRooms()));
-        bathroom.setText(String.format(Locale.getDefault(), "Number of bathrooms :%d", property.getBathrooms()));
-        bedroom.setText(String.format(Locale.getDefault(), "Number of bedrooms :%d", property.getBedrooms()));
+        room.setText(String.format(Locale.getDefault(), "Number of rooms : %d", property.getRooms()));
+        bathroom.setText(String.format(Locale.getDefault(), "Number of bathrooms : %d", property.getBathrooms()));
+        bedroom.setText(String.format(Locale.getDefault(), "Number of bedrooms : %d", property.getBedrooms()));
         String supplement = property.getAddressSupplement();
         supplement = (supplement == null) ? "" : "\n" + supplement;
         address.setText(String.format(Locale.getDefault(), "%d %s %s\n%s\n%d\n%s",
