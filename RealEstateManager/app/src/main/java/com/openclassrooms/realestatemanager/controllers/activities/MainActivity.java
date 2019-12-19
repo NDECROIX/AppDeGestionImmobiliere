@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -22,10 +23,12 @@ import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
+import java.io.Serializable;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,6 +53,10 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     private Fragment activeFragment = new Fragment();
     private final ListFragment listFragment = new ListFragment();
     private final DetailFragment detailFragment = new DetailFragment();
+
+    private Property property;
+    private List<Photo> photos;
+    private List<PoiNextProperty> poiNextProperties;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     private void configViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
+        if (property != null){
+            propertyViewModel.setCurrentProperty(property);
+            propertyViewModel.setCurrentPoisNextProperty(poiNextProperties);
+            propertyViewModel.setCurrentPhotos(photos);
+        }
     }
 
     private void configToolbar() {
@@ -177,8 +189,10 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     public void firstPropertyAdded(Property property, List<Photo> photos) {
-        propertyViewModel.setCurrentProperty(property);
-        propertyViewModel.setCurrentPhotos(photos);
+        if (this.property == null){
+            propertyViewModel.setCurrentProperty(property);
+            propertyViewModel.setCurrentPhotos(photos);
+        }
     }
 
     @Override
@@ -186,4 +200,23 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         startActivity(EditActivity.newIntent(this, null, null, null));
     }
 
+    public static final String PROPERTY = "property";
+    public static final String PHOTOS = "photo";
+    public static final String POIS = "pois";
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
+        outState.putSerializable(PHOTOS, (Serializable) propertyViewModel.getCurrentPhotosProperty().getValue());
+        outState.putSerializable(POIS, (Serializable) propertyViewModel.getCurrentPoisNextProperty().getValue());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        property =(Property) savedInstanceState.getSerializable(PROPERTY);
+        photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
+        poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
+    }
 }
