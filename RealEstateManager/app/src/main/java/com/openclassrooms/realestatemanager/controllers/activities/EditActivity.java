@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
@@ -47,6 +49,7 @@ import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
+import com.openclassrooms.realestatemanager.utils.OnMapAndViewReadyListener;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
@@ -206,7 +209,8 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     private void completeFieldsWithProperty(Property property) {
-        tiePrice.setText(Utils.getPrice(property.getPrice()));
+        DecimalFormat df = new DecimalFormat("#.##");
+        tiePrice.setText(df.format(property.getPrice()));
         tieSurface.setText(String.valueOf(property.getSurface()));
         tieRooms.setText(String.valueOf(property.getRooms()));
         tieBedroom.setText(String.valueOf(property.getBedrooms()));

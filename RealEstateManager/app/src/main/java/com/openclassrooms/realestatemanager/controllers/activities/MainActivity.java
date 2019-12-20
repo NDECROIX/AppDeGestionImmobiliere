@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +48,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Nullable
     @BindView(R.id.activity_main_frame_layout_detail)
     FrameLayout frameLayoutDetail;
+    @BindView(R.id.main_activity_tv_empty)
+    TextView noProperty;
 
     private PropertyViewModel propertyViewModel;
 
@@ -140,6 +144,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             case R.id.activity_main_drawer_agent:
                 startActivity(new Intent(this, AgentActivity.class));
                 break;
+            case R.id.activity_main_drawer_map:
+                startActivity(new Intent(this, MapsActivity.class));
+                break;
             case android.R.id.home:
                 if (activeFragment == detailFragment) onBackPressed();
                 break;
@@ -189,9 +196,19 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     public void firstPropertyAdded(Property property, List<Photo> photos) {
+        noProperty.setVisibility(View.GONE);
         if (this.property == null){
             propertyViewModel.setCurrentProperty(property);
             propertyViewModel.setCurrentPhotos(photos);
+        }
+    }
+
+    @Override
+    public void recyclerViewEmpty() {
+        noProperty.setVisibility(View.VISIBLE);
+        if (frameLayoutDetail != null && detailFragment.getView() != null){
+            detailFragment.getView()
+                    .findViewById(R.id.fragment_detail_main_layout).setVisibility(View.GONE);
         }
     }
 
@@ -213,10 +230,17 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         property =(Property) savedInstanceState.getSerializable(PROPERTY);
         photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
         poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        activeFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

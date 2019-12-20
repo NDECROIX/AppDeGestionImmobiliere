@@ -6,4 +6,8 @@
         android:id="@+id/activity_main_drawer_agent"
         android:icon="@drawable/ic_person_add_24"
         android:title="Agents"/>
+    <item
+        android:id="@+id/activity_main_drawer_map"
+        android:icon="@android:drawable/ic_menu_mapmode"
+        android:title="Map"/>
 </menu>

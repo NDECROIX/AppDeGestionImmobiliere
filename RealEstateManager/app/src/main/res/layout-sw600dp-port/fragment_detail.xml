@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/fragment_detail_main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".controllers.fragments.DetailFragment"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/end_screen_margin"
-            tools:context=".controllers.fragments.DetailFragment">
+            android:layout_marginEnd="@dimen/end_screen_margin">
 
             <TextView
                 android:id="@+id/fragment_detail_tv_type"
@@ -187,14 +189,18 @@
                 app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_poi_left"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-            <ImageView
+            <fragment
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:name="com.google.android.gms.maps.MapFragment"
                 android:id="@+id/fragment_detail_map_view"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@color/colorAccent"
                 android:layout_marginTop="@dimen/end_screen_margin"
                 android:layout_marginBottom="@dimen/end_screen_margin"
                 android:layout_marginStart="@dimen/margin_screen"
+                map:cameraZoom="13"
+                map:mapType="normal"
+                map:liteMode="true"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_poi_left"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -203,7 +209,7 @@
                 android:id="@+id/fragment_detail_tv_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:gravity="end|bottom"
                 android:layout_marginTop="@dimen/margin_screen"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 android:text="12/12/2012"
@@ -215,15 +221,13 @@
                 android:id="@+id/fragment_detail_tv_agent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:gravity="end|bottom"
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginBottom="@dimen/end_screen_margin"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:text="Real estate manager"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_date"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

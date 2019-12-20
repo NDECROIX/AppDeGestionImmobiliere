@@ -201,13 +201,17 @@
                 app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_poi_left"
                 app:layout_constraintEnd_toStartOf="@id/fragment_detail_map_view"/>
 
-            <ImageView
+            <fragment
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:name="com.google.android.gms.maps.MapFragment"
                 android:id="@+id/fragment_detail_map_view"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="1"
-                android:background="@color/colorAccent"
+                map:cameraZoom="13"
+                map:mapType="normal"
+                map:liteMode="true"
                 android:layout_marginBottom="@dimen/end_screen_margin"
                 android:layout_marginStart="@dimen/margin_screen"
                 app:layout_constraintTop_toTopOf="@id/fragment_detail_tv_address"
@@ -237,7 +241,6 @@
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginBottom="@dimen/end_screen_margin"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                android:text="Real manager"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_poi_right"
                 app:layout_constraintEnd_toEndOf="parent"

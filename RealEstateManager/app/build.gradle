@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.openclassrooms.realestatemanager"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -14,6 +15,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "ApiKey", map_api_key
+            resValue 'string', "map_api_key", map_api_key
+        }
+        debug {
+            buildConfigField 'String', "ApiKey", map_api_key
+            resValue 'string', "map_api_key", map_api_key
         }
     }
     compileOptions {
@@ -61,5 +68,14 @@ dependencies {
     // ROOM
     implementation "androidx.room:room-runtime:2.2.2"
     annotationProcessor "androidx.room:room-compiler:2.2.2"
+
+    // GOOGLE API
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.1.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-basement:17.1.1'
+    implementation 'com.google.android.gms:play-services-base:17.1.0'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
 }

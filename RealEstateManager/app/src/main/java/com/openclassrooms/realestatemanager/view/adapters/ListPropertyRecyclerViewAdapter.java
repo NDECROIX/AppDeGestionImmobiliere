@@ -27,6 +27,8 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         void onClickPropertyListener(Property property, List<Photo> photos);
 
         void firstPropertyAdded(Property property, List<Photo> photos);
+
+        void recyclerViewEmpty();
     }
 
     private PropertyOnClickListener callback;
@@ -134,6 +136,9 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
             if (!filter.meetsCriteria(property, photos, pois)) {
                 properties.remove(property);
             }
+        }
+        if (getItemCount() == 0){
+            callback.recyclerViewEmpty();
         }
     }
 }

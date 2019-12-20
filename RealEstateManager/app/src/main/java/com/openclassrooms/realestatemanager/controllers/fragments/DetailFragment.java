@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,28 +13,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.utils.OnMapAndViewReadyListener;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.DetailFragmentPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -39,11 +56,17 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.INTERNET;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
+public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener, DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
 
     @Nullable
     @BindView(R.id.fragment_detail_toolbar)
@@ -78,8 +101,13 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     @BindView(R.id.fragment_detail_main_layout)
     ConstraintLayout constraintLayout;
 
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 898;
+
     private Context context;
     private PropertyViewModel propertyViewModel;
+    private PlacesClient placesClient;
+    private GoogleMap mMap;
+    private SupportMapFragment mapFragment;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -89,6 +117,8 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         propertyViewModel = ViewModelProviders.of((MainActivity) context).get(PropertyViewModel.class);
+        Places.initialize(context, BuildConfig.ApiKey);
+        placesClient = Places.createClient(context);
     }
 
     @Override
@@ -102,11 +132,17 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
-        if (getActivity() != null && getActivity().findViewById(R.id.activity_main_frame_layout_detail) == null){
+        if (getActivity() != null && getActivity().findViewById(R.id.activity_main_frame_layout_detail) == null) {
             configToolbar();
         }
         configRecyclerView();
         getPropertyFromDatabase();
+        // Get the map and register for the ready callback
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_detail_map_view);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            //new OnMapAndViewReadyListener(mapFragment, this);
+        }
         return view;
     }
 
@@ -176,14 +212,14 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
     }
 
     private void getPropertyFromDatabase() {
-        if (constraintLayout != null){
+        if (constraintLayout != null) {
             constraintLayout.setVisibility(View.GONE);
         }
         propertyViewModel.getCurrentProperty().observe(getViewLifecycleOwner(), property -> {
             displayPropertyData(property);
             propertyViewModel.getPoisNextProperty(property.getId())
                     .observe(getViewLifecycleOwner(), this::displayPoi);
-            if (constraintLayout != null && constraintLayout.getVisibility() == View.GONE){
+            if (constraintLayout != null && constraintLayout.getVisibility() == View.GONE) {
                 constraintLayout.setVisibility(View.VISIBLE);
             }
         });
@@ -208,4 +244,46 @@ public class DetailFragment extends Fragment implements DetailFragmentPhotoRecyc
             left = !left;
         }
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        getPictureAddress();
+    }
+
+    @AfterPermissionGranted(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+    private void getPictureAddress() {
+        if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
+            Property property = propertyViewModel.getCurrentProperty().getValue();
+            if (property != null){
+                String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
+                        property.getStreetName(), property.getCity(), property.getCountry(),
+                        property.getZip());
+                LatLng latLng = Utils.getLocationFromAddress(context, address);
+                System.out.println("PASSED BUT WHT AS LATLNG : " + latLng);
+                if (latLng != null)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
+            }
+        } else {
+            getAccessFineLocationPermission();
+        }
+    }
+
+    /**
+     * Get the location permission.
+     */
+    private void getAccessFineLocationPermission() {
+        if (getActivity() != null && ContextCompat.checkSelfPermission(context,
+                ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, INTERNET},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 }

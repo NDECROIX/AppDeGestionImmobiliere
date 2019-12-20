@@ -1,8 +1,12 @@
 package com.openclassrooms.realestatemanager.utils;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,6 +18,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -109,5 +114,31 @@ public class Utils {
         NumberFormat format = NumberFormat.getInstance(Locale.US);
         format.setMinimumFractionDigits(0);
         return format.format(price);
+    }
+
+    /**
+     * Get latitude and longitude from String address
+     * @param context Application context
+     * @param strAddress Address
+     * @return LatLng of the address
+     */
+    public static LatLng getLocationFromAddress(Context context, String strAddress) {
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng latLng = null;
+
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return latLng;
     }
 }
