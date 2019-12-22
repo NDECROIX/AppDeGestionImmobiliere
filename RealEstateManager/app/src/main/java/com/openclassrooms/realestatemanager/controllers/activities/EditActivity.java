@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
@@ -783,7 +784,25 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         if (agent != null) {
             property.setAgentID(agent.getId());
         }
+
+        if (!getLatLngFromAddress()){
+            showToastMessage(this, "Can't convert address to lat lng!");
+            return false;
+        }
         return true;
+    }
+
+    private boolean getLatLngFromAddress(){
+        String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
+                property.getStreetName(), property.getCity(), property.getCountry(),
+                property.getZip());
+        LatLng latLng = Utils.getLocationFromAddress(this, address);
+        if (latLng != null){
+            property.setLatitude(latLng.latitude);
+            property.setLongitude(latLng.longitude);
+            return true;
+        }
+        return false;
     }
 
     private boolean insertPropertyInDatabase() {

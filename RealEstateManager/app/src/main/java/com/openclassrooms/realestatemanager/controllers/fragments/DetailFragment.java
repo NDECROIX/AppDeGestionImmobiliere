@@ -255,13 +255,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
     private void getPictureAddress() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
             Property property = propertyViewModel.getCurrentProperty().getValue();
-            if (property != null){
-                String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
-                        property.getStreetName(), property.getCity(), property.getCountry(),
-                        property.getZip());
-                LatLng latLng = Utils.getLocationFromAddress(context, address);
-                System.out.println("PASSED BUT WHT AS LATLNG : " + latLng);
-                if (latLng != null)
+            if (property != null && property.getLatitude() != null && property.getLongitude() != null){
+                LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
             }
         } else {

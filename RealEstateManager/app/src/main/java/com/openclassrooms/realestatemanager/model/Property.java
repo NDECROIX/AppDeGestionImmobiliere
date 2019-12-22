@@ -129,6 +129,18 @@ public class Property implements Serializable {
     private long saleDate;
 
     /**
+     * Latitude address
+     */
+    @ColumnInfo(name = "latitude")
+    private Double latitude;
+
+    /**
+     * Longitude address
+     */
+    @ColumnInfo(name = "longitude")
+    private Double longitude;
+
+    /**
      * The real estate agent in charge of this property.
      */
     @ColumnInfo(name = "agent_id")
@@ -137,7 +149,8 @@ public class Property implements Serializable {
 
     public Property(@NonNull String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
                     int bedrooms, String description, int streetNumber, String streetName,
-                    String addressSupplement, String city, int zip, String country, long entryDate, String agentID) {
+                    String addressSupplement, String city, int zip, String country, long entryDate, Double latitude,
+                    Double longitude, String agentID) {
         this.id = id;
         this.type = type;
         this.borough = borough;
@@ -156,6 +169,8 @@ public class Property implements Serializable {
         this.status = false;
         this.entryDate = entryDate;
         this.saleDate = 0;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.agentID = agentID;
     }
 
@@ -189,6 +204,8 @@ public class Property implements Serializable {
         if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
         if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
         if (values.containsKey("saleDate")) property.setSaleDate(values.getAsLong("saleDate"));
+        if (values.containsKey("latitude")) property.setLatitude(values.getAsDouble("latitude"));
+        if (values.containsKey("longitude")) property.setLongitude(values.getAsDouble("longitude"));
         if (values.containsKey("agentID")) property.setAgentID(values.getAsString("agentID"));
         return property;
     }
@@ -309,6 +326,14 @@ public class Property implements Serializable {
         return saleDate;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
     public String getAgentID() {
         return agentID;
     }
@@ -385,6 +410,14 @@ public class Property implements Serializable {
 
     public void setSaleDate(long saleDate) {
         this.saleDate = saleDate;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public void setAgentID(String agentID) {
