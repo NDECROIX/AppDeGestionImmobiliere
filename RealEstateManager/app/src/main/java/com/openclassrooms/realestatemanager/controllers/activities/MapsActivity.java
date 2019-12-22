@@ -2,18 +2,28 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +46,9 @@ import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -129,12 +142,36 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         mMap.clear();
         markers.clear();
         for (Property property : properties){
-            LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
-            // Add marker on the map
-            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
-            marker.setTag(property);
-            markers.add(marker);
+            addMarkerWithBitmap(property);
         }
+    }
+
+    private void addMarkerWithBitmap(Property property){
+        propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos -> {
+            Glide.with(this)
+                    .asBitmap()
+                    .load(photos.get(0).getUri())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(new CustomTarget<Bitmap>(80, 80) {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            // Get position
+                            LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+                            markerOptions.position(latLng);
+                            // Get bitmap
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resource));
+                            // Add marker on the map
+                            Marker marker = mMap.addMarker(markerOptions);
+                            marker.setTag(property);
+                            markers.add(marker);
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
+        });
     }
 
     /**
@@ -188,5 +225,4 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         // (the camera animates to the user's current position).
         return false;
     }
-
 }

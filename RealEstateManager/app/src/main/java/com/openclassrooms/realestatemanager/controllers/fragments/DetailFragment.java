@@ -35,6 +35,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.openclassrooms.realestatemanager.BuildConfig;
@@ -257,6 +258,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
             Property property = propertyViewModel.getCurrentProperty().getValue();
             if (property != null && property.getLatitude() != null && property.getLongitude() != null){
                 LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(latLng));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
             }
         } else {
