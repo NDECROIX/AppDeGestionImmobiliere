@@ -64,6 +64,10 @@
         android:id="@+id/activity_main_navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark"
+        app:itemTextColor="@android:color/white"
+        app:itemTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:itemIconTint="#FFF"
         android:layout_gravity="start"
         app:headerLayout="@layout/activity_main_navigation_header"
         app:menu="@menu/activity_main_navigation_items" />

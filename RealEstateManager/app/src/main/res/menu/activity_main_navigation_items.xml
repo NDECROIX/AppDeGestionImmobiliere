@@ -8,6 +8,6 @@
         android:title="Agents"/>
     <item
         android:id="@+id/activity_main_drawer_map"
-        android:icon="@android:drawable/ic_menu_mapmode"
+        android:icon="@drawable/ic_map_24"
         android:title="Map"/>
 </menu>
