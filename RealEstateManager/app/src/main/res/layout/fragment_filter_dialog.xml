@@ -24,12 +24,218 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_title"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_title">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <CheckBox
+                android:id="@+id/fragment_filter_dialog_cb_on_sale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="On sale"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/fragment_filter_dialog_cb_sold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="Sold"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_cb_on_sale"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_entry_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="Entry date"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_filter_dialog_cb_on_sale" />
+
+            <!-- ENTRY DATE FROM LAYOUT -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_filter_dialog_layout_entry_date_from"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/fragment_filter_dialog_layout_entry_date_to"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_filter_dialog_tv_entry_date">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_filter_dialog_til_entry_date_from"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_screen"
+                    android:layout_marginEnd="@dimen/margin_screen"
+                    android:layout_marginBottom="@dimen/margin_screen"
+                    android:hint="From"
+                    app:helperText="month/day/years"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_filter_dialog_tie_entry_date_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/fragment_filter_dialog_ib_entry_date_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/ic_calendar_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/fragment_filter_dialog_til_entry_date_from"
+                    app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_entry_date_from"
+                    app:layout_constraintTop_toTopOf="@+id/fragment_filter_dialog_til_entry_date_from" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- ENTRY DATE TO LAYOUT -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_filter_dialog_layout_entry_date_to"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_layout_entry_date_from"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_filter_dialog_tv_entry_date">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_filter_dialog_til_entry_date_to"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_screen"
+                    android:layout_marginEnd="@dimen/margin_screen"
+                    android:layout_marginBottom="@dimen/margin_screen"
+                    android:hint="To"
+                    app:helperText="month/day/years"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_filter_dialog_tie_entry_date_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/fragment_filter_dialog_ib_entry_date_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/ic_calendar_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_filter_dialog_til_entry_date_to"
+                    app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_entry_date_to"
+                    app:layout_constraintTop_toTopOf="@+id/fragment_filter_dialog_til_entry_date_to" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/fragment_filter_dialog_tv_sale_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_screen"
+                android:text="Sale date"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_filter_dialog_layout_entry_date_from" />
+
+            <!-- sale DATE FROM LAYOUT -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_filter_dialog_layout_sale_date_from"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/fragment_filter_dialog_layout_sale_date_to"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_filter_dialog_tv_sale_date">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_filter_dialog_til_sale_date_from"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_screen"
+                    android:layout_marginEnd="@dimen/margin_screen"
+                    android:layout_marginBottom="@dimen/margin_screen"
+                    android:hint="From"
+                    app:helperText="month/day/years"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_filter_dialog_tie_sale_date_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/fragment_filter_dialog_ib_sale_date_from"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/ic_calendar_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/fragment_filter_dialog_til_sale_date_from"
+                    app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_sale_date_from"
+                    app:layout_constraintTop_toTopOf="@+id/fragment_filter_dialog_til_sale_date_from" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- sale DATE TO LAYOUT -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fragment_filter_dialog_layout_sale_date_to"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_layout_sale_date_from"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_filter_dialog_tv_sale_date">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fragment_filter_dialog_til_sale_date_to"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_screen"
+                    android:layout_marginEnd="@dimen/margin_screen"
+                    android:layout_marginBottom="@dimen/margin_screen"
+                    android:hint="To"
+                    app:helperText="month/day/years"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fragment_filter_dialog_tie_sale_date_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/fragment_filter_dialog_ib_sale_date_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/ic_calendar_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_filter_dialog_til_sale_date_to"
+                    app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_sale_date_to"
+                    app:layout_constraintTop_toTopOf="@+id/fragment_filter_dialog_til_sale_date_to" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/fragment_filter_dialog_tv_type"
@@ -37,15 +243,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_screen"
                 android:text="Type of property"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_layout_sale_date_from" />
 
             <RadioGroup
                 android:id="@+id/fragment_filter_dialog_radio_grp_type_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_margin="@dimen/margin_screen"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_radio_grp_type_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_type">
@@ -56,8 +263,8 @@
                 android:id="@+id/fragment_filter_dialog_radio_grp_type_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_margin="@dimen/margin_screen"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/fragment_filter_dialog_radio_grp_type_left"
                 app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_type">
@@ -74,16 +281,16 @@
                 android:layout_marginBottom="@dimen/margin_screen"
                 android:hint="Min price"
                 app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_til_price_max"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_type_left"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_type_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_filter_dialog_tie_price_min"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_dollar_24"
                     android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
                     android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_max" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,16 +304,16 @@
                 android:layout_marginBottom="@dimen/margin_screen"
                 android:hint="Max price"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_type_left"
-                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_price_min">
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_price_min"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_type_left">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_filter_dialog_tie_price_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_dollar_24"
                     android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
                     android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_min" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -121,16 +328,16 @@
                 android:layout_marginBottom="@dimen/margin_screen"
                 android:hint="Min surface"
                 app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_til_surface_max"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_price_min"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_price_min">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_filter_dialog_tie_surface_min"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_surface_24"
                     android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
                     android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_max" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,16 +351,16 @@
                 android:layout_marginBottom="@dimen/margin_screen"
                 android:hint="Max surface"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_price_max"
-                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_surface_min">
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_til_surface_min"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_price_max">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/fragment_filter_dialog_tie_surface_max"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_surface_24"
                     android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
                     android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_min" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -162,26 +369,28 @@
                 android:id="@+id/fragment_filter_dialog_tv_photos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginTop="@dimen/margin_screen"
                 android:layout_marginEnd="@dimen/margin_screen"
                 android:layout_marginBottom="@dimen/margin_screen"
+                android:padding="5dp"
                 android:text="Photos :"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_surface_min"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_surface_min" />
 
             <TextView
                 android:id="@+id/fragment_filter_dialog_tv_photos_nbr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_marginTop="@dimen/margin_screen"
                 android:layout_marginEnd="@dimen/margin_screen"
                 android:layout_marginBottom="@dimen/margin_screen"
+                android:padding="5dp"
                 android:text="1"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_surface_min"
-                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_tv_photos"/>
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toEndOf="@id/fragment_filter_dialog_tv_photos"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_til_surface_min" />
 
             <SeekBar
                 android:id="@+id/fragment_filter_dialog_slider_photos"
@@ -199,12 +408,13 @@
                 android:id="@+id/fragment_filter_dialog_tv_borough"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_marginStart="@dimen/margin_screen"
                 android:layout_marginTop="@dimen/margin_screen"
                 android:layout_marginEnd="@dimen/margin_screen"
                 android:layout_marginBottom="@dimen/margin_screen"
+                android:padding="5dp"
                 android:text="Borough"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_slider_photos" />
 
@@ -212,8 +422,8 @@
                 android:id="@+id/fragment_filter_dialog_radio_grp_borough_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_margin="@dimen/margin_screen"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toStartOf="@id/fragment_filter_dialog_radio_grp_borough_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_tv_borough">
@@ -236,11 +446,12 @@
                 android:id="@+id/fragment_filter_dialog_tv_poi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:layout_margin="@dimen/margin_screen"
+                android:padding="5dp"
                 android:text="Points of interests next the property"
-                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_borough_left"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_filter_dialog_radio_grp_borough_left" />
 
             <LinearLayout
                 android:id="@+id/fragment_filter_dialog_check_box_grp_poi_left"

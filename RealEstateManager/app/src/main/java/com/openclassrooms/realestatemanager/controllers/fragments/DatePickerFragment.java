@@ -22,8 +22,8 @@ public class DatePickerFragment extends DialogFragment {
 
     private final DatePickerDialog.OnDateSetListener onDateSetListener;
 
-    public DatePickerFragment(Context context) {
-        this.onDateSetListener = (DatePickerDialog.OnDateSetListener) context;
+    public DatePickerFragment(DatePickerDialog.OnDateSetListener onDateSetListener) {
+        this.onDateSetListener = onDateSetListener;
     }
 
     @Override

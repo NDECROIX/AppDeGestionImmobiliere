@@ -158,7 +158,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         if (activeFragment != listFragment){
             return;
         }
-        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, (ListFragment) activeFragment, this.getLayoutInflater());
+        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, (ListFragment) activeFragment,
+                this.getLayoutInflater(), getSupportFragmentManager());
         agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 

@@ -314,7 +314,7 @@ public class Property implements Serializable {
         return country;
     }
 
-    public boolean isStatus() {
+    public boolean getStatus() {
         return status;
     }
 

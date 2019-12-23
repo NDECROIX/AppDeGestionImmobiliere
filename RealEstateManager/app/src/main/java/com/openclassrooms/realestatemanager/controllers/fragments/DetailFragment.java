@@ -101,6 +101,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
     @Nullable
     @BindView(R.id.fragment_detail_main_layout)
     ConstraintLayout constraintLayout;
+    @BindView(R.id.fragment_detail_tv_sold)
+    TextView tvSold;
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 898;
 
@@ -205,6 +207,13 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
         calendar.setTimeInMillis(property.getEntryDate());
         date.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        if (property.getStatus()){
+            tvSold.setVisibility(View.VISIBLE);
+            calendar = new GregorianCalendar();
+            calendar.setTimeInMillis(property.getSaleDate());
+            date.append(String.format(Locale.getDefault(), " - %d/%d/%d",
+                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        }
         if (property.getAgentID() != null && !property.getAgentID().isEmpty()) {
             agent.setText(property.getAgentID());
             propertyViewModel.getAgent(property.getAgentID()).observe(getViewLifecycleOwner(), agent ->

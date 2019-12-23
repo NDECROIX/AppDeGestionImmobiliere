@@ -6,6 +6,14 @@ import java.util.List;
 
 public class Filter implements Serializable {
 
+    /**
+     * 0 nothing, 1 On sale, 2 Sold.
+     */
+    private int status;
+    private long entryDateFrom;
+    private long entryDateTo;
+    private long saleDateFrom;
+    private long saleDateTo;
     private String type;
     private Double minPrice;
     private Double maxPrice;
@@ -22,30 +30,42 @@ public class Filter implements Serializable {
     // UTILS
 
     public boolean meetsCriteria(Property property, int nbrPhotos, List<Poi> pois) {
-        if (type != null && !type.isEmpty() && !property.getType().equals(type)){
+        if (status != 0) {
+            if (status == 1 && property.getSaleDate() != 0) {
+                return false;
+            } else if (status == 2 && property.getSaleDate() == 0) {
+                return false;
+            }
+        }
+        if (entryDateFrom != 0 && property.getEntryDate() < entryDateFrom) {
             return false;
         }
-        else if (minPrice != null && property.getPrice() < minPrice){
+        if (entryDateFrom != 0 && property.getEntryDate() > entryDateTo) {
             return false;
         }
-        else if (maxPrice != null && property.getPrice() > maxPrice){
+        if (saleDateFrom != 0 && property.getSaleDate() < saleDateFrom) {
             return false;
         }
-        else if (minSurface != null && property.getSurface() < minSurface){
+        if (saleDateTo != 0 && property.getSaleDate() > saleDateTo) {
             return false;
         }
-        else if (maxSurface != null && property.getSurface() > maxSurface){
+        if (type != null && !type.isEmpty() && !property.getType().equals(type)) {
             return false;
-        }
-        else if (this.nbrPhotos != 1 && nbrPhotos < this.nbrPhotos){
+        } else if (minPrice != null && property.getPrice() < minPrice) {
             return false;
-        }
-        else if (this.borough != null && !property.getBorough().equals(this.borough)){
+        } else if (maxPrice != null && property.getPrice() > maxPrice) {
             return false;
-        }
-        else if (!this.pois.isEmpty()){
+        } else if (minSurface != null && property.getSurface() < minSurface) {
+            return false;
+        } else if (maxSurface != null && property.getSurface() > maxSurface) {
+            return false;
+        } else if (this.nbrPhotos != 1 && nbrPhotos < this.nbrPhotos) {
+            return false;
+        } else if (this.borough != null && !property.getBorough().equals(this.borough)) {
+            return false;
+        } else if (!this.pois.isEmpty()) {
             if (pois.isEmpty()) return false;
-            for (Poi poi : this.pois){
+            for (Poi poi : this.pois) {
                 if (!pois.contains(poi)) return false;
             }
         }
@@ -56,34 +76,6 @@ public class Filter implements Serializable {
 
     public String getType() {
         return type;
-    }
-
-    public Double getMinPrice() {
-        return minPrice;
-    }
-
-    public Double getMaxPrice() {
-        return maxPrice;
-    }
-
-    public Double getMinSurface() {
-        return minSurface;
-    }
-
-    public Double getMaxSurface() {
-        return maxSurface;
-    }
-
-    public int getNbrPhotos() {
-        return nbrPhotos;
-    }
-
-    public String getBorough() {
-        return borough;
-    }
-
-    public List<Poi> getPois() {
-        return pois;
     }
 
     // SETTER
@@ -118,5 +110,25 @@ public class Filter implements Serializable {
 
     public void setPois(List<Poi> pois) {
         this.pois = pois;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setEntryDateFrom(long entryDateFrom) {
+        this.entryDateFrom = entryDateFrom;
+    }
+
+    public void setEntryDateTo(long entryDateTo) {
+        this.entryDateTo = entryDateTo;
+    }
+
+    public void setSaleDateFrom(long saleDateFrom) {
+        this.saleDateFrom = saleDateFrom;
+    }
+
+    public void setSaleDateTo(long saleDateTo) {
+        this.saleDateTo = saleDateTo;
     }
 }

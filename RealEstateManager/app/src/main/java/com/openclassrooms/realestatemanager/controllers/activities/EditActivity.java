@@ -35,8 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
@@ -50,7 +48,6 @@ import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
-import com.openclassrooms.realestatemanager.utils.OnMapAndViewReadyListener;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
@@ -60,7 +57,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,6 +126,8 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     RecyclerView recyclerView;
     @BindView(R.id.activity_edit_tie_date)
     TextInputEditText tieEntryDate;
+    @BindView(R.id.activity_edit_tie_date_sell)
+    TextInputEditText tieSaleDate;
     @BindView(R.id.activity_edit_tie_price)
     TextInputEditText tiePrice;
     @BindView(R.id.activity_edit_tie_surface)
@@ -168,6 +166,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private List<Property> properties;
     private List<Agent> agents;
     private Agent agent;
+    private boolean entryDate;
 
     // Update
     private Property propertyToUpdate;
@@ -228,6 +227,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         calendar.setTimeInMillis(property.getEntryDate());
         tieEntryDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        if (property.getStatus()){
+            calendar = new GregorianCalendar();
+            calendar.setTimeInMillis(property.getSaleDate());
+            tieSaleDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
+                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        }
         if (property.getAgentID() != null && !property.getAgentID().isEmpty())
             propertyViewModel.getAgent(property.getAgentID()).observe(this, agent ->
                     tvAgent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
@@ -608,14 +613,26 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     @OnClick(R.id.activity_edit_id_calendar)
     public void onClickCalendar() {
+        entryDate = true;
         DatePickerFragment datePickerFragment = new DatePickerFragment(this);
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @OnClick(R.id.activity_edit_id_calendar_sell)
+    public void onClickCalendarSell() {
+        entryDate = false;
+        DatePickerFragment datePickerFragment = new DatePickerFragment(this);
+        datePickerFragment.show(getSupportFragmentManager(), "datePickerSell");
     }
 
     @Override
     @SuppressLint("SetTextI18n")
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        tieEntryDate.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+        if (entryDate) {
+            tieEntryDate.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+        } else {
+            tieSaleDate.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+        }
     }
 
     //--------------------
@@ -766,7 +783,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             property.setBorough(borough);
         }
 
-        // Check date
+        // Check entry date
         if (tieEntryDate.getText() == null || tieEntryDate.getText().toString().isEmpty()) {
             showToastMessage(this, "Please choose a date");
             return false;
@@ -780,24 +797,40 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             return false;
         }
 
+        // Check sell date
+        if (tieSaleDate.getText() != null && !tieSaleDate.getText().toString().isEmpty()) {
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                Date date = simpleDateFormat.parse(tieSaleDate.getText().toString());
+                property.setSaleDate(date.getTime());
+                property.setStatus(true);
+            } catch (ParseException p) {
+                showToastMessage(this, "Error on the sale date");
+                return false;
+            }
+        } else {
+            property.setStatus(false);
+        }
+
         // Check agent
         if (agent != null) {
             property.setAgentID(agent.getId());
         }
 
-        if (!getLatLngFromAddress()){
+        if (!getLatLngFromAddress()) {
             showToastMessage(this, "Can't convert address to lat lng!");
             return false;
         }
+
         return true;
     }
 
-    private boolean getLatLngFromAddress(){
+    private boolean getLatLngFromAddress() {
         String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
                 property.getStreetName(), property.getCity(), property.getCountry(),
                 property.getZip());
         LatLng latLng = Utils.getLocationFromAddress(this, address);
-        if (latLng != null){
+        if (latLng != null) {
             property.setLatitude(latLng.latitude);
             property.setLongitude(latLng.longitude);
             return true;
