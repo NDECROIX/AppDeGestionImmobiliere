@@ -213,6 +213,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
             calendar.setTimeInMillis(property.getSaleDate());
             date.append(String.format(Locale.getDefault(), " - %d/%d/%d",
                     calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
+        } else {
+            tvSold.setVisibility(View.GONE);
         }
         if (property.getAgentID() != null && !property.getAgentID().isEmpty()) {
             agent.setText(property.getAgentID());

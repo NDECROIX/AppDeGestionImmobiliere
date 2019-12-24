@@ -709,6 +709,13 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         }
 
+        // Check if the number of bedrooms and bathrooms is less than the number of rooms
+        if (property.getBathrooms() + property.getBedrooms() >= property.getRooms()){
+            showToastMessage(this, "Number of room less than bedrooms + bathrooms");
+            return false;
+        }
+
+
         // Check description
         if (tieDescription.getText() != null && !tieDescription.getText().toString().isEmpty()) {
             property.setDescription(tieDescription.getText().toString());
@@ -810,6 +817,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
         } else {
             property.setStatus(false);
+        }
+
+        // Check date of sale against date of entry
+        if (property.getSaleDate() != 0 && property.getEntryDate() > property.getSaleDate()){
+            showToastMessage(this, "Error between dates");
+            return false;
         }
 
         // Check agent
