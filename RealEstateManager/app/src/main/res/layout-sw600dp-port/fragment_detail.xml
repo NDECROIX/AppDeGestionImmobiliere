@@ -30,6 +30,16 @@
                 android:textColor="@color/colorAccent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/fragment_detail_tv_sold"/>
+
+            <TextView
+                android:id="@+id/fragment_detail_tv_sold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Sold"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <androidx.core.widget.NestedScrollView
