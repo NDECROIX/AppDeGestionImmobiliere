@@ -2,18 +2,14 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.openclassrooms.realestatemanager.R;
-
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * Create DatePickerFragment
@@ -39,8 +35,8 @@ public class DatePickerFragment extends DialogFragment {
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-
-        return new DatePickerDialog(getActivity(), R.style.dateTimePicker,
+        //R.style.dateTimePicker,
+        return new DatePickerDialog(Objects.requireNonNull(getActivity()),
                 onDateSetListener, year, month, day);
     }
 }

@@ -3,8 +3,6 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,33 +20,27 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.openclassrooms.realestatemanager.BuildConfig;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
+import com.openclassrooms.realestatemanager.controllers.activities.MapsActivity;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.utils.OnMapAndViewReadyListener;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.DetailFragmentPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -67,7 +58,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener, DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
+public class DetailFragment extends Fragment implements OnMapReadyCallback, DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
 
     @Nullable
     @BindView(R.id.fragment_detail_toolbar)
@@ -108,9 +99,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
 
     private Context context;
     private PropertyViewModel propertyViewModel;
-    private PlacesClient placesClient;
     private GoogleMap mMap;
-    private SupportMapFragment mapFragment;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -119,9 +108,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        propertyViewModel = ViewModelProviders.of((MainActivity) context).get(PropertyViewModel.class);
-        Places.initialize(context, BuildConfig.ApiKey);
-        placesClient = Places.createClient(context);
+        propertyViewModel = ViewModelProviders.of((FragmentActivity) context).get(PropertyViewModel.class);
     }
 
     @Override
@@ -141,15 +128,21 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
         configRecyclerView();
         getPropertyFromDatabase();
         // Get the map and register for the ready callback
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_detail_map_view);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_detail_map_view);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
-            //new OnMapAndViewReadyListener(mapFragment, this);
         }
         return view;
     }
 
     private void configToolbar() {
+        if (getActivity() instanceof MapsActivity) {
+            ActionBar actionBar = ((MapsActivity) context).getSupportActionBar();
+            if (actionBar != null) actionBar.setTitle("Details");
+            if (toolbar != null)
+                toolbar.setVisibility(View.GONE);
+            return;
+        }
         // Hide main toolbar
         ActionBar supportActionBar = ((MainActivity) context).getSupportActionBar();
         if (supportActionBar != null) {
@@ -168,13 +161,17 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        menu.findItem(R.id.menu_activity_main_search).setVisible(false);
+        if (context instanceof MainActivity) {
+            menu.findItem(R.id.menu_activity_main_search).setVisible(false);
+        }
         super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_detail_toolbar_menu, menu);
+        if (context instanceof MainActivity) {
+            inflater.inflate(R.menu.fragment_detail_toolbar_menu, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -194,7 +191,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
         type.setText(property.getType());
         description.setText(property.getDescription());
         price.setText(String.format("Price : $ %s ", Utils.getPrice(property.getPrice())));
-        surface.setText(String.format(Locale.getDefault(), "Surface : %s", property.getSurface()));
+        surface.setText(String.format(Locale.getDefault(), "Surface : %s sq m", property.getSurface()));
         room.setText(String.format(Locale.getDefault(), "Number of rooms : %d", property.getRooms()));
         bathroom.setText(String.format(Locale.getDefault(), "Number of bathrooms : %d", property.getBathrooms()));
         bedroom.setText(String.format(Locale.getDefault(), "Number of bedrooms : %d", property.getBedrooms()));
@@ -207,7 +204,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
         calendar.setTimeInMillis(property.getEntryDate());
         date.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        if (property.getStatus()){
+        if (property.getStatus()) {
             tvSold.setVisibility(View.VISIBLE);
             calendar = new GregorianCalendar();
             calendar.setTimeInMillis(property.getSaleDate());
@@ -267,11 +264,21 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
     private void getPictureAddress() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
             Property property = propertyViewModel.getCurrentProperty().getValue();
-            if (property != null && property.getLatitude() != null && property.getLongitude() != null){
-                LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(latLng));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
+            if (property != null && property.getLatitude() == null) {
+                String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
+                        property.getStreetName(), property.getCity(), property.getCountry(),
+                        property.getZip());
+                LatLng latLng = Utils.getLocationFromAddress(context, address);
+                if (latLng != null) {
+                    property.setLatitude(latLng.latitude);
+                    property.setLongitude(latLng.longitude);
+                    propertyViewModel.updateProperty(property);
+                }
             }
+            if (property == null) return;
+            LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
         } else {
             getAccessFineLocationPermission();
         }
@@ -293,5 +300,4 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, OnMa
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 }

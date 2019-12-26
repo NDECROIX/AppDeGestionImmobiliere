@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.view.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.ColumnInfo;
 
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
@@ -21,7 +19,6 @@ import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.holders.PropertyViewHolder;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +107,7 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         if (position == 0) callback.firstPropertyAdded(property, photos);
         holder.itemView.setFocusableInTouchMode(true);
         holder.itemView.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus){
+            if (hasFocus) {
                 v.callOnClick();
                 v.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimaryDark));
 
@@ -152,7 +149,7 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
                 properties.remove(property);
             }
         }
-        if (getItemCount() == 0){
+        if (getItemCount() == 0) {
             callback.recyclerViewEmpty();
         }
     }

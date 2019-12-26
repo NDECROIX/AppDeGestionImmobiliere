@@ -32,11 +32,22 @@
 
     <FrameLayout
         android:id="@+id/activity_maps_frame_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintTop_toBottomOf="@id/maps_activity_appbar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/maps_activity_appbar" />
+        app:layout_constraintEnd_toStartOf="@+id/activity_maps_frame_layout_detail"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/activity_maps_frame_layout_detail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_weight="7"
+        app:layout_constraintTop_toBottomOf="@id/maps_activity_appbar"
+        app:layout_constraintStart_toEndOf="@+id/activity_maps_frame_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

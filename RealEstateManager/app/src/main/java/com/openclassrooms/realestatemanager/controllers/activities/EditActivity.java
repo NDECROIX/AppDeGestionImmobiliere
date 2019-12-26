@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
@@ -227,7 +226,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         calendar.setTimeInMillis(property.getEntryDate());
         tieEntryDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        if (property.getStatus()){
+        if (property.getStatus()) {
             calendar = new GregorianCalendar();
             calendar.setTimeInMillis(property.getSaleDate());
             tieSaleDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
@@ -710,7 +709,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check if the number of bedrooms and bathrooms is less than the number of rooms
-        if (property.getBathrooms() + property.getBedrooms() >= property.getRooms()){
+        if (property.getBathrooms() + property.getBedrooms() >= property.getRooms()) {
             showToastMessage(this, "Number of room less than bedrooms + bathrooms");
             return false;
         }
@@ -820,7 +819,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
 
         // Check date of sale against date of entry
-        if (property.getSaleDate() != 0 && property.getEntryDate() > property.getSaleDate()){
+        if (property.getSaleDate() != 0 && property.getEntryDate() > property.getSaleDate()) {
             showToastMessage(this, "Error between dates");
             return false;
         }
@@ -830,25 +829,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             property.setAgentID(agent.getId());
         }
 
-        if (!getLatLngFromAddress()) {
-            showToastMessage(this, "Can't convert address to lat lng!");
-            return false;
-        }
-
         return true;
-    }
-
-    private boolean getLatLngFromAddress() {
-        String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
-                property.getStreetName(), property.getCity(), property.getCountry(),
-                property.getZip());
-        LatLng latLng = Utils.getLocationFromAddress(this, address);
-        if (latLng != null) {
-            property.setLatitude(latLng.latitude);
-            property.setLongitude(latLng.longitude);
-            return true;
-        }
-        return false;
     }
 
     private boolean insertPropertyInDatabase() {

@@ -129,7 +129,7 @@ public class Utils {
 
         try {
             // May throw an IOException
-            address = coder.getFromLocationName(strAddress, 5);
+            address = coder.getFromLocationName(strAddress, 1);
             if (address == null) {
                 return null;
             }
