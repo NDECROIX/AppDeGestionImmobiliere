@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -16,9 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -90,10 +89,13 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     @BindView(R.id.fragment_detail_tv_agent)
     TextView agent;
     @Nullable
-    @BindView(R.id.fragment_detail_main_layout)
-    ConstraintLayout constraintLayout;
+    @BindView(R.id.fragment_detail_sv)
+    NestedScrollView nestedScrollView;
     @BindView(R.id.fragment_detail_tv_sold)
     TextView tvSold;
+    @Nullable
+    @BindView(R.id.fragment_detail_tv_empty)
+    TextView empty;
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 898;
 
@@ -188,6 +190,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     }
 
     private void displayPropertyData(Property property) {
+        if (empty != null) empty.setVisibility(View.GONE);
         type.setText(property.getType());
         description.setText(property.getDescription());
         price.setText(String.format("Price : $ %s ", Utils.getPrice(property.getPrice())));
@@ -218,18 +221,19 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
             propertyViewModel.getAgent(property.getAgentID()).observe(getViewLifecycleOwner(), agent ->
                     this.agent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
         }
+        if (mMap != null) getPictureAddress();
     }
 
     private void getPropertyFromDatabase() {
-        if (constraintLayout != null) {
-            constraintLayout.setVisibility(View.GONE);
+        if (nestedScrollView != null) {
+            nestedScrollView.setVisibility(View.GONE);
         }
         propertyViewModel.getCurrentProperty().observe(getViewLifecycleOwner(), property -> {
             displayPropertyData(property);
             propertyViewModel.getPoisNextProperty(property.getId())
                     .observe(getViewLifecycleOwner(), this::displayPoi);
-            if (constraintLayout != null && constraintLayout.getVisibility() == View.GONE) {
-                constraintLayout.setVisibility(View.VISIBLE);
+            if (nestedScrollView != null && nestedScrollView.getVisibility() == View.GONE) {
+                nestedScrollView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -264,7 +268,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     private void getPictureAddress() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
             Property property = propertyViewModel.getCurrentProperty().getValue();
-            if (property != null && property.getLatitude() == null) {
+            if (property == null) return;
+            if (property.getLatitude() == null || property.getLatitude() == 0) {
                 String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
                         property.getStreetName(), property.getCity(), property.getCountry(),
                         property.getZip());
@@ -275,7 +280,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
                     propertyViewModel.updateProperty(property);
                 }
             }
-            if (property == null) return;
             LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));

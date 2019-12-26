@@ -46,9 +46,9 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         ButterKnife.bind(this);
+        configViewModel();
         configFragment();
         configToolbar();
-        configViewModel();
     }
 
     private void configFragment() {
@@ -57,7 +57,8 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
                 .commitNow();
         if (frameLayoutDetail != null) {
             this.getSupportFragmentManager().beginTransaction()
-                    .add(frameLayoutDetail.getId(), detailFragment);
+                    .add(frameLayoutDetail.getId(), detailFragment)
+                    .commitNow();
         }
     }
 

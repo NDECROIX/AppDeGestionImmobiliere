@@ -59,6 +59,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     private PropertyViewModel propertyViewModel;
     private GoogleMap mMap;
+    private boolean initDetail;
 
     private Context context;
 
@@ -159,30 +160,36 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
     private void addMarkerWithBitmap(Property property) {
-        propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos ->
-                Glide.with(this)
-                        .asBitmap()
-                        .load(photos.get(0).getUri())
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(new CustomTarget<Bitmap>(80, 80) {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                MarkerOptions markerOptions = new MarkerOptions();
-                                // Get position
-                                LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
-                                markerOptions.position(latLng);
-                                // Get bitmap
-                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resource));
-                                // Add marker on the map
-                                Marker marker = mMap.addMarker(markerOptions);
-                                MarkerObject markerObject = new MarkerObject(property, photos);
-                                marker.setTag(markerObject);
-                            }
+        propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos -> {
+            if (!initDetail){
+                initDetail = true;
+                propertyViewModel.setCurrentProperty(property);
+                propertyViewModel.setCurrentPhotos(photos);
+            }
+            Glide.with(this)
+                    .asBitmap()
+                    .load(photos.get(0).getUri())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(new CustomTarget<Bitmap>(80, 80) {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            // Get position
+                            LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+                            markerOptions.position(latLng);
+                            // Get bitmap
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resource));
+                            // Add marker on the map
+                            Marker marker = mMap.addMarker(markerOptions);
+                            MarkerObject markerObject = new MarkerObject(property, photos);
+                            marker.setTag(markerObject);
+                        }
 
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                            }
-                        }));
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
+                });
     }
 
     public class MarkerObject {
