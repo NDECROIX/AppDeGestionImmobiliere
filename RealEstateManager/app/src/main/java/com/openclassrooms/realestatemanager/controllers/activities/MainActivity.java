@@ -12,17 +12,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
-import com.openclassrooms.realestatemanager.database.updates.UpdateAgent;
+import com.openclassrooms.realestatemanager.database.updates.UpdateData;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Photo;
@@ -39,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
-        EditActivity.startEditActivityListener, UpdateAgent.UpdateAgentListener {
+        EditActivity.startEditActivityListener, UpdateData.UpdateDataListener {
 
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
@@ -164,8 +166,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             showToastMessage(this, "No internet");
             return;
         }
-        UpdateAgent updateAgent = new UpdateAgent(this, propertyViewModel, this);
-        updateAgent.updateData();
+        UpdateData updateData = new UpdateData(this, propertyViewModel, this);
+        updateData.startSynchronisation();
     }
 
     private void startFilterDialogFragment() {
@@ -260,17 +262,12 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     @Override
-    public void notification(String agent) {
-        showToastMessage(this, agent);
+    public void synchronisationComplete() {
+        customToast(this, "Synchronization complete");
     }
 
     @Override
-    public void updateComplete() {
-        showToastMessage(this, "Synchronization complete");
-    }
-
-    @Override
-    public void error(Exception exception) {
-        showToastMessage(this, exception.getMessage());
+    public void notification(String notification) {
+        showToastMessage(this, notification);
     }
 }

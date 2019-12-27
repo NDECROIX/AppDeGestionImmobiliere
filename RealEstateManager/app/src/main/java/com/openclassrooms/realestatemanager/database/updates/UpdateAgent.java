@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.database.updates;
 
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 import com.openclassrooms.realestatemanager.api.AgentHelper;
 import com.openclassrooms.realestatemanager.model.Agent;
@@ -12,8 +13,10 @@ import java.util.List;
 public class UpdateAgent {
 
     public interface UpdateAgentListener {
-        void notification(String agent);
-        void updateComplete();
+        void notification(String notification);
+
+        void agentsSynchronized(String typeData);
+
         void error(Exception exception);
     }
 
@@ -30,12 +33,16 @@ public class UpdateAgent {
     }
 
     public void updateData() {
-        this.propertyViewModel.getAgents().observe(lifecycleOwner, agents -> {
-            agentsRoom = new ArrayList<>(agents);
-            if (!agentsRoom.isEmpty()) {
-                updateAgents();
-            } else {
-                getNewAgentsFromFirebase();
+        this.propertyViewModel.getAgents().observe(lifecycleOwner, new Observer<List<Agent>>() {
+            @Override
+            public void onChanged(List<Agent> agents) {
+                propertyViewModel.getAgents().removeObserver(this);
+                agentsRoom = new ArrayList<>(agents);
+                if (!agentsRoom.isEmpty()) {
+                    updateAgents();
+                } else {
+                    getNewAgentsFromFirebase();
+                }
             }
         });
     }
@@ -59,7 +66,7 @@ public class UpdateAgent {
                 callback.error(task.getException());
             }
             count++;
-            if (count < agentsRoom.size()){
+            if (count < agentsRoom.size()) {
                 updateAgents();
             } else {
                 getNewAgentsFromFirebase();
@@ -89,7 +96,7 @@ public class UpdateAgent {
             } else if (task.getException() != null) {
                 callback.error(task.getException());
             }
-            callback.updateComplete();
+            callback.agentsSynchronized("Agents");
         });
     }
 
