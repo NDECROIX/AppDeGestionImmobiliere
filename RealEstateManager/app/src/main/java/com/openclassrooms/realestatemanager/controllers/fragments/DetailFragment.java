@@ -207,7 +207,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
         calendar.setTimeInMillis(property.getEntryDate());
         date.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        if (property.getStatus()) {
+        if (property.isSold()) {
             tvSold.setVisibility(View.VISIBLE);
             calendar = new GregorianCalendar();
             calendar.setTimeInMillis(property.getSaleDate());

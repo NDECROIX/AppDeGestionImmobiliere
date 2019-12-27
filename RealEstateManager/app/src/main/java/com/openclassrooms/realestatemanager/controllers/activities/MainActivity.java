@@ -22,11 +22,13 @@ import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
+import com.openclassrooms.realestatemanager.database.updates.UpdateAgent;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
@@ -37,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
-        EditActivity.startEditActivityListener {
+        EditActivity.startEditActivityListener, UpdateAgent.UpdateAgentListener {
 
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
@@ -79,7 +81,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
-        if (frameLayoutDetail != null){
+        if (frameLayoutDetail != null) {
             this.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_main_frame_layout_detail, detailFragment)
                     .commitNow();
@@ -89,7 +91,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     private void configViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
-        if (property != null){
+        if (property != null) {
             propertyViewModel.setCurrentProperty(property);
             propertyViewModel.setCurrentPoisNextProperty(poiNextProperties);
             propertyViewModel.setCurrentPhotos(photos);
@@ -120,7 +122,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (frameLayoutDetail == null){
+        if (frameLayoutDetail == null) {
             getMenuInflater().inflate(R.menu.activity_main_toolbar_menu, menu);
         } else {
             getMenuInflater().inflate(R.menu.activity_main_toolbar_menu_tablet, menu);
@@ -147,6 +149,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             case R.id.activity_main_drawer_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
+            case R.id.activity_main_drawer_synchronize:
+                synchronizeData();
+                break;
             case android.R.id.home:
                 if (activeFragment == detailFragment) onBackPressed();
                 break;
@@ -154,8 +159,17 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
+    private void synchronizeData() {
+        if (!Utils.isInternetAvailable(this)) {
+            showToastMessage(this, "No internet");
+            return;
+        }
+        UpdateAgent updateAgent = new UpdateAgent(this, propertyViewModel, this);
+        updateAgent.updateData();
+    }
+
     private void startFilterDialogFragment() {
-        if (activeFragment != listFragment){
+        if (activeFragment != listFragment) {
             return;
         }
         FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, (ListFragment) activeFragment,
@@ -164,7 +178,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     private void editProperty() {
-        if (propertyViewModel.getCurrentProperty() != null){
+        if (propertyViewModel.getCurrentProperty() != null) {
             startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
                     propertyViewModel.getCurrentPoisNextProperty().getValue(), propertyViewModel.getCurrentPhotosProperty().getValue()));
         } else {
@@ -187,7 +201,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     public void onClickPropertyListener(Property property, List<Photo> photos) {
         propertyViewModel.setCurrentProperty(property);
         propertyViewModel.setCurrentPhotos(photos);
-        if (frameLayoutDetail == null){
+        if (frameLayoutDetail == null) {
             activeFragment = detailFragment;
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.activity_main_frame_layout, activeFragment)
@@ -198,7 +212,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void firstPropertyAdded(Property property, List<Photo> photos) {
         noProperty.setVisibility(View.GONE);
-        if (this.property == null){
+        if (this.property == null) {
             propertyViewModel.setCurrentProperty(property);
             propertyViewModel.setCurrentPhotos(photos);
         }
@@ -207,7 +221,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void recyclerViewEmpty() {
         noProperty.setVisibility(View.VISIBLE);
-        if (frameLayoutDetail != null && detailFragment.getView() != null){
+        if (frameLayoutDetail != null && detailFragment.getView() != null) {
             detailFragment.getView()
                     .findViewById(R.id.fragment_detail_main_layout).setVisibility(View.GONE);
         }
@@ -234,7 +248,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        property =(Property) savedInstanceState.getSerializable(PROPERTY);
+        property = (Property) savedInstanceState.getSerializable(PROPERTY);
         photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
         poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
     }
@@ -243,5 +257,20 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         activeFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void notification(String agent) {
+        showToastMessage(this, agent);
+    }
+
+    @Override
+    public void updateComplete() {
+        showToastMessage(this, "Synchronization complete");
+    }
+
+    @Override
+    public void error(Exception exception) {
+        showToastMessage(this, exception.getMessage());
     }
 }

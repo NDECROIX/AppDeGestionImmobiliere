@@ -113,8 +113,8 @@ public class Property implements Serializable {
     /**
      * Status of the property. True if the property has been sold.
      */
-    @ColumnInfo(name = "status")
-    private boolean status;
+    @ColumnInfo(name = "sold")
+    private boolean sold;
 
     /**
      * The date on which the property entered the market.
@@ -127,6 +127,12 @@ public class Property implements Serializable {
      */
     @ColumnInfo(name = "sale_date")
     private long saleDate;
+
+    /**
+     * Property update date
+     */
+    @ColumnInfo(name = "update_date")
+    private long updateDate;
 
     /**
      * Latitude address
@@ -149,7 +155,7 @@ public class Property implements Serializable {
 
     public Property(@NonNull String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
                     int bedrooms, String description, int streetNumber, String streetName,
-                    String addressSupplement, String city, int zip, String country, long entryDate, Double latitude,
+                    String addressSupplement, String city, int zip, String country, long entryDate, long updateDate, Double latitude,
                     Double longitude, String agentID) {
         this.id = id;
         this.type = type;
@@ -166,9 +172,10 @@ public class Property implements Serializable {
         this.zip = zip;
         this.city = city;
         this.country = country;
-        this.status = false;
+        this.sold = false;
         this.entryDate = entryDate;
         this.saleDate = 0;
+        this.updateDate = 0;
         this.latitude = latitude;
         this.longitude = longitude;
         this.agentID = agentID;
@@ -201,9 +208,10 @@ public class Property implements Serializable {
         if (values.containsKey("city")) property.setCity(values.getAsString("city"));
         if (values.containsKey("zip")) property.setZip(values.getAsInteger("zip"));
         if (values.containsKey("country")) property.setCountry(values.getAsString("country"));
-        if (values.containsKey("status")) property.setStatus(values.getAsBoolean("status"));
+        if (values.containsKey("sold")) property.setSold(values.getAsBoolean("sold"));
         if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
         if (values.containsKey("saleDate")) property.setSaleDate(values.getAsLong("saleDate"));
+        if (values.containsKey("updateDate")) property.setUpdateDate(values.getAsLong("updateDate"));
         if (values.containsKey("latitude")) property.setLatitude(values.getAsDouble("latitude"));
         if (values.containsKey("longitude")) property.setLongitude(values.getAsDouble("longitude"));
         if (values.containsKey("agentID")) property.setAgentID(values.getAsString("agentID"));
@@ -235,8 +243,7 @@ public class Property implements Serializable {
                 this.getStreetName() +
                 this.getZip() +
                 this.getCity() +
-                this.getEntryDate() +
-                this.getAgentID();
+                this.getEntryDate();
     }
 
     @Override
@@ -314,8 +321,8 @@ public class Property implements Serializable {
         return country;
     }
 
-    public boolean getStatus() {
-        return status;
+    public boolean isSold() {
+        return sold;
     }
 
     public long getEntryDate() {
@@ -324,6 +331,10 @@ public class Property implements Serializable {
 
     public long getSaleDate() {
         return saleDate;
+    }
+
+    public long getUpdateDate() {
+        return updateDate;
     }
 
     public Double getLatitude() {
@@ -400,8 +411,8 @@ public class Property implements Serializable {
         this.country = country;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setSold(boolean sold) {
+        this.sold = sold;
     }
 
     public void setEntryDate(long entryDate) {
@@ -410,6 +421,10 @@ public class Property implements Serializable {
 
     public void setSaleDate(long saleDate) {
         this.saleDate = saleDate;
+    }
+
+    public void setUpdateDate(long updateDate) {
+        this.updateDate = updateDate;
     }
 
     public void setLatitude(Double latitude) {

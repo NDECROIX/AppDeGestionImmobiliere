@@ -32,12 +32,16 @@ public class Agent {
     @ColumnInfo(name = "phone")
     private String phone;
 
+    @ColumnInfo(name = "update_date")
+    private long updateDate;
+
     public Agent(@NonNull String firstName, @NonNull String lastName, @NonNull String email, @NonNull String phone) {
         this.id = Utils.convertStringMd5(String.format("%s%s%s", firstName, lastName, email));
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.updateDate = 0;
     }
 
     @Ignore
@@ -104,6 +108,14 @@ public class Agent {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public long getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(long updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override

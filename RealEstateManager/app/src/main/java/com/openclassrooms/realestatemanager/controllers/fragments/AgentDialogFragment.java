@@ -24,6 +24,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.Agent;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -83,6 +85,7 @@ public class AgentDialogFragment extends DialogFragment {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
                     if (allCompleted()){
                         if (update){
+                            agent.setUpdateDate(new Date().getTime());
                             callback.updateAgent(agent);
                         } else {
                             agent.createId();

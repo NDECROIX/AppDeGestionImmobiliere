@@ -227,7 +227,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         calendar.setTimeInMillis(property.getEntryDate());
         tieEntryDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        if (property.getStatus()) {
+        if (property.isSold()) {
             calendar = new GregorianCalendar();
             calendar.setTimeInMillis(property.getSaleDate());
             tieSaleDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
@@ -810,13 +810,13 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieSaleDate.getText().toString());
                 property.setSaleDate(date.getTime());
-                property.setStatus(true);
+                property.setSold(true);
             } catch (ParseException p) {
                 showToastMessage(this, "Error on the sale date");
                 return false;
             }
         } else {
-            property.setStatus(false);
+            property.setSold(false);
         }
 
         // Check date of sale against date of entry
