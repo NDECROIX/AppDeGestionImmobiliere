@@ -45,13 +45,15 @@ class UpdatePhoto {
         this.propertyViewModel.getPhotos().observe(lifecycleOwner, new Observer<List<Photo>>() {
             @Override
             public void onChanged(List<Photo> photos) {
-                propertyViewModel.getPhotos().removeObserver(this);
-                photosRoom = new ArrayList<>(photos);
-                if (!photosRoom.isEmpty()) {
-                    updatePhotos();
-                } else {
-                    getNewPhotosFromFirebase();
+                if (photosRoom == null){
+                    photosRoom = new ArrayList<>(photos);
+                    if (!photosRoom.isEmpty()) {
+                        updatePhotos();
+                    } else {
+                        getNewPhotosFromFirebase();
+                    }
                 }
+                propertyViewModel.getPhotos().removeObserver(this);
             }
         });
     }
@@ -145,7 +147,6 @@ class UpdatePhoto {
                     if (bitmap != null) {
                         StoragePhotoHelper.savePictureToFile(photo)
                                 .addOnFailureListener(callback::error);
-                        System.out.println("ERROR PATH : " + photo.getUri());
                     }
                 });
             }

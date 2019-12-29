@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.database.updates;
 
-import android.content.Context;
-
 import androidx.lifecycle.LifecycleOwner;
 
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProperty.UpdatePropertyListener,
-    UpdatePhoto.UpdatePhotoListener{
+        UpdatePhoto.UpdatePhotoListener, UpdatePoisNextProperties.UpdatePoiListener {
 
     public interface UpdateDataListener {
         void synchronisationComplete();
@@ -30,6 +28,7 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
     }
 
     public void startSynchronisation() {
+        callback.notification("Synchronization");
         synchronizeAgents();
     }
 
@@ -48,9 +47,9 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
         updatePhoto.updateData();
     }
 
-    @Override
-    public void notification(String notification) {
-        callback.notification(notification);
+    private void synchronizePoisNextProperties() {
+        UpdatePoisNextProperties updatePoisNextProperties = new UpdatePoisNextProperties(lifecycleOwner, propertyViewModel, this, propertiesDown);
+        updatePoisNextProperties.updateData();
     }
 
     @Override
@@ -59,18 +58,25 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
     }
 
     @Override
-    public void agentsSynchronized(String typeData) {
+    public void agentsSynchronized() {
+        callback.notification("Agents synchronized");
         synchronizeProperties();
     }
 
     @Override
-    public void propertiesSynchronized(List<String> propertiesPush, List<String> propertiesDown) {
+    public void propertiesSynchronized(List<String> propertiesDown) {
         this.propertiesDown = new ArrayList<>(propertiesDown);
         synchronizePhotos();
     }
 
     @Override
     public void photosSynchronized() {
+        synchronizePoisNextProperties();
+    }
+
+    @Override
+    public void poisNextPropertiesSynchronized() {
+        callback.notification("Properties synchronized");
         callback.synchronisationComplete();
     }
 }

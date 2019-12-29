@@ -11,6 +11,9 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 
+import com.google.firebase.firestore.Exclude;
+import com.openclassrooms.realestatemanager.utils.Utils;
+
 import java.util.Objects;
 
 @Entity(primaryKeys = {"property_id", "poi_name"},
@@ -44,6 +47,13 @@ public class PoiNextProperty implements Parcelable {
     }
 
     // --- UTILS ---
+
+    @Ignore
+    @Exclude
+    public String getHash(){
+        String value = this.propertyID + this.poiName;
+        return Utils.convertStringMd5(value);
+    }
 
     protected PoiNextProperty(Parcel in) {
         propertyID = in.readString();

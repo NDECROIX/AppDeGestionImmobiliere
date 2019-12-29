@@ -13,9 +13,7 @@ import java.util.List;
 class UpdateProperty {
 
     public interface UpdatePropertyListener {
-        void notification(String notification);
-
-        void propertiesSynchronized(List<String> propertiesPush, List<String> propertiesDown);
+        void propertiesSynchronized(List<String> propertiesDown);
 
         void error(Exception exception);
     }
@@ -24,7 +22,6 @@ class UpdateProperty {
     private final PropertyViewModel propertyViewModel;
     private UpdatePropertyListener callback;
     private LifecycleOwner lifecycleOwner;
-    private List<String> propertiesPush;
     private List<String> propertiesDown;
     private int count;
 
@@ -38,15 +35,16 @@ class UpdateProperty {
         this.propertyViewModel.getProperties().observe(lifecycleOwner, new Observer<List<Property>>() {
             @Override
             public void onChanged(List<Property> properties) {
-                propertyViewModel.getProperties().removeObserver(this);
-                propertiesPush = new ArrayList<>();
-                propertiesDown = new ArrayList<>();
-                propertiesRoom = new ArrayList<>(properties);
-                if (!propertiesRoom.isEmpty()){
-                    updateProperties();
-                } else {
-                    getNewPropertiesFromFirebase();
+                if (propertiesRoom == null){
+                    propertiesDown = new ArrayList<>();
+                    propertiesRoom = new ArrayList<>(properties);
+                    if (!propertiesRoom.isEmpty()){
+                        updateProperties();
+                    } else {
+                        getNewPropertiesFromFirebase();
+                    }
                 }
+                propertyViewModel.getProperties().removeObserver(this);
             }
         });
     }
@@ -81,15 +79,12 @@ class UpdateProperty {
     }
 
     private void updatePropertyInFirebase(Property property) {
-        propertiesPush.add(property.getId());
         PropertyHelper.updateProperty(property).addOnFailureListener(callback::error);
-        callback.notification(String.format("%s uploaded", property.getType()));
     }
 
     private void updatePropertyInRooms(Property property) {
         propertiesDown.add(property.getId());
         propertyViewModel.updateProperty(property);
-        callback.notification(String.format("%s updated", property.getType()));
     }
 
     private void getNewPropertiesFromFirebase() {
@@ -104,13 +99,12 @@ class UpdateProperty {
             } else if (task.getException() != null) {
                 callback.error(task.getException());
             }
-            callback.propertiesSynchronized(propertiesPush, propertiesDown);
+            callback.propertiesSynchronized(propertiesDown);
         });
     }
 
     private void addPropertyInRoom(Property property) {
         propertiesDown.add(property.getId());
         propertyViewModel.insertProperty(property);
-        callback.notification(String.format("%s added", property.getType()));
     }
 }

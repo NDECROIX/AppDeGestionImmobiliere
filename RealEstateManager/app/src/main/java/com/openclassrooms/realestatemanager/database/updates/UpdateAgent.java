@@ -13,10 +13,7 @@ import java.util.List;
 class UpdateAgent {
 
     public interface UpdateAgentListener {
-        void notification(String notification);
-
-        void agentsSynchronized(String typeData);
-
+        void agentsSynchronized();
         void error(Exception exception);
     }
 
@@ -36,13 +33,15 @@ class UpdateAgent {
         this.propertyViewModel.getAgents().observe(lifecycleOwner, new Observer<List<Agent>>() {
             @Override
             public void onChanged(List<Agent> agents) {
-                propertyViewModel.getAgents().removeObserver(this);
-                agentsRoom = new ArrayList<>(agents);
-                if (!agentsRoom.isEmpty()) {
-                    updateAgents();
-                } else {
-                    getNewAgentsFromFirebase();
+                if (agentsRoom == null){
+                    agentsRoom = new ArrayList<>(agents);
+                    if (!agentsRoom.isEmpty()) {
+                        updateAgents();
+                    } else {
+                        getNewAgentsFromFirebase();
+                    }
                 }
+                propertyViewModel.getAgents().removeObserver(this);
             }
         });
     }
@@ -78,12 +77,10 @@ class UpdateAgent {
 
     private void updateAgentInFirebase(Agent agent) {
         AgentHelper.updateAgent(agent).addOnFailureListener(callback::error);
-        callback.notification(String.format("Agent %s %s uploaded", agent.getFirstName(), agent.getLastName()));
     }
 
     private void updateAgentInRooms(Agent agent) {
         propertyViewModel.updateAgent(agent);
-        callback.notification(String.format("Agent %s %s updated", agent.getFirstName(), agent.getLastName()));
     }
 
     private void getNewAgentsFromFirebase() {
@@ -98,12 +95,11 @@ class UpdateAgent {
             } else if (task.getException() != null) {
                 callback.error(task.getException());
             }
-            callback.agentsSynchronized("Agents");
+            callback.agentsSynchronized();
         });
     }
 
     private void addAgentInRoom(Agent agent) {
         propertyViewModel.insertAgent(agent);
-        callback.notification(String.format("Agent %s %s added", agent.getFirstName(), agent.getLastName()));
     }
 }
