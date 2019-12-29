@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -37,6 +40,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
         EditActivity.startEditActivityListener, UpdateData.UpdateDataListener {
@@ -52,6 +60,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     FrameLayout frameLayoutDetail;
     @BindView(R.id.main_activity_tv_empty)
     TextView noProperty;
+
+    public static final int RC_READ_WRITE = 666;
 
     private PropertyViewModel propertyViewModel;
 
@@ -159,13 +169,18 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
+    @AfterPermissionGranted(RC_READ_WRITE)
     private void synchronizeData() {
         if (!Utils.isInternetAvailable(this)) {
             showToastMessage(this, "No internet");
             return;
         }
-        UpdateData updateData = new UpdateData(this, propertyViewModel, this);
-        updateData.startSynchronisation();
+        if (EasyPermissions.hasPermissions(this, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE)) {
+            UpdateData updateData = new UpdateData(this, propertyViewModel, this, this);
+            updateData.startSynchronisation();
+        } else {
+            getPermission();
+        }
     }
 
     private void startFilterDialogFragment() {
@@ -255,7 +270,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        activeFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == RC_READ_WRITE) {
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        } else {
+            activeFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -267,5 +286,17 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void notification(String notification) {
         showToastMessage(this, notification);
+    }
+
+    /**
+     * Get the read/write external storage permission.
+     */
+    private void getPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE},
+                    RC_READ_WRITE);
+        }
     }
 }

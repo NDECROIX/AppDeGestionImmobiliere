@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.database.updates;
 
+import android.content.Context;
+
 import androidx.lifecycle.LifecycleOwner;
 
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
@@ -20,9 +22,11 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
     private LifecycleOwner lifecycleOwner;
     private PropertyViewModel propertyViewModel;
     private List<String> propertiesDown;
+    private Context context;
 
-    public UpdateData(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdateDataListener callback) {
+    public UpdateData(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdateDataListener callback, Context context) {
         this.lifecycleOwner = lifecycleOwner;
+        this.context = context;
         this.propertyViewModel = propertyViewModel;
         this.callback = callback;
     }
@@ -43,7 +47,7 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
     }
 
     private void synchronizePhotos() {
-        UpdatePhoto updatePhoto = new UpdatePhoto(lifecycleOwner, propertyViewModel, this, propertiesDown);
+        UpdatePhoto updatePhoto = new UpdatePhoto(lifecycleOwner, propertyViewModel, this, propertiesDown, context);
         updatePhoto.updateData();
     }
 

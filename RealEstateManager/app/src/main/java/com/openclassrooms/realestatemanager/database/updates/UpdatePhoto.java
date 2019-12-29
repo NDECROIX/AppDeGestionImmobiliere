@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.database.updates;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
@@ -32,10 +33,12 @@ class UpdatePhoto {
     private LifecycleOwner lifecycleOwner;
     private List<String> propertiesDown;
     private int count = 0;
+    private Context context;
 
     UpdatePhoto(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel,
-                UpdatePhotoListener callback, List<String> propertiesDown) {
+                UpdatePhotoListener callback, List<String> propertiesDown, Context context) {
         this.callback = callback;
+        this.context = context;
         this.lifecycleOwner = lifecycleOwner;
         this.propertyViewModel = propertyViewModel;
         this.propertiesDown = new ArrayList<>(propertiesDown);
@@ -45,7 +48,7 @@ class UpdatePhoto {
         this.propertyViewModel.getPhotos().observe(lifecycleOwner, new Observer<List<Photo>>() {
             @Override
             public void onChanged(List<Photo> photos) {
-                if (photosRoom == null){
+                if (photosRoom == null) {
                     photosRoom = new ArrayList<>(photos);
                     if (!photosRoom.isEmpty()) {
                         updatePhotos();
@@ -145,7 +148,8 @@ class UpdatePhoto {
                 executor.execute(() -> {
                     Bitmap bitmap = UtilsPhoto.getBitmapFromURL(downloadUri.toString());
                     if (bitmap != null) {
-                        StoragePhotoHelper.savePictureToFile(photo)
+                        String path = photo.getUri(context);
+                        StoragePhotoHelper.savePictureToFile(photo, path)
                                 .addOnFailureListener(callback::error);
                     }
                 });

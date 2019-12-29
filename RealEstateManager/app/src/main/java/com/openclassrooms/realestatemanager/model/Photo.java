@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.model;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,6 +16,7 @@ import androidx.room.Index;
 import com.google.firebase.firestore.Exclude;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.io.File;
 import java.util.Objects;
 
 @Entity(primaryKeys = {"uri", "property_id"},
@@ -38,7 +41,7 @@ public class Photo implements Parcelable {
     public Photo(@NonNull String uri, @NonNull String propertyID, String description) {
         this.uri = uri;
         this.propertyID = propertyID;
-        this.description =description;
+        this.description = description;
     }
 
     @Ignore
@@ -50,20 +53,38 @@ public class Photo implements Parcelable {
 
     @Ignore
     @Exclude
-    public String getHash(){
+    public String getHash() {
         String value = this.uri;
         return Utils.convertStringMd5(value);
+    }
+
+    @Ignore
+    @Exclude
+    public String getName() {
+        String[] splitUri = this.uri.split("/");
+        return splitUri[splitUri.length - 1];
     }
 
     public static Photo fromContentValues(ContentValues values) {
         final Photo photo = new Photo();
         if (values.containsKey("uri")) photo.setUri(values.getAsString("uri"));
         if (values.containsKey("propertyID")) photo.setPropertyID(values.getAsString("propertyID"));
-        if (values.containsKey("description")) photo.setDescription(values.getAsString("description"));
+        if (values.containsKey("description"))
+            photo.setDescription(values.getAsString("description"));
         return photo;
     }
 
     // --- GETTER ---
+
+    public String getUri(Context context) {
+        String uri = "";
+        File file = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (file != null) {
+            uri = file.getAbsolutePath();
+            uri += "/" + this.getName();
+        }
+        return uri;
+    }
 
     public String getUri() {
         return uri;

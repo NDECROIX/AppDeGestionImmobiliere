@@ -1,7 +1,11 @@
 package com.openclassrooms.realestatemanager.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
+
+import com.openclassrooms.realestatemanager.model.Photo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,5 +30,4 @@ public class UtilsPhoto {
             return null;
         }
     }
-
 }

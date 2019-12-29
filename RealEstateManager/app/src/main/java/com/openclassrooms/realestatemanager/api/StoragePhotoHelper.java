@@ -51,7 +51,7 @@ public class StoragePhotoHelper {
         return getStorageReference(photoDeviceUri).child(Utils.convertStringMd5(uid)).getDownloadUrl();
     }
 
-    public static FileDownloadTask savePictureToFile(Photo photo){
-        return getStorageReference(photo.getPropertyID()).child(photo.getHash()).getFile(Uri.parse(photo.getUri()));
+    public static FileDownloadTask savePictureToFile(Photo photo, String path){
+        return getStorageReference(photo.getPropertyID()).child(photo.getHash()).getFile(Uri.parse(path));
     }
 }
