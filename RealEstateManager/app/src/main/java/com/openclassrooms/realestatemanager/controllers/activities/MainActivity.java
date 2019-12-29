@@ -12,13 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
@@ -153,7 +151,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 break;
             case R.id.activity_main_drawer_synchronize:
                 synchronizeData();
-                break;
+                return true;
             case android.R.id.home:
                 if (activeFragment == detailFragment) onBackPressed();
                 break;

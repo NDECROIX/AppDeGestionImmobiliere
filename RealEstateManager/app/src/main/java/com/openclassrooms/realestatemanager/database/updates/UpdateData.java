@@ -1,10 +1,16 @@
 package com.openclassrooms.realestatemanager.database.updates;
 
+import android.content.Context;
+
 import androidx.lifecycle.LifecycleOwner;
 
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
-public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProperty.UpdatePropertyListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProperty.UpdatePropertyListener,
+    UpdatePhoto.UpdatePhotoListener{
 
     public interface UpdateDataListener {
         void synchronisationComplete();
@@ -15,6 +21,7 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
     private UpdateDataListener callback;
     private LifecycleOwner lifecycleOwner;
     private PropertyViewModel propertyViewModel;
+    private List<String> propertiesDown;
 
     public UpdateData(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdateDataListener callback) {
         this.lifecycleOwner = lifecycleOwner;
@@ -31,9 +38,14 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
         updateAgent.updateData();
     }
 
-    private void synchronizeProperty() {
+    private void synchronizeProperties() {
         UpdateProperty updateProperty = new UpdateProperty(lifecycleOwner, propertyViewModel, this);
         updateProperty.updateData();
+    }
+
+    private void synchronizePhotos() {
+        UpdatePhoto updatePhoto = new UpdatePhoto(lifecycleOwner, propertyViewModel, this, propertiesDown);
+        updatePhoto.updateData();
     }
 
     @Override
@@ -48,11 +60,17 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
 
     @Override
     public void agentsSynchronized(String typeData) {
-        synchronizeProperty();
+        synchronizeProperties();
     }
 
     @Override
-    public void propertiesSynchronized(String typeData) {
+    public void propertiesSynchronized(List<String> propertiesPush, List<String> propertiesDown) {
+        this.propertiesDown = new ArrayList<>(propertiesDown);
+        synchronizePhotos();
+    }
+
+    @Override
+    public void photosSynchronized() {
         callback.synchronisationComplete();
     }
 }

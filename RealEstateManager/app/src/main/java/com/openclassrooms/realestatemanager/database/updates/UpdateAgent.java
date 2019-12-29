@@ -10,7 +10,7 @@ import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateAgent {
+class UpdateAgent {
 
     public interface UpdateAgentListener {
         void notification(String notification);
@@ -21,18 +21,18 @@ public class UpdateAgent {
     }
 
     private List<Agent> agentsRoom;
-    private PropertyViewModel propertyViewModel;
+    private final PropertyViewModel propertyViewModel;
     private UpdateAgentListener callback;
     private LifecycleOwner lifecycleOwner;
     private int count = 0;
 
-    public UpdateAgent(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdateAgentListener callback) {
+    UpdateAgent(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdateAgentListener callback) {
         this.callback = callback;
         this.lifecycleOwner = lifecycleOwner;
         this.propertyViewModel = propertyViewModel;
     }
 
-    public void updateData() {
+    void updateData() {
         this.propertyViewModel.getAgents().observe(lifecycleOwner, new Observer<List<Agent>>() {
             @Override
             public void onChanged(List<Agent> agents) {
@@ -48,6 +48,8 @@ public class UpdateAgent {
     }
 
     private void updateAgents() {
+        if (this.count >= agentsRoom.size()) return;
+        final int count = this.count;
         AgentHelper.getAgent(agentsRoom.get(count).getId()).addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 Agent agentFirebase = task.getResult().toObject(Agent.class);
@@ -65,8 +67,8 @@ public class UpdateAgent {
             } else if (task.getException() != null) {
                 callback.error(task.getException());
             }
-            count++;
-            if (count < agentsRoom.size()) {
+            this.count++;
+            if (this.count < agentsRoom.size()) {
                 updateAgents();
             } else {
                 getNewAgentsFromFirebase();

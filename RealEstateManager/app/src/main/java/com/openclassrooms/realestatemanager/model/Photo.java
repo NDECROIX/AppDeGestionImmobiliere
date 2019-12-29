@@ -11,6 +11,11 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 
+import com.google.firebase.firestore.Exclude;
+import com.openclassrooms.realestatemanager.utils.Utils;
+
+import java.util.Objects;
+
 @Entity(primaryKeys = {"uri", "property_id"},
         foreignKeys = @ForeignKey(
                 entity = Property.class,
@@ -43,7 +48,12 @@ public class Photo implements Parcelable {
 
     // --- UTILS ---
 
-
+    @Ignore
+    @Exclude
+    public String getHash(){
+        String value = this.uri;
+        return Utils.convertStringMd5(value);
+    }
 
     public static Photo fromContentValues(ContentValues values) {
         final Photo photo = new Photo();
@@ -110,4 +120,17 @@ public class Photo implements Parcelable {
             return new Photo[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return uri.equals(photo.uri);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uri);
+    }
 }

@@ -48,6 +48,6 @@ public class PhotoDataRepository {
      * @param photo Photo to delete
      */
     public void deletePhoto(Photo photo){
-        this.deletePhoto(photo);
+        this.photoDAO.deletePhoto(photo);
     }
 }

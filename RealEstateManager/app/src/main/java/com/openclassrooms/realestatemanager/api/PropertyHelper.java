@@ -19,33 +19,36 @@ public class PropertyHelper {
      *
      * @return The collection reference
      */
-    private static CollectionReference getPropertyCollection(){
+    private static CollectionReference getPropertyCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME_PROPERTY);
     }
 
     /**
      * Add a property in the database
+     *
      * @param property property to add to the database
      * @return Void task
      */
-    public static Task<Void> updateProperty(Property property){
+    public static Task<Void> updateProperty(Property property) {
         return PropertyHelper.getPropertyCollection().document(property.getId()).set(property);
     }
 
     /**
      * Get a property from the database
+     *
      * @param id Id of the property to be recovered
      * @return DocumentSnapshot agent
      */
-    public static Task<DocumentSnapshot> getProperty(String id){
+    public static Task<DocumentSnapshot> getProperty(String id) {
         return PropertyHelper.getPropertyCollection().document(id).get();
     }
 
     /**
      * Get properties from the database
+     *
      * @return DocumentSnapshot agents
      */
-    public static Task<QuerySnapshot> getProperties(){
+    public static Task<QuerySnapshot> getProperties() {
         return PropertyHelper.getPropertyCollection().get();
     }
 }

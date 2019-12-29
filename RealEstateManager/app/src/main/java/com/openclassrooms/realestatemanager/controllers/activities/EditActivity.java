@@ -589,7 +589,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = "file:" + image.getAbsolutePath();
+        currentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
@@ -887,6 +887,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
         if (this.propertyPhotos != null && !this.propertyPhotos.isEmpty())
             for (Photo photo : propertyPhotos) {
+                System.out.println("HOW MANY CALL IN THIS LOOP");
                 propertyViewModel.deletePhoto(photo);
                 File fileToDelete = new File(photo.getUri());
                 fileToDelete.deleteOnExit();

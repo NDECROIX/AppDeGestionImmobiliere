@@ -10,36 +10,38 @@ import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateProperty {
+class UpdateProperty {
 
     public interface UpdatePropertyListener {
         void notification(String notification);
 
-        void propertiesSynchronized(String typeData);
+        void propertiesSynchronized(List<String> propertiesPush, List<String> propertiesDown);
 
         void error(Exception exception);
     }
 
     private List<Property> propertiesRoom;
-    private PropertyViewModel propertyViewModel;
+    private final PropertyViewModel propertyViewModel;
     private UpdatePropertyListener callback;
     private LifecycleOwner lifecycleOwner;
-    private int count = 0;
+    private List<String> propertiesPush;
+    private List<String> propertiesDown;
+    private int count;
 
-    public UpdateProperty(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdatePropertyListener callback) {
+    UpdateProperty(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdatePropertyListener callback) {
         this.callback = callback;
         this.lifecycleOwner = lifecycleOwner;
         this.propertyViewModel = propertyViewModel;
     }
 
-    private Observer<List<Property>> observerProperty;
-
-    public void updateData() {
+    void updateData() {
         this.propertyViewModel.getProperties().observe(lifecycleOwner, new Observer<List<Property>>() {
             @Override
             public void onChanged(List<Property> properties) {
-                propertiesRoom = new ArrayList<>(properties);
                 propertyViewModel.getProperties().removeObserver(this);
+                propertiesPush = new ArrayList<>();
+                propertiesDown = new ArrayList<>();
+                propertiesRoom = new ArrayList<>(properties);
                 if (!propertiesRoom.isEmpty()){
                     updateProperties();
                 } else {
@@ -50,6 +52,8 @@ public class UpdateProperty {
     }
 
     private void updateProperties() {
+        if (this.count >= propertiesRoom.size()) return;
+        final int count = this.count;
         PropertyHelper.getProperty(propertiesRoom.get(count).getId()).addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 Property property = task.getResult().toObject(Property.class);
@@ -67,8 +71,8 @@ public class UpdateProperty {
             } else if (task.getException() != null) {
                 callback.error(task.getException());
             }
-            count++;
-            if (count < propertiesRoom.size()) {
+            this.count++;
+            if (this.count < propertiesRoom.size()) {
                 updateProperties();
             } else {
                 getNewPropertiesFromFirebase();
@@ -77,11 +81,13 @@ public class UpdateProperty {
     }
 
     private void updatePropertyInFirebase(Property property) {
+        propertiesPush.add(property.getId());
         PropertyHelper.updateProperty(property).addOnFailureListener(callback::error);
         callback.notification(String.format("%s uploaded", property.getType()));
     }
 
     private void updatePropertyInRooms(Property property) {
+        propertiesDown.add(property.getId());
         propertyViewModel.updateProperty(property);
         callback.notification(String.format("%s updated", property.getType()));
     }
@@ -98,11 +104,12 @@ public class UpdateProperty {
             } else if (task.getException() != null) {
                 callback.error(task.getException());
             }
-            callback.propertiesSynchronized("Properties");
+            callback.propertiesSynchronized(propertiesPush, propertiesDown);
         });
     }
 
     private void addPropertyInRoom(Property property) {
+        propertiesDown.add(property.getId());
         propertyViewModel.insertProperty(property);
         callback.notification(String.format("%s added", property.getType()));
     }

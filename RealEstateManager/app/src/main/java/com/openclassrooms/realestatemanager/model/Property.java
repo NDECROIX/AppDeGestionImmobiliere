@@ -9,6 +9,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -155,7 +157,7 @@ public class Property implements Serializable {
 
     public Property(@NonNull String id, String type, String borough, Double price, Double surface, int rooms, int bathrooms,
                     int bedrooms, String description, int streetNumber, String streetName,
-                    String addressSupplement, String city, int zip, String country, long entryDate, long updateDate, Double latitude,
+                    String addressSupplement, String city, int zip, String country, boolean sold, long entryDate, long saleDate, long updateDate, Double latitude,
                     Double longitude, String agentID) {
         this.id = id;
         this.type = type;
@@ -172,10 +174,10 @@ public class Property implements Serializable {
         this.zip = zip;
         this.city = city;
         this.country = country;
-        this.sold = false;
+        this.sold = sold;
         this.entryDate = entryDate;
-        this.saleDate = 0;
-        this.updateDate = 0;
+        this.saleDate = saleDate;
+        this.updateDate = updateDate;
         this.latitude = latitude;
         this.longitude = longitude;
         this.agentID = agentID;
@@ -235,6 +237,7 @@ public class Property implements Serializable {
      * @return String of all data notnull
      */
     @Ignore
+    @Exclude
     public String getStringToHash() {
         return this.getType() +
                 this.getRooms() +
