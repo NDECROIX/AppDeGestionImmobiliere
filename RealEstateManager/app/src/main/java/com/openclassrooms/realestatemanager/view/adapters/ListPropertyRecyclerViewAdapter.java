@@ -101,7 +101,7 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
             }
         }
         if (!photos.isEmpty()) {
-            Glide.with(holder.itemView).load(photos.get(0).getUri()).into(holder.propertyPhoto);
+            Glide.with(holder.itemView).load(photos.get(0).getUri(holder.itemView.getContext())).into(holder.propertyPhoto);
         }
         holder.itemView.setOnClickListener(l -> callback.onClickPropertyListener(property, photos));
         if (position == 0) callback.firstPropertyAdded(property, photos);
@@ -110,7 +110,6 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
             if (hasFocus) {
                 v.callOnClick();
                 v.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimaryDark));
-
             } else {
                 v.setBackgroundColor(Color.WHITE);
             }

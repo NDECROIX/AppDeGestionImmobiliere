@@ -32,7 +32,6 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
     }
 
     public void startSynchronisation() {
-        callback.notification("Synchronization");
         synchronizeAgents();
     }
 
@@ -63,7 +62,6 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
 
     @Override
     public void agentsSynchronized() {
-        callback.notification("Agents synchronized");
         synchronizeProperties();
     }
 
@@ -80,7 +78,6 @@ public class UpdateData implements UpdateAgent.UpdateAgentListener, UpdateProper
 
     @Override
     public void poisNextPropertiesSynchronized() {
-        callback.notification("Properties synchronized");
         callback.synchronisationComplete();
     }
 }

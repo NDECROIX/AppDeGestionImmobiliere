@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @BindView(R.id.main_activity_tv_empty)
     TextView noProperty;
 
-    public static final int RC_READ_WRITE = 666;
+    public static final int RC_READ_WRITE = 854;
 
     private PropertyViewModel propertyViewModel;
 
@@ -159,9 +160,13 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             case R.id.activity_main_drawer_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
+            case R.id.activity_main_drawer_subscribe:
+                subscribeToTopics();
+                break;
             case R.id.activity_main_drawer_synchronize:
                 synchronizeData();
-                return true;
+                drawerLayout.closeDrawers();
+                break;
             case android.R.id.home:
                 if (activeFragment == detailFragment) onBackPressed();
                 break;
@@ -169,14 +174,32 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
+    private void subscribeToTopics() {
+        FirebaseMessaging.getInstance().subscribeToTopic("newAgent")
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        showToastMessage(this, "Fail to subscribe");
+                    }
+                    showToastMessage(this, "Subscribe OK");
+                });
+        FirebaseMessaging.getInstance().subscribeToTopic("newProperty")
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        showToastMessage(this, "Fail to subscribe");
+                    }
+                    showToastMessage(this, "Subscribe OK");
+                });
+    }
+
     @AfterPermissionGranted(RC_READ_WRITE)
-    private void synchronizeData() {
+    public void synchronizeData() {
         if (!Utils.isInternetAvailable(this)) {
             showToastMessage(this, "No internet");
             return;
         }
         if (EasyPermissions.hasPermissions(this, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE)) {
             UpdateData updateData = new UpdateData(this, propertyViewModel, this, this);
+            customToast(this, "Synchronization start");
             updateData.startSynchronisation();
         } else {
             getPermission();

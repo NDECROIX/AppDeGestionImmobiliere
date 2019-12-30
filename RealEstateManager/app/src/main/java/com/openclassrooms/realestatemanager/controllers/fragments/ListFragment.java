@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.EditActivity;
@@ -34,6 +35,8 @@ public class ListFragment extends Fragment implements FilterDialogFragment.Filte
 
     @BindView(R.id.fragment_list_recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.fragment_swipe_refresh_view)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private Context context;
     private ListPropertyRecyclerViewAdapter adapter;
@@ -57,7 +60,15 @@ public class ListFragment extends Fragment implements FilterDialogFragment.Filte
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
         configRecyclerView();
+        configureSwipeRefreshLayout();
         return view;
+    }
+
+    private void configureSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            ((MainActivity) context).synchronizeData();
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     /**

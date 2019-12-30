@@ -149,12 +149,12 @@ class UpdatePhoto {
                     Bitmap bitmap = UtilsPhoto.getBitmapFromURL(downloadUri.toString());
                     if (bitmap != null) {
                         String path = photo.getUri(context);
-                        StoragePhotoHelper.savePictureToFile(photo, path)
-                                .addOnFailureListener(callback::error);
+                        StoragePhotoHelper.savePictureToFile(photo, path).addOnSuccessListener(voidTask ->
+                                propertyViewModel.insertPropertyPhoto(photo)
+                        ).addOnFailureListener(callback::error);
                     }
                 });
             }
         }).addOnFailureListener(callback::error);
-        propertyViewModel.insertPropertyPhoto(photo);
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -463,18 +464,28 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
         if (requestCode == RC_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(currentPhotoPath));
-                    startPhotoDialog(null, bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    showToastMessage(this, "No photo!");
-                }
+                Bitmap bitmap = getPic();
+                startPhotoDialog(null, bitmap);
             } else {
                 showToastMessage(this, "No photo!");
             }
         }
     }
+
+    private Bitmap getPic() {
+        // Get the dimensions of the View
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inPurgeable = true;
+
+        return BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
+    }
+
 
     /**
      * Display a dialog to add title.
