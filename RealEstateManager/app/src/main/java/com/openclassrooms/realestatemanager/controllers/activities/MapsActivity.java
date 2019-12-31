@@ -108,9 +108,7 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
     public void onBackPressed() {
         if (frameLayoutDetail == null && currentFragment != mapFragment) {
             currentFragment = mapFragment;
-            getSupportFragmentManager().popBackStack();/*.beginTransaction()
-                    .replace(R.id.activity_maps_frame_layout, currentFragment)
-                    .commitNow();*/
+            getSupportFragmentManager().popBackStack();
             return;
         }
         super.onBackPressed();

@@ -294,6 +294,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_activity_edit_validate) {
             editProperty();
+        }if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -911,5 +914,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             File photoToDelete = new File(photo.getUri());
             photoToDelete.deleteOnExit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

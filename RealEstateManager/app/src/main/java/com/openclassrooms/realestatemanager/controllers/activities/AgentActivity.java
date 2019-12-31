@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -50,7 +51,7 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
     Toolbar toolbar;
     @BindView(R.id.activity_agent_swipe_refresh_view)
     SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.main_activity_progress_bar)
+    @BindView(R.id.agent_activity_progress_bar)
     ProgressBar progressBar;
 
     private AgentActivityRecyclerViewAdapter adapter;
@@ -184,4 +185,17 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         showToastMessage(this, notification);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
