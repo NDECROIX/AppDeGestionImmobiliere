@@ -23,7 +23,6 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        System.out.println("FFFFFFFFFFFFrom: " + remoteMessage.getFrom());
         if (remoteMessage.getData().size() == 0 || remoteMessage.getFrom() == null){
             return;
         }

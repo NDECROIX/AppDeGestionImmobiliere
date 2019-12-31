@@ -14,8 +14,4 @@
         android:id="@+id/activity_main_drawer_synchronize"
         android:icon="@drawable/ic_sync_24"
         android:title="Synchronize"/>
-    <item
-        android:id="@+id/activity_main_drawer_subscribe"
-        android:icon="@android:drawable/stat_notify_chat"
-        android:title="Subscribe"/>
 </menu>

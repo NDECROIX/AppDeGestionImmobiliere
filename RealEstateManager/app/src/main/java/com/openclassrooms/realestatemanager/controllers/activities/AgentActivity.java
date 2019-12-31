@@ -2,6 +2,8 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -48,6 +50,8 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
     Toolbar toolbar;
     @BindView(R.id.activity_agent_swipe_refresh_view)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.main_activity_progress_bar)
+    ProgressBar progressBar;
 
     private AgentActivityRecyclerViewAdapter adapter;
     private PropertyViewModel propertyViewModel;
@@ -63,9 +67,16 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
             getSupportActionBar().setTitle("Agents");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        configProgressBar();
         configViewModel();
         configObserver();
         configRecyclerView();
+    }
+
+    private void configProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        progressBar.getIndeterminateDrawable().setColorFilter(
+                this.getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     private void configObserver() {
@@ -97,6 +108,9 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
 
     @AfterPermissionGranted(RC_READ_WRITE)
     public void synchronizeData() {
+        if (progressBar != null && progressBar.getVisibility() != View.GONE){
+            return;
+        }
         if (!Utils.isInternetAvailable(this)) {
             showToastMessage(this, "No internet");
             return;
@@ -160,6 +174,9 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
     @Override
     public void synchronisationComplete() {
         customToast(this, "Synchronization complete");
+        if (progressBar != null){
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

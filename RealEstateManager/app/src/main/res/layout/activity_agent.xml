@@ -35,6 +35,16 @@
             </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
+        <ProgressBar
+            android:id="@+id/agent_activity_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/activity_agent_appbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/activity_agent_swipe_refresh_view"
@@ -44,7 +54,7 @@
             android:layout_marginStart="@dimen/margin_screen"
             android:layout_marginEnd="@dimen/margin_screen"
             android:layout_marginBottom="@dimen/margin_screen"
-            app:layout_constraintTop_toBottomOf="@id/activity_agent_appbar"
+            app:layout_constraintTop_toBottomOf="@id/agent_activity_progress_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">

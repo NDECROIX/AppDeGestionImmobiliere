@@ -1,12 +1,15 @@
 package com.openclassrooms.realestatemanager.controllers.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +23,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.openclassrooms.realestatemanager.RealEstateManager;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
@@ -61,8 +66,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     FrameLayout frameLayoutDetail;
     @BindView(R.id.main_activity_tv_empty)
     TextView noProperty;
+    @BindView(R.id.main_activity_progress_bar)
+    ProgressBar progressBar;
 
     public static final int RC_READ_WRITE = 854;
+    public static final String SUBSCRIBE_TOPICS_TOKEN = "subscribe_topics_token";
 
     private PropertyViewModel propertyViewModel;
 
@@ -85,7 +93,37 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
         configFragment();
         configToolbar();
+        configProgressBar();
         configDrawerLayout();
+        if (Utils.isInternetAvailable(this)){
+            configSubscribeToTopics();
+            if (!((RealEstateManager) getApplication()).isSyncData()){
+                synchronizeData();
+            }
+        }
+    }
+
+    private void configProgressBar() {
+        progressBar.setVisibility(View.GONE);
+        progressBar.getIndeterminateDrawable().setColorFilter(
+                this.getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    private void configSubscribeToTopics() {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String lastToken = sharedPref.getString(SUBSCRIBE_TOPICS_TOKEN, "");
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful() || task.getResult() == null) {
+                        return;
+                    }
+                    // Get new Instance ID token
+                    String newToken = task.getResult().getToken();
+                    if (lastToken != null && !lastToken.equals(newToken)) {
+                        subscribeToTopics();
+                        sharedPref.edit().putString(SUBSCRIBE_TOPICS_TOKEN, newToken).apply();
+                    }
+                });
     }
 
     private void configFragment() {
@@ -160,9 +198,6 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             case R.id.activity_main_drawer_map:
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
-            case R.id.activity_main_drawer_subscribe:
-                subscribeToTopics();
-                break;
             case R.id.activity_main_drawer_synchronize:
                 synchronizeData();
                 drawerLayout.closeDrawers();
@@ -178,28 +213,31 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         FirebaseMessaging.getInstance().subscribeToTopic("newAgent")
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        showToastMessage(this, "Fail to subscribe");
+                        showToastMessage(this, "Fail to subscribe on new agents");
                     }
-                    showToastMessage(this, "Subscribe OK");
+                    customToast(this, "Subscribe to new agents");
                 });
         FirebaseMessaging.getInstance().subscribeToTopic("newProperty")
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        showToastMessage(this, "Fail to subscribe");
+                        showToastMessage(this, "Fail to subscribe on new properties");
                     }
-                    showToastMessage(this, "Subscribe OK");
+                    customToast(this, "Subscribe to new properties");
                 });
     }
 
     @AfterPermissionGranted(RC_READ_WRITE)
     public void synchronizeData() {
+        if (progressBar != null && progressBar.getVisibility() != View.GONE){
+            return;
+        }
         if (!Utils.isInternetAvailable(this)) {
             showToastMessage(this, "No internet");
             return;
         }
         if (EasyPermissions.hasPermissions(this, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE)) {
             UpdateData updateData = new UpdateData(this, propertyViewModel, this, this);
-            customToast(this, "Synchronization start");
+            progressBar.setVisibility(View.VISIBLE);
             updateData.startSynchronisation();
         } else {
             getPermission();
@@ -220,7 +258,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
                     propertyViewModel.getCurrentPoisNextProperty().getValue(), propertyViewModel.getCurrentPhotosProperty().getValue()));
         } else {
-            showToastMessage(this, "No property exist!");
+            showToastMessage(this, "No property to edit!");
         }
     }
 
@@ -304,6 +342,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void synchronisationComplete() {
         customToast(this, "Synchronization complete");
+        if (progressBar != null){
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
