@@ -9,8 +9,6 @@
     <string name="dummy_description_text">Stunning Panoramic Penthouse.\n\nBreathtaking helicopter views of the Manhattan skyline, Central Park, and beyond define this sky-high, 9,000-square-foot penthouse duplex towering over the city.\n\nRedesigned with five bedrooms and six-and-a-half bathrooms by architectural legend Charles Gwathmey, this palatial home features awe-inspiring, 24-foot double-height ceilings in the living room, a chef’s eat-in-kitchen with state-of-the-art stainless steel appliances, separate floors for entertaining and living, a nearly 2,000-square-foot master suite with dual closets and separate bathrooms, dual home offices, as well as media and family rooms, and separate staff quarters.</string>
     <string name="check_item">validate property item</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_real_estate">No real estate</string>
     <string name="title_activity_maps">Map</string>
 </resources>
