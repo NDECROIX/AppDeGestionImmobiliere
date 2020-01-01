@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -41,18 +40,20 @@
                 android:id="@+id/activity_edit_tv_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="*Type of property :"
+                android:layout_margin="@dimen/margin"
+                android:text="@string/activity_edit_tv_type"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
                 android:id="@+id/activity_edit_radio_grp_type_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/margin_screen"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_radio_grp_type_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_tv_type">
@@ -63,8 +64,9 @@
                 android:id="@+id/activity_edit_radio_grp_type_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/margin_screen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/activity_edit_radio_grp_type_left"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_tv_type">
@@ -75,13 +77,12 @@
                 android:id="@+id/activity_edit_til_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Price"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                android:hint="@string/activity_edit_til_price_hint"
+                app:helperText="@string/activity_edit_til_price_helper"
                 app:hintEnabled="true"
-                app:helperText="*Dollars"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_surface"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_radio_grp_type_left">
@@ -90,10 +91,10 @@
                     android:id="@+id/activity_edit_tie_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_dollar_24"
                     android:imeOptions="actionNext"
-                    android:nextFocusDown="@+id/activity_edit_til_surface"/>
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@+id/activity_edit_til_surface" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,12 +102,10 @@
                 android:id="@+id/activity_edit_til_surface"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Surface"
-                app:helperText="*Square meter"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:hint="@string/activity_edit_til_surface_hint"
+                app:helperText="@string/activity_edit_til_surface_helper"
                 app:hintEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_price"
@@ -116,10 +115,10 @@
                     android:id="@+id/activity_edit_tie_surface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_surface_24"
                     android:drawablePadding="5dp"
                     android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
                     android:nextFocusDown="@+id/activity_edit_til_rooms" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -128,8 +127,10 @@
                 android:id="@+id/activity_edit_txt_number_rooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="Number of :"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:text="@string/activity_edit_txt_number_rooms"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_surface" />
@@ -138,11 +139,10 @@
                 android:id="@+id/activity_edit_til_rooms"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                app:helperText="*Rooms"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                app:helperText="@string/activity_edit_til_rooms_helper"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_bathroom"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_txt_number_rooms">
@@ -151,10 +151,10 @@
                     android:id="@+id/activity_edit_tie_rooms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:drawableStart="@drawable/ic_home_24"
                     android:drawablePadding="5dp"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:nextFocusDown="@+id/activity_edit_til_bathroom" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -163,11 +163,9 @@
                 android:id="@+id/activity_edit_til_bathroom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                app:helperText="Bathroom"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                app:helperText="@string/activity_edit_til_bathroom_helper"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_bedroom"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_rooms"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_txt_number_rooms">
@@ -176,10 +174,10 @@
                     android:id="@+id/activity_edit_tie_bathroom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:drawableStart="@drawable/ic_bathroom_24"
                     android:drawablePadding="5dp"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:nextFocusDown="@+id/activity_edit_til_bedroom" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -188,11 +186,9 @@
                 android:id="@+id/activity_edit_til_bedroom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                app:helperText="Bedroom"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                app:helperText="@string/activity_edit_til_bedroom_helper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_bathroom"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_txt_number_rooms">
@@ -201,10 +197,10 @@
                     android:id="@+id/activity_edit_tie_bedroom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:drawableStart="@drawable/ic_bedroom_24"
                     android:drawablePadding="5dp"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:nextFocusDown="@+id/activity_edit_til_description" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -213,11 +209,10 @@
                 android:id="@+id/activity_edit_til_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Description"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:hint="@string/activity_edit_til_description_hint"
                 app:layout_constraintBottom_toTopOf="@id/activity_edit_ib_photo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_rooms">
@@ -235,8 +230,9 @@
                 android:id="@+id/activity_tv_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="*Photo(s) :"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:text="@string/activity_tv_photo"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_description" />
@@ -245,25 +241,24 @@
                 android:id="@+id/activity_edit_ib_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="@dimen/margin_screen"
+                android:layout_marginStart="@dimen/gutter"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
                 android:background="@null"
+                android:contentDescription="@string/activity_edit_ib_photo"
                 android:src="@drawable/ic_add_photo_24"
+                app:layout_constraintEnd_toStartOf="@id/activity_edit_ib_camera"
                 app:layout_constraintStart_toEndOf="@+id/activity_tv_photo"
-                app:layout_constraintTop_toBottomOf="@id/activity_edit_til_description"
-                app:layout_constraintEnd_toStartOf="@id/activity_edit_ib_camera"/>
+                app:layout_constraintTop_toBottomOf="@id/activity_edit_til_description" />
 
             <ImageButton
                 android:id="@+id/activity_edit_ib_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="@dimen/margin_screen"
+                android:layout_marginStart="@dimen/gutter"
+                android:layout_marginTop="@dimen/gutter"
                 android:background="@null"
+                android:contentDescription="@string/activity_edit_ib_camera"
                 android:src="@drawable/ic_camera_24"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_ib_photo"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_description" />
@@ -273,18 +268,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_ib_camera">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/activity_edit_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="@dimen/end_screen_margin"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="@dimen/margin"
+                    android:layout_marginTop="@dimen/gutter"
+                    android:layout_marginEnd="@dimen/margin"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/activity_edit_item" />
@@ -295,8 +289,9 @@
                 android:id="@+id/activity_edit_tv_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="*Address :"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:text="@string/activity_edit_tv_address"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_recycler_view_scroll" />
@@ -305,11 +300,10 @@
                 android:id="@+id/activity_edit_til_street_number"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Number"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                android:hint="@string/activity_edit_til_street_number_hint"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_street_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_tv_address">
@@ -318,8 +312,8 @@
                     android:id="@+id/activity_edit_tie_street_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:nextFocusDown="@+id/activity_edit_til_street_name" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -328,11 +322,9 @@
                 android:id="@+id/activity_edit_til_street_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Name"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:hint="@string/activity_edit_til_street_name_hint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_street_number"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_tv_address">
@@ -351,11 +343,10 @@
                 android:id="@+id/activity_edit_til_street_supplement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Address supplement"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:hint="@string/activity_edit_til_street_supplement_hint"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_street_number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_street_number">
@@ -374,13 +365,12 @@
                 android:id="@+id/activity_edit_til_city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintHorizontal_weight="6"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="City"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                android:hint="@string/activity_edit_til_city_hint"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_til_zip"
+                app:layout_constraintHorizontal_weight="6"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_street_supplement">
 
@@ -398,13 +388,11 @@
                 android:id="@+id/activity_edit_til_zip"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintHorizontal_weight="4"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Zip code"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:hint="@string/activity_edit_til_zip_hint"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="4"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_city"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_street_supplement">
 
@@ -412,8 +400,8 @@
                     android:id="@+id/activity_edit_tie_zip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
                     android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:nextFocusDown="@+id/activity_edit_til_country" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -422,11 +410,10 @@
                 android:id="@+id/activity_edit_til_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Country"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:hint="@string/activity_edit_til_country_hint"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_city">
 
@@ -434,7 +421,7 @@
                     android:id="@+id/activity_edit_tie_country"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"/>
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -442,8 +429,10 @@
                 android:id="@+id/activity_edit_tv_borough"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="*Borough :"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:text="@string/activity_edit_tv_borough"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_til_country" />
@@ -452,8 +441,10 @@
                 android:id="@+id/activity_edit_radio_grp_borough_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/margin_screen"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_radio_grp_borough_right"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_tv_borough">
@@ -464,7 +455,8 @@
                 android:id="@+id/activity_edit_radio_grp_borough_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_radio_grp_borough_left"
@@ -476,17 +468,21 @@
                 android:id="@+id/activity_edit_tv_poi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="Points of interests next the property :"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:text="@string/activity_edit_tv_poi"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                app:layout_constraintTop_toBottomOf="@id/activity_edit_radio_grp_borough_left"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/activity_edit_radio_grp_borough_left" />
 
             <LinearLayout
                 android:id="@+id/activity_edit_check_box_grp_poi_left"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toStartOf="@id/activity_edit_check_box_grp_poi_right"
                 app:layout_constraintStart_toStartOf="parent"
@@ -496,7 +492,8 @@
                 android:id="@+id/activity_edit_check_box_grp_poi_right"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_check_box_grp_poi_left"
@@ -506,12 +503,11 @@
                 android:id="@+id/activity_edit_til_date"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Entry date"
-                app:helperText="*month/day/years"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                android:hint="@string/activity_edit_til_date_hint"
+                app:helperText="@string/activity_edit_til_date_helper"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_check_box_grp_poi_left">
 
@@ -519,8 +515,8 @@
                     android:id="@+id/activity_edit_tie_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
                     android:imeOptions="actionNext"
+                    android:inputType="date"
                     android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -529,8 +525,10 @@
                 android:id="@+id/activity_edit_id_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
                 android:background="@null"
+                android:contentDescription="@string/activity_edit_id_calendar"
                 android:src="@drawable/ic_calendar_24"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_date"
                 app:layout_constraintTop_toTopOf="@+id/activity_edit_til_date" />
@@ -539,12 +537,11 @@
                 android:id="@+id/activity_edit_til_date_sell"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_screen"
-                android:layout_marginTop="@dimen/margin_screen"
-                android:layout_marginEnd="@dimen/margin_screen"
-                android:layout_marginBottom="@dimen/margin_screen"
-                android:hint="Sell date"
-                app:helperText="*month/day/years"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
+                android:hint="@string/activity_edit_til_date_sell_hint"
+                app:helperText="@string/activity_edit_til_date_sell_helper"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date">
 
@@ -552,8 +549,8 @@
                     android:id="@+id/activity_edit_tie_date_sell"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
                     android:imeOptions="actionNext"
+                    android:inputType="date"
                     android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -562,8 +559,10 @@
                 android:id="@+id/activity_edit_id_calendar_sell"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
                 android:background="@null"
+                android:contentDescription="@string/activity_edit_id_calendar_sell"
                 android:src="@drawable/ic_calendar_24"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_til_date_sell"
                 app:layout_constraintTop_toTopOf="@+id/activity_edit_til_date_sell" />
@@ -572,24 +571,27 @@
                 android:id="@+id/activity_edit_ib_agent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:src="@drawable/ic_person_add_24"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/gutter"
                 android:background="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/activity_edit_ib_agent"
+                android:src="@drawable/ic_person_add_24"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date_sell"/>
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date_sell" />
 
             <TextView
                 android:id="@+id/activity_edit_tv_agent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_screen"
-                android:text="agent"
+                android:layout_marginTop="@dimen/gutter"
+                android:layout_marginEnd="@dimen/margin"
+                android:paddingBottom="?actionBarSize"
+                android:text="@string/activity_edit_tv_agent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_ib_agent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date_sell"/>
-
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date_sell" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

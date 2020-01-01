@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,9 +60,6 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
  */
 public class DetailFragment extends Fragment implements OnMapReadyCallback, DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
 
-    @Nullable
-    @BindView(R.id.fragment_detail_toolbar)
-    Toolbar toolbar;
     @BindView(R.id.fragment_detail_recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.fragment_detail_tv_type)
@@ -124,9 +122,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
-        if (getActivity() != null && getActivity().findViewById(R.id.activity_main_frame_layout_detail) == null) {
-            configToolbar();
-        }
+        configToolbar();
         configRecyclerView();
         getPropertyFromDatabase();
         // Get the map and register for the ready callback
@@ -138,32 +134,36 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     }
 
     private void configToolbar() {
+        if (getActivity() instanceof MainActivity &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            return;
+        }
         if (getActivity() instanceof MapsActivity) {
             ActionBar actionBar = ((MapsActivity) context).getSupportActionBar();
             if (actionBar != null) actionBar.setTitle("Details");
-            if (toolbar != null)
-                toolbar.setVisibility(View.GONE);
             return;
         }
-        // Hide main toolbar
-        ActionBar supportActionBar = ((MainActivity) context).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.hide();
-        }
-
-        // Show Fragment toolbar
-        setHasOptionsMenu(true);
-        ((MainActivity) context).setSupportActionBar(toolbar);
+        // Change toolbar
         ActionBar actionBar = ((MainActivity) context).getSupportActionBar();
         if (actionBar != null) {
+            // Get Main Toolbar
+            Toolbar toolbar = ((MainActivity) context).findViewById(R.id.main_activity_toolbar);
+            // Add back button
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24);
+            // Add a listener on the back button
+            toolbar.setNavigationOnClickListener((l) -> ((MainActivity) context).onBackPressed());
+
             actionBar.setTitle("Detail");
-            actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        // Change icon
+        setHasOptionsMenu(true);
     }
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        if (context instanceof MainActivity) {
+        if (context instanceof MainActivity &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Hide search item
             menu.findItem(R.id.menu_activity_main_search).setVisible(false);
         }
         super.onPrepareOptionsMenu(menu);
@@ -171,7 +171,9 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        if (context instanceof MainActivity) {
+        if (context instanceof MainActivity &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Show edit item
             inflater.inflate(R.menu.fragment_detail_toolbar_menu, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -186,7 +188,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
 
     @Override
     public void onClickPhoto(Photo photo) {
-
     }
 
     private void displayPropertyData(Property property) {

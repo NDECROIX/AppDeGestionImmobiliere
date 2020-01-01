@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,8 +27,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.openclassrooms.realestatemanager.RealEstateManager;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.RealEstateManager;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFragment;
@@ -88,16 +90,15 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        configToolbar();
         configViewModel();
-        activeFragment = listFragment;
         navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
         configFragment();
-        configToolbar();
         configProgressBar();
         configDrawerLayout();
-        if (Utils.isInternetAvailable(this)){
+        if (Utils.isInternetAvailable(this)) {
             configSubscribeToTopics();
-            if (!((RealEstateManager) getApplication()).isSyncData()){
+            if (!((RealEstateManager) getApplication()).isSyncData()) {
                 synchronizeData();
             }
         }
@@ -127,6 +128,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     private void configFragment() {
+        activeFragment = listFragment;
         this.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.activity_main_frame_layout, activeFragment)
                 .commitNow();
@@ -228,7 +230,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @AfterPermissionGranted(RC_READ_WRITE)
     public void synchronizeData() {
-        if (progressBar != null && progressBar.getVisibility() != View.GONE){
+        if (progressBar != null && progressBar.getVisibility() != View.GONE) {
             return;
         }
         if (!Utils.isInternetAvailable(this)) {
@@ -314,10 +316,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().beginTransaction().remove(detailFragment).commitAllowingStateLoss();
         outState.putSerializable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
         outState.putSerializable(PHOTOS, (Serializable) propertyViewModel.getCurrentPhotosProperty().getValue());
         outState.putSerializable(POIS, (Serializable) propertyViewModel.getCurrentPoisNextProperty().getValue());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -342,7 +345,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     public void synchronisationComplete() {
         customToast(this, "Synchronization complete");
-        if (progressBar != null){
+        if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
     }

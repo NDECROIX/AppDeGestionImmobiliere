@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 
 public class AgentViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.activity_agent_item_names)
+    @BindView(R.id.activity_agent_item_name)
     public TextView names;
 
     @BindView(R.id.activity_agent_item_email)
