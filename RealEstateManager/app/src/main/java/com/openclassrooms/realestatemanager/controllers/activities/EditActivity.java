@@ -19,24 +19,16 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
@@ -51,23 +43,19 @@ import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
+import com.openclassrooms.realestatemanager.view.holders.EditActivityViewHolder;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -75,18 +63,25 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
-public class EditActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, EditActivityPhotoRecyclerViewAdapter.OnClickPhotoListener {
+public class EditActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, EditActivityPhotoRecyclerViewAdapter.OnClickPhotoListener, EditActivityViewHolder.CheckFieldsListener {
 
-    private static final String PROPERTY = "property";
-    private static final String POIS = "pois";
-    private static final String PHOTOS = "photos";
-
+    /**
+     * Callback that allows a fragment to start this fragment by its activity
+     */
     public interface startEditActivityListener {
         void createProperty();
     }
 
+    /**
+     * Edit activity intent
+     *
+     * @param context  Activity context
+     * @param property Property to update
+     * @param pois     Pois of the property to be updated
+     * @param photos   Photo of the property to be updated
+     * @return Intent
+     */
     public static Intent newIntent(Context context, @Nullable Property property, @Nullable List<PoiNextProperty> pois,
                                    @Nullable List<Photo> photos) {
         Bundle bundle = new Bundle();
@@ -104,62 +99,19 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         return intent;
     }
 
-    private static final int RC_IMAGE_PERMS = 666;
-    private static final int RC_CHOOSE_PHOTO = 333;
-    private static final int RC_CAMERA_PERMS = 777;
-    private static final int RC_TAKE_PHOTO = 999;
+    // Views
+    private EditActivityViewHolder viewHolder;
 
-    @BindView(R.id.activity_edit_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.activity_edit_radio_grp_type_left)
-    RadioGroup radioGroupTypeLeft;
-    @BindView(R.id.activity_edit_radio_grp_type_right)
-    RadioGroup radioGroupTypeRight;
-    @BindView(R.id.activity_edit_radio_grp_borough_left)
-    RadioGroup radioGroupBoroughLeft;
-    @BindView(R.id.activity_edit_radio_grp_borough_right)
-    RadioGroup radioGroupBoroughRight;
-    @BindView(R.id.activity_edit_check_box_grp_poi_left)
-    LinearLayout checkBoxGrpLeft;
-    @BindView(R.id.activity_edit_check_box_grp_poi_right)
-    LinearLayout checkBoxGrpRight;
-    @BindView(R.id.activity_edit_recycler_view)
-    RecyclerView recyclerView;
-    @BindView(R.id.activity_edit_tie_date)
-    TextInputEditText tieEntryDate;
-    @BindView(R.id.activity_edit_tie_date_sell)
-    TextInputEditText tieSaleDate;
-    @BindView(R.id.activity_edit_tie_price)
-    TextInputEditText tiePrice;
-    @BindView(R.id.activity_edit_tie_surface)
-    TextInputEditText tieSurface;
-    @BindView(R.id.activity_edit_tie_rooms)
-    TextInputEditText tieRooms;
-    @BindView(R.id.activity_edit_tie_bathroom)
-    TextInputEditText tieBathroom;
-    @BindView(R.id.activity_edit_tie_bedroom)
-    TextInputEditText tieBedroom;
-    @BindView(R.id.activity_edit_tie_description)
-    TextInputEditText tieDescription;
-    @BindView(R.id.activity_edit_tie_street_number)
-    TextInputEditText tieStreetNumber;
-    @BindView(R.id.activity_edit_tie_street_name)
-    TextInputEditText tieStreetName;
-    @BindView(R.id.activity_edit_tie_street_supplement)
-    TextInputEditText tieStreetSupplement;
-    @BindView(R.id.activity_edit_tie_city)
-    TextInputEditText tieCity;
-    @BindView(R.id.activity_edit_tie_zip)
-    TextInputEditText tieZipCode;
-    @BindView(R.id.activity_edit_tie_country)
-    TextInputEditText tieCountry;
-    @BindView(R.id.activity_edit_tv_agent)
-    TextView tvAgent;
-
+    // View Model
     private PropertyViewModel propertyViewModel;
+
+    // Photo recycler view
     private EditActivityPhotoRecyclerViewAdapter adapter;
+
+    // Path where the current photo is located
     private String currentPhotoPath;
 
+    // Property data
     private String type;
     private String borough;
     private List<Poi> pois;
@@ -167,9 +119,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private List<Property> properties;
     private List<Agent> agents;
     private Agent agent;
-    private boolean entryDate;
+    private int calendarId;
 
-    // Update
+    // Property update
     private Property propertyToUpdate;
     private List<PoiNextProperty> poisNextProperty;
     private List<String> poisPropertyName;
@@ -179,6 +131,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        viewHolder = new EditActivityViewHolder(this);
         ButterKnife.bind(this);
         getExtras();
         pois = new ArrayList<>();
@@ -190,6 +143,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         configViews();
     }
 
+    /**
+     * Retrieve property data in the extras
+     */
     private void getExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -209,36 +165,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
     }
 
-    private void completeFieldsWithProperty(Property property) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        tiePrice.setText(df.format(property.getPrice()));
-        tieSurface.setText(String.valueOf(property.getSurface()));
-        tieRooms.setText(String.valueOf(property.getRooms()));
-        tieBedroom.setText(String.valueOf(property.getBedrooms()));
-        tieBathroom.setText(String.valueOf(property.getBathrooms()));
-        tieDescription.setText(property.getDescription());
-        tieStreetNumber.setText(String.valueOf(property.getStreetNumber()));
-        tieStreetName.setText(String.valueOf(property.getStreetName()));
-        if (property.getAddressSupplement() != null)
-            tieStreetSupplement.setText(property.getAddressSupplement());
-        tieCity.setText(property.getCity());
-        tieZipCode.setText(String.valueOf(property.getZip()));
-        tieCountry.setText(property.getCountry());
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTimeInMillis(property.getEntryDate());
-        tieEntryDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
-                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        if (property.isSold()) {
-            calendar = new GregorianCalendar();
-            calendar.setTimeInMillis(property.getSaleDate());
-            tieSaleDate.setText(String.format(Locale.getDefault(), "%d/%d/%d",
-                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR)));
-        }
-        if (property.getAgentID() != null && !property.getAgentID().isEmpty())
-            propertyViewModel.getAgent(property.getAgentID()).observe(this, agent ->
-                    tvAgent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
-    }
-
+    // Complete view
     private void configViews() {
         displayBoroughRadioBtn();
         if (propertyToUpdate != null) {
@@ -246,23 +173,35 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
     }
 
+    /**
+     * Complete fields with property data
+     *
+     * @param property Property to show
+     */
+    private void completeFieldsWithProperty(Property property) {
+        viewHolder.completeFieldsWithProperty(property, propertyViewModel, this);
+    }
+
     private void configRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new EditActivityPhotoRecyclerViewAdapter(this);
-        recyclerView.setAdapter(adapter);
+        viewHolder.recyclerView.setAdapter(adapter);
         if (propertyPhotos != null) {
             adapter.setPhotos(propertyPhotos);
         }
     }
 
     private void configToolbar() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(viewHolder.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Edit property");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
+    /**
+     * Display agents in the dialogue box
+     */
     @OnClick(R.id.activity_edit_ib_agent)
     public void onClickAgent() {
         if (this.agents.size() == 0) {
@@ -278,7 +217,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Agents")
                 .setItems(agents, (dialog, which) -> {
-                    tvAgent.setText(agents[which]);
+                    viewHolder.tvAgent.setText(agents[which]);
                     agent = this.agents.get(which);
                 });
         builder.create().show();
@@ -294,13 +233,17 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_activity_edit_validate) {
             editProperty();
-        }if (item.getItemId() == android.R.id.home) {
+        }
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Validate the property and add it to the local database
+     */
     private void editProperty() {
         if (champNotEmpty()) {
             if (insertPropertyInDatabase()) {
@@ -338,17 +281,17 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             RadioButton radioButton = new RadioButton(getApplicationContext());
             radioButton.setText(type.getName());
             radioButton.setOnClickListener(l -> {
-                if (l.getParent() == radioGroupTypeRight) {
-                    radioGroupTypeLeft.clearCheck();
+                if (l.getParent() == viewHolder.radioGroupTypeRight) {
+                    viewHolder.radioGroupTypeLeft.clearCheck();
                 } else {
-                    radioGroupTypeRight.clearCheck();
+                    viewHolder.radioGroupTypeRight.clearCheck();
                 }
                 this.type = type.getName();
             });
             if (left) {
-                radioGroupTypeLeft.addView(radioButton);
+                viewHolder.radioGroupTypeLeft.addView(radioButton);
             } else {
-                radioGroupTypeRight.addView(radioButton);
+                viewHolder.radioGroupTypeRight.addView(radioButton);
             }
             left = !left;
             if (propertyToUpdate != null && propertyToUpdate.getType().equals(type.getName())) {
@@ -369,17 +312,17 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             RadioButton radioButton = new RadioButton(getApplicationContext());
             radioButton.setText(borough);
             radioButton.setOnClickListener(l -> {
-                if (l.getParent() == radioGroupBoroughRight) {
-                    radioGroupBoroughLeft.clearCheck();
+                if (l.getParent() == viewHolder.radioGroupBoroughRight) {
+                    viewHolder.radioGroupBoroughLeft.clearCheck();
                 } else {
-                    radioGroupBoroughRight.clearCheck();
+                    viewHolder.radioGroupBoroughRight.clearCheck();
                 }
                 this.borough = borough;
             });
             if (left) {
-                radioGroupBoroughLeft.addView(radioButton);
+                viewHolder.radioGroupBoroughLeft.addView(radioButton);
             } else {
-                radioGroupBoroughRight.addView(radioButton);
+                viewHolder.radioGroupBoroughRight.addView(radioButton);
             }
             left = !left;
             if (propertyToUpdate != null && propertyToUpdate.getBorough().equals(borough)) {
@@ -407,9 +350,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 }
             });
             if (left) {
-                checkBoxGrpLeft.addView(checkBox);
+                viewHolder.checkBoxGrpLeft.addView(checkBox);
             } else {
-                checkBoxGrpRight.addView(checkBox);
+                viewHolder.checkBoxGrpRight.addView(checkBox);
             }
             left = !left;
             if (poisPropertyName != null && poisPropertyName.contains(poi.getName())) {
@@ -432,28 +375,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(intent, RC_CHOOSE_PHOTO);
         } else {
-            getPermission(READ_EXTERNAL_STORAGE);
-        }
-    }
-
-    /**
-     * Get the read external storage permission.
-     */
-    private void getPermission(String permission) {
-        if (permission.equals(READ_EXTERNAL_STORAGE)) {
-            if (ContextCompat.checkSelfPermission(this,
-                    READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{READ_EXTERNAL_STORAGE},
-                        RC_IMAGE_PERMS);
-            }
-        } else if (permission.equals(CAMERA)) {
-            if (ContextCompat.checkSelfPermission(this,
-                    CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE},
-                        RC_CAMERA_PERMS);
-            }
+            getReadExternalStoragePermission();
         }
     }
 
@@ -475,9 +397,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
     }
 
+    /**
+     * Get the bitmap from the currentPhotoPath
+     *
+     * @return Photo
+     */
     private Bitmap getPic() {
-        // Get the dimensions of the View
-
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -525,6 +450,11 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         builder.create().show();
     }
 
+    /**
+     * Move the bitmap in a new directory
+     *
+     * @param data Bitmap uri
+     */
     private void saveBitmapToThePath(Uri data) {
         try {
             InputStream iStream = getContentResolver().openInputStream(data);
@@ -580,17 +510,23 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 // Continue only if the File was successfully created
                 if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(this,
-                            "com.openclassrooms.realestatemanager.fileprovider",
+                            getString(R.string.activity_edit_authority_uri),
                             photoFile);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(intent, RC_TAKE_PHOTO);
                 }
             }
         } else {
-            getPermission(CAMERA);
+            getCameraPermission();
         }
     }
 
+    /**
+     * Create path for the photo
+     *
+     * @return Image file
+     * @throws IOException Create temp file
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
@@ -601,7 +537,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
-
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
@@ -627,235 +562,61 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     @OnClick(R.id.activity_edit_id_calendar)
     public void onClickCalendar() {
-        entryDate = true;
+        calendarId = R.id.activity_edit_id_calendar;
         DatePickerFragment datePickerFragment = new DatePickerFragment(this);
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     @OnClick(R.id.activity_edit_id_calendar_sell)
     public void onClickCalendarSell() {
-        entryDate = false;
+        calendarId = R.id.activity_edit_id_calendar_sell;
         DatePickerFragment datePickerFragment = new DatePickerFragment(this);
         datePickerFragment.show(getSupportFragmentManager(), "datePickerSell");
     }
 
     @Override
-    @SuppressLint("SetTextI18n")
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        if (entryDate) {
-            tieEntryDate.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+        if (calendarId == R.id.activity_edit_id_calendar) {
+            viewHolder.tieEntryDate.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
         } else {
-            tieSaleDate.setText((month + 1) + "/" + dayOfMonth + "/" + year);
+            viewHolder.tieSaleDate.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
         }
     }
 
-    //--------------------
-    // FIELD VERIFICATION
-    //--------------------
-
+    /**
+     * Check if all fields are correctly filled in
+     *
+     * @return true if all ok
+     */
     private boolean champNotEmpty() {
-        // Check than at least one type is selected and if it does not exist in the database, add it.
-        if (this.type == null) {
-            showToastMessage(this, "Please add a type");
-            return false;
-        } else {
-            property.setType(type);
-        }
-
-        // Check if the price is correct
-        if (tiePrice.getText() == null || tiePrice.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a price");
-            return false;
-        }
-        try {
-            Double price = Double.parseDouble(tiePrice.getText().toString());
-            property.setPrice(price);
-        } catch (NumberFormatException e) {
-            showToastMessage(this, "Error in the price format");
-            return false;
-        }
-
-        // Check if the surface is correct
-        if (tieSurface.getText() == null || tieSurface.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a surface");
-            return false;
-        }
-        try {
-            Double surface = Double.parseDouble(tieSurface.getText().toString());
-            property.setSurface(surface);
-        } catch (NumberFormatException e) {
-            showToastMessage(this, "Error on the surface");
-            return false;
-        }
-
-        // Check if the number of rooms is correct
-        if (tieRooms.getText() == null || tieRooms.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a number of rooms");
-            return false;
-        }
-        try {
-            int rooms = Integer.parseInt(tieRooms.getText().toString());
-            property.setRooms(rooms);
-        } catch (NumberFormatException e) {
-            showToastMessage(this, "Error on the number of rooms");
-            return false;
-        }
-
-        // Check if the number of bathrooms is correct
-        if (tieBathroom.getText() != null && !tieBathroom.getText().toString().isEmpty()) {
-            try {
-                int bathrooms = Integer.parseInt(tieBathroom.getText().toString());
-                property.setBathrooms(bathrooms);
-            } catch (NumberFormatException e) {
-                showToastMessage(this, "Error on the number of bathrooms");
-                return false;
-            }
-        }
-
-        // Check if the number of bedrooms is correct
-        if (tieBedroom.getText() != null && !tieBedroom.getText().toString().isEmpty()) {
-            try {
-                int bedrooms = Integer.parseInt(tieBedroom.getText().toString());
-                property.setBedrooms(bedrooms);
-            } catch (NumberFormatException e) {
-                showToastMessage(this, "Error on the number of bedrooms");
-                return false;
-            }
-        }
-
-        // Check if the number of bedrooms and bathrooms is less than the number of rooms
-        if (property.getBathrooms() + property.getBedrooms() >= property.getRooms()) {
-            showToastMessage(this, "Number of room less than bedrooms + bathrooms");
-            return false;
-        }
-
-
-        // Check description
-        if (tieDescription.getText() != null && !tieDescription.getText().toString().isEmpty()) {
-            property.setDescription(tieDescription.getText().toString());
-        }
-
-        // Check if we have at least one photo
-        if (adapter.getItemCount() == 0) {
-            showToastMessage(this, "You need at least one photo");
-            return false;
-        }
-
-        // Check street number
-        if (tieStreetNumber.getText() == null || tieStreetNumber.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a street number");
-            return false;
-        }
-        try {
-            int streetNumber = Integer.parseInt(tieStreetNumber.getText().toString());
-            property.setStreetNumber(streetNumber);
-        } catch (NumberFormatException e) {
-            showToastMessage(this, "Error on the street number");
-            return false;
-        }
-
-        // Check the street name
-        if (tieStreetName.getText() == null || tieStreetName.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a street name");
-            return false;
-        } else {
-            property.setStreetName(tieStreetName.getText().toString());
-        }
-
-        // Check the address supplement
-        if (tieStreetSupplement.getText() != null && !tieStreetSupplement.getText().toString().isEmpty()) {
-            property.setAddressSupplement(tieStreetSupplement.getText().toString());
-        }
-
-        // Check the city
-        if (tieCity.getText() == null || tieCity.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a city");
-            return false;
-        } else {
-            property.setCity(tieCity.getText().toString());
-        }
-
-        // Check the Zip code
-        if (tieZipCode.getText() == null || tieZipCode.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a Zip code");
-            return false;
-        }
-        try {
-            int zip = Integer.parseInt(tieZipCode.getText().toString());
-            property.setZip(zip);
-        } catch (NumberFormatException e) {
-            showToastMessage(this, "Error on the zip code");
-            return false;
-        }
-
-        // Check the country
-        if (tieCountry.getText() == null || tieCountry.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please add a country");
-            return false;
-        } else {
-            property.setCountry(tieCountry.getText().toString());
-        }
-
-        // Check the borough
-        if (borough == null) {
-            showToastMessage(this, "Please add a borough");
-            return false;
-        } else {
-            property.setBorough(borough);
-        }
-
-        // Check entry date
-        if (tieEntryDate.getText() == null || tieEntryDate.getText().toString().isEmpty()) {
-            showToastMessage(this, "Please choose a date");
-            return false;
-        }
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-            Date date = simpleDateFormat.parse(tieEntryDate.getText().toString());
-            property.setEntryDate(date.getTime());
-        } catch (ParseException p) {
-            showToastMessage(this, "Error on the date");
-            return false;
-        }
-
-        // Check sell date
-        if (tieSaleDate.getText() != null && !tieSaleDate.getText().toString().isEmpty()) {
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                Date date = simpleDateFormat.parse(tieSaleDate.getText().toString());
-                property.setSaleDate(date.getTime());
-                property.setSold(true);
-            } catch (ParseException p) {
-                showToastMessage(this, "Error on the sale date");
-                return false;
-            }
-        } else {
-            property.setSold(false);
-        }
-
-        // Check date of sale against date of entry
-        if (property.getSaleDate() != 0 && property.getEntryDate() > property.getSaleDate()) {
-            showToastMessage(this, "Error between dates");
-            return false;
-        }
-
-        // Check agent
-        if (agent != null) {
-            property.setAgentID(agent.getId());
-        }
-
-        String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
-                property.getStreetName(), property.getCity(), property.getCountry(),
-                property.getZip());
-        LatLng latLng = Utils.getLocationFromAddress(this, address);
-        if (latLng != null) {
-            property.setLatitude(latLng.latitude);
-            property.setLongitude(latLng.longitude);
-            propertyViewModel.updateProperty(property);
-        }
-        return true;
+        return viewHolder.champNotEmpty(this, adapter, agent, type, borough);
     }
 
+    /**
+     * Return error on fields
+     *
+     * @param message Message to show
+     */
+    @Override
+    public void error(String message) {
+        customToast(this, message);
+    }
+
+    /**
+     * Property return if all fields are correctly filled in
+     *
+     * @param property Property created from fields
+     */
+    @Override
+    public void property(Property property) {
+        this.property = property;
+    }
+
+    /**
+     * Insert or update property in the local database
+     *
+     * @return True if property is added
+     */
     private boolean insertPropertyInDatabase() {
         if (propertyToUpdate == null) {
             property.setId(Utils.convertStringMd5(property.getStringToHash()));
@@ -892,6 +653,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             }
     }
 
+    /**
+     * Insert all photos in the local database and delete the old ones
+     */
     private void insertPhotoInDatabase() {
         for (Photo photo : adapter.getPhotos()) {
             photo.setPropertyID(property.getId());
@@ -901,7 +665,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         }
         if (this.propertyPhotos != null && !this.propertyPhotos.isEmpty())
             for (Photo photo : propertyPhotos) {
-                System.out.println("HOW MANY CALL IN THIS LOOP");
                 propertyViewModel.deletePhoto(photo);
                 File fileToDelete = new File(photo.getUri());
                 fileToDelete.deleteOnExit();

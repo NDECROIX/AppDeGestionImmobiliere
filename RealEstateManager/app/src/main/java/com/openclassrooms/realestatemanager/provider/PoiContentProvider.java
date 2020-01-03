@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.Poi;
 
+/**
+ * Provide access to the poi from the local database
+ */
 public class PoiContentProvider extends ContentProvider {
 
     // FOR DATA

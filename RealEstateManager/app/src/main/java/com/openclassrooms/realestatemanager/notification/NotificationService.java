@@ -23,24 +23,25 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (remoteMessage.getData().size() == 0 || remoteMessage.getFrom() == null){
+        if (remoteMessage.getData().size() == 0 || remoteMessage.getFrom() == null) {
             return;
         }
         String title;
         String message;
 
         // Check if message contains a data payload.
-        if (remoteMessage.getFrom().contains("newAgent")){
-            title = "New agent";
-            message = remoteMessage.getData().get("firstName") +" "+ remoteMessage.getData().get("lastName");
-        } else if (remoteMessage.getFrom().contains("newProperty")){
-            title = "New property";
-            String p = remoteMessage.getData().get("price");
-            if (p != null){
+        if (remoteMessage.getFrom().contains(getString(R.string.notification_service_new_agent_topic_name))) {
+            title = getString(R.string.notification_service_new_agent_title);
+            message = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_first_name_key))
+                    + " " + remoteMessage.getData().get(getString(R.string.notification_service_new_agent_last_name_key));
+        } else if (remoteMessage.getFrom().contains(getString(R.string.notification_service_new_property_topic_name))) {
+            title = getString(R.string.notification_service_new_property_title);
+            String p = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_price_key));
+            if (p != null) {
                 Double price = Double.valueOf(p);
-                message = String.format("%s $ %s ", remoteMessage.getData().get("type"), Utils.getPrice(price));
+                message = String.format("%s $ %s ", remoteMessage.getData().get(getString(R.string.notification_service_new_agent_type_key)), Utils.getPrice(price));
             } else {
-                message = remoteMessage.getData().get("type");
+                message = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_type_key));
             }
         } else {
             return;
@@ -78,7 +79,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         // Support Version >= Android 8
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence channelName = "Message from Firebase";
+            CharSequence channelName = getString(R.string.notification_service_message_from_firebase);
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
             notificationManager.createNotificationChannel(mChannel);

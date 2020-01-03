@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.Property;
 
+/**
+ * Provide access to the property from the local database
+ */
 public class PropertyContentProvider extends ContentProvider {
 
     // FOR DATA

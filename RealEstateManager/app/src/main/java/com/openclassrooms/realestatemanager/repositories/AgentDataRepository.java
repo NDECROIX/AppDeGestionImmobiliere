@@ -8,6 +8,9 @@ import com.openclassrooms.realestatemanager.model.Photo;
 
 import java.util.List;
 
+/**
+ * Repository of agents
+ */
 public class AgentDataRepository {
 
     private final AgentDao agentDao;

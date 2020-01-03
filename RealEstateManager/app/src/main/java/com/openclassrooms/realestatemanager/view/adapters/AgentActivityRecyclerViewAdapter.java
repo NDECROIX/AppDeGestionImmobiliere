@@ -14,6 +14,9 @@ import com.openclassrooms.realestatemanager.view.holders.AgentViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter that binds agents to view
+ */
 public class AgentActivityRecyclerViewAdapter extends RecyclerView.Adapter<AgentViewHolder> {
 
     public interface OnClickAgentListener{

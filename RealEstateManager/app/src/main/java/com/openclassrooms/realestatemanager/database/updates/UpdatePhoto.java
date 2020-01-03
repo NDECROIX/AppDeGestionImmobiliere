@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Synchronize local database photos with the firebase database photos
+ */
 class UpdatePhoto {
 
     public interface UpdatePhotoListener {
@@ -27,14 +30,30 @@ class UpdatePhoto {
         void error(Exception exception);
     }
 
+    // Photos from the local database
     private List<Photo> photosRoom;
+    // Activity property view model
     private final PropertyViewModel propertyViewModel;
+    // Notify errors and synchronization complete
     private UpdatePhotoListener callback;
+    // Activity lifecycle
     private LifecycleOwner lifecycleOwner;
+    // Properties updated in room from firebase database
     private List<String> propertiesDown;
+    // Call on the api one after one to respect the unique constraint
     private int count = 0;
+    // Activity context
     private Context context;
 
+    /**
+     * Constructor
+     *
+     * @param lifecycleOwner    Activity lifecycle
+     * @param propertyViewModel Activity view model
+     * @param callback          UpdatePhotoListener
+     * @param propertiesDown    Properties updated in room from firebase database
+     * @param context           Activity context
+     */
     UpdatePhoto(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel,
                 UpdatePhotoListener callback, List<String> propertiesDown, Context context) {
         this.callback = callback;
@@ -44,6 +63,9 @@ class UpdatePhoto {
         this.propertiesDown = new ArrayList<>(propertiesDown);
     }
 
+    /**
+     * Get photos from the local database
+     */
     void updateData() {
         this.propertyViewModel.getPhotos().observe(lifecycleOwner, new Observer<List<Photo>>() {
             @Override
@@ -61,6 +83,12 @@ class UpdatePhoto {
         });
     }
 
+    /**
+     * Compare local photos with distance photos.
+     * If photo does not exist on the firebase database and the property has been updated from
+     * the firebase database, delete the photo from the local database, otherwise upload it on
+     * the firebase database.
+     */
     private void updatePhotos() {
         if (count >= photosRoom.size()) return;
         final int count = this.count;
@@ -92,10 +120,20 @@ class UpdatePhoto {
         });
     }
 
+    /**
+     * Delete the photo from the locale database
+     *
+     * @param photo Photo to delete
+     */
     private void deletePhotoFromRoom(Photo photo) {
         propertyViewModel.deletePhoto(photo);
     }
 
+    /**
+     * Upload the photo on the firebase database
+     *
+     * @param photo Photo to upload
+     */
     private void addPhotoToFirebase(Photo photo) {
         // Add photo to database
         PhotoHelper.updatePhoto(photo.getHash(), photo).addOnFailureListener(callback::error);
@@ -104,6 +142,9 @@ class UpdatePhoto {
                 .addOnFailureListener(callback::error);
     }
 
+    /**
+     * Get photos from the firebase database that does not exist in the local database
+     */
     private void getNewPhotosFromFirebase() {
         PhotoHelper.getPhotos().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -125,6 +166,11 @@ class UpdatePhoto {
         });
     }
 
+    /**
+     * Delete photo from the firebase database
+     *
+     * @param photo Photo to delete
+     */
     private void deletePhotoFromFirebase(Photo photo) {
         StoragePhotoHelper.getStorageReference(photo.getPropertyID()).listAll().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -140,6 +186,11 @@ class UpdatePhoto {
         PhotoHelper.deletePhoto(photo.getHash()).addOnFailureListener(callback::error);
     }
 
+    /**
+     * Add photo from the firebase database in the local database
+     *
+     * @param photo Photo
+     */
     private void addPhotoInRoom(Photo photo) {
         StoragePhotoHelper.getUrlPicture(photo.getPropertyID(), photo.getUri()).addOnCompleteListener(task -> {
             Uri downloadUri = task.getResult();

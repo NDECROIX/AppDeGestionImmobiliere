@@ -8,6 +8,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.openclassrooms.realestatemanager.model.Agent;
 
+/**
+ * Manage calls on the Firebase database agent collection.
+ */
 public class AgentHelper {
 
     /**

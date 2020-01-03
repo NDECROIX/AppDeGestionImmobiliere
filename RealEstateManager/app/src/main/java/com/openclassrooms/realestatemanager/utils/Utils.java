@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Philippe on 21/02/2018.
+ * Useful function
  */
-
 public class Utils {
 
     /**

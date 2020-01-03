@@ -7,6 +7,9 @@ import com.openclassrooms.realestatemanager.model.Photo;
 
 import java.util.List;
 
+/**
+ * Repository of photos
+ */
 public class PhotoDataRepository {
 
     private final PhotoDAO photoDAO;

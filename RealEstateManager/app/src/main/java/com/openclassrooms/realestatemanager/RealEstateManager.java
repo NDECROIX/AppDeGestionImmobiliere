@@ -2,15 +2,20 @@ package com.openclassrooms.realestatemanager;
 
 import android.app.Application;
 
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
-
+/**
+ * Application class that provides unique data for
+ * one application instance.
+ */
 public class RealEstateManager extends Application {
 
     private boolean isSyncData;
-    private PropertyViewModel propertyViewModel;
 
+    /**
+     * Synchronize data with firebase when application start
+     *
+     * @return true if app already sync
+     */
     public boolean isSyncData() {
-
         if (!isSyncData) {
             isSyncData = true;
             return false;

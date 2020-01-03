@@ -7,6 +7,9 @@ import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 
 import java.util.List;
 
+/**
+ * Repository of points of interest next properties
+ */
 public class PoiNextPropertyDataRepository {
 
     private final PoiNextPropertyDAO poiNextPropertyDAO;
@@ -51,5 +54,4 @@ public class PoiNextPropertyDataRepository {
     public void deletePoiNextProperty(PoiNextProperty poiNextProperty) {
         this.poiNextPropertyDAO.deletePoiNextProperty(poiNextProperty);
     }
-
 }

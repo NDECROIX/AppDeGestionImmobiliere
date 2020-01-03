@@ -15,6 +15,9 @@ import com.openclassrooms.realestatemanager.view.holders.DetailPhotoViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter that binds photos to view
+ */
 public class DetailFragmentPhotoRecyclerViewAdapter extends RecyclerView.Adapter<DetailPhotoViewHolder> {
 
     public interface OnClickPhotoListener {

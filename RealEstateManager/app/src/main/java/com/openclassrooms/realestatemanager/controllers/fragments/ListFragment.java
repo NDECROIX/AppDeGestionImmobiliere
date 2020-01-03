@@ -29,10 +29,11 @@ import butterknife.OnClick;
 import butterknife.Optional;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Display properties from the local database in a recycler view
  */
 public class ListFragment extends Fragment implements FilterDialogFragment.FilterListener {
 
+    // Views
     @BindView(R.id.fragment_list_recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.fragment_swipe_refresh_view)

@@ -4,31 +4,50 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Filter for filtering properties
+ */
 public class Filter implements Serializable {
 
-    /**
-     * 0 nothing, 1 On sale, 2 Sold.
-     */
+    // 0 nothing, 1 On sale, 2 Sold.
     private int status;
+    // Limit one of the entry date
     private long entryDateFrom;
+    // Limit tow of the entry date
     private long entryDateTo;
+    // Limit one of the sale date
     private long saleDateFrom;
+    // Limit tow of the sale date
     private long saleDateTo;
+    // Type of property
     private String type;
+    // Limit one of the price
     private Double minPrice;
+    // Limit tow of the price
     private Double maxPrice;
+    // Limit one of the surface
     private Double minSurface;
+    // Limit tow of the surface
     private Double maxSurface;
+    // Number of photo
     private int nbrPhotos;
+    // Property borough
     private String borough;
+    // Points of interest
     private List<Poi> pois;
 
     public Filter() {
         pois = new ArrayList<>();
     }
 
-    // UTILS
-
+    /**
+     * Check if the criteria correlate with the property
+     *
+     * @param property  Property to check
+     * @param nbrPhotos Number of photos it should have
+     * @param pois      Points of interest next the property
+     * @return True if property respect criteria
+     */
     public boolean meetsCriteria(Property property, int nbrPhotos, List<Poi> pois) {
         if (status != 0) {
             if (status == 1 && property.getSaleDate() != 0) {

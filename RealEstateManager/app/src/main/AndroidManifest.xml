@@ -59,6 +59,26 @@
             android:authorities="com.openclassrooms.realestatemanager.provider"
             android:exported="true" />
         <provider
+            android:name=".provider.AgentContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true" />
+        <provider
+            android:name=".provider.PhotoContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true" />
+        <provider
+            android:name=".provider.PoiContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true" />
+        <provider
+            android:name=".provider.PoiNextPropertyContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true" />
+        <provider
+            android:name=".provider.TypeContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.provider"
+            android:exported="true" />
+        <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.openclassrooms.realestatemanager.fileprovider"
             android:exported="false"

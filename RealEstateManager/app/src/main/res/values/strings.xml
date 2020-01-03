@@ -106,4 +106,14 @@
     <string name="fragment_list_item_bedroom">4</string>
     <string name="fragment_list_item_home">8</string>
     <string name="fragment_list_item_surface">750</string>
+    <string name="activity_edit_authority_uri">com.openclassrooms.realestatemanager.fileprovider</string>
+    <string name="notification_service_new_agent_topic_name">newAgent</string>
+    <string name="notification_service_new_agent_title">New agent</string>
+    <string name="notification_service_new_agent_first_name_key">firstName</string>
+    <string name="notification_service_new_agent_last_name_key">lastName</string>
+    <string name="notification_service_new_property_topic_name">newProperty</string>
+    <string name="notification_service_new_property_title">New property</string>
+    <string name="notification_service_new_agent_price_key">price</string>
+    <string name="notification_service_new_agent_type_key">type</string>
+    <string name="notification_service_message_from_firebase">Message from Firebase</string>
 </resources>

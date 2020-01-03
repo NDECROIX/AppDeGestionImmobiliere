@@ -27,8 +27,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/**
+ * Display a google map with properties as marker
+ */
 public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClickListener {
 
+    // Views
     @BindView(R.id.maps_activity_toolbar)
     Toolbar toolbar;
     @BindView(R.id.activity_maps_frame_layout)
@@ -37,10 +41,12 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
     @BindView(R.id.activity_maps_frame_layout_detail)
     FrameLayout frameLayoutDetail;
 
+    // Fragments
     private final MapsFragment mapFragment = new MapsFragment();
     private final DetailFragment detailFragment = new DetailFragment();
     private Fragment currentFragment = mapFragment;
 
+    // View model
     private PropertyViewModel propertyViewModel;
 
     @Override
@@ -53,6 +59,9 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
         configToolbar();
     }
 
+    /**
+     * Display fragment(s)
+     */
     private void configFragment() {
         this.getSupportFragmentManager().beginTransaction()
                 .add(frameLayout.getId(), currentFragment)
@@ -72,6 +81,7 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    // Configure view model
     private void configViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
@@ -86,6 +96,7 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
         }
     }
 
+    // Display property details by clicking on the property marker
     @Override
     public boolean onMarkerClick(Marker marker) {
         MapsFragment.MarkerObject markerObject = (MapsFragment.MarkerObject) marker.getTag();

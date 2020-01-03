@@ -10,46 +10,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
+import com.openclassrooms.realestatemanager.view.holders.FilterViewHolder;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Filter fragment to filter properties
  */
 public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSeekBarChangeListener,
         DatePickerDialog.OnDateSetListener {
 
+    /**
+     * Notified all errors and passed the filter
+     */
     public interface FilterListener {
         void onApplyFilter(Filter filter);
 
@@ -58,47 +52,13 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
 
     private FilterListener callback;
 
-    @BindView(R.id.fragment_filter_dialog_radio_grp_type_left)
-    RadioGroup radioGroupTypeLeft;
-    @BindView(R.id.fragment_filter_dialog_radio_grp_type_right)
-    RadioGroup radioGroupTypeRight;
-    @BindView(R.id.fragment_filter_dialog_radio_grp_borough_left)
-    RadioGroup radioGroupBoroughLeft;
-    @BindView(R.id.fragment_filter_dialog_radio_grp_borough_right)
-    RadioGroup radioGroupBoroughRight;
-    @BindView(R.id.fragment_filter_dialog_check_box_grp_poi_left)
-    LinearLayout checkBoxGrpLeft;
-    @BindView(R.id.fragment_filter_dialog_check_box_grp_poi_right)
-    LinearLayout checkBoxGrpRight;
-    @BindView(R.id.fragment_filter_dialog_slider_photos)
-    SeekBar seekBar;
-    @BindView(R.id.fragment_filter_dialog_tv_photos_nbr)
-    TextView nbrPhotos;
-    @BindView(R.id.fragment_filter_dialog_tie_price_min)
-    TextInputEditText minPrice;
-    @BindView(R.id.fragment_filter_dialog_tie_price_max)
-    TextInputEditText maxPrice;
-    @BindView(R.id.fragment_filter_dialog_tie_surface_min)
-    TextInputEditText minSurface;
-    @BindView(R.id.fragment_filter_dialog_tie_surface_max)
-    TextInputEditText maxSurface;
-    @BindView(R.id.fragment_filter_dialog_tie_entry_date_from)
-    TextInputEditText tieEntryDateFrom;
-    @BindView(R.id.fragment_filter_dialog_tie_entry_date_to)
-    TextInputEditText tieEntryDateTo;
-    @BindView(R.id.fragment_filter_dialog_tie_sale_date_from)
-    TextInputEditText tieSaleDateFrom;
-    @BindView(R.id.fragment_filter_dialog_tie_sale_date_to)
-    TextInputEditText tieSaleDateTo;
-    @BindView(R.id.fragment_filter_dialog_cb_on_sale)
-    CheckBox checkBoxOnSale;
-    @BindView(R.id.fragment_filter_dialog_cb_sold)
-    CheckBox checkBoxSold;
-
+    // Views
+    private FilterViewHolder viewHolder;
 
     private Context context;
     private LayoutInflater layoutInflater;
 
+    // View model
     private PropertyViewModel propertyViewModel;
 
     private String type;
@@ -131,6 +91,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final View view = layoutInflater.inflate(R.layout.fragment_filter_dialog, null);
+        viewHolder = new FilterViewHolder(view);
         ButterKnife.bind(this, view);
         configObserver();
         configViews();
@@ -142,7 +103,8 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(l ->
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                    if (checkCast()) {
+                    if (viewHolder.checkCast(callback)) {
+                        filter = viewHolder.filter;
                         callback.onApplyFilter(createFilter());
                         dialog.dismiss();
                     }
@@ -151,12 +113,12 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
     }
 
     private void configViews() {
-        seekBar.setOnSeekBarChangeListener(this);
-        checkBoxOnSale.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) checkBoxSold.setChecked(false);
+        viewHolder.seekBar.setOnSeekBarChangeListener(this);
+        viewHolder.checkBoxOnSale.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) viewHolder.checkBoxSold.setChecked(false);
         });
-        checkBoxSold.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) checkBoxOnSale.setChecked(false);
+        viewHolder.checkBoxSold.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) viewHolder.checkBoxOnSale.setChecked(false);
         });
     }
 
@@ -178,17 +140,17 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
             RadioButton radioButton = new RadioButton(context);
             radioButton.setText(type.getName());
             radioButton.setOnClickListener(l -> {
-                if (l.getParent() == radioGroupTypeRight) {
-                    radioGroupTypeLeft.clearCheck();
+                if (l.getParent() == viewHolder.radioGroupTypeRight) {
+                    viewHolder.radioGroupTypeLeft.clearCheck();
                 } else {
-                    radioGroupTypeRight.clearCheck();
+                    viewHolder.radioGroupTypeRight.clearCheck();
                 }
                 this.type = type.getName();
             });
             if (left) {
-                radioGroupTypeLeft.addView(radioButton);
+                viewHolder.radioGroupTypeLeft.addView(radioButton);
             } else {
-                radioGroupTypeRight.addView(radioButton);
+                viewHolder.radioGroupTypeRight.addView(radioButton);
             }
             left = !left;
         }
@@ -204,17 +166,17 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
             RadioButton radioButton = new RadioButton(context);
             radioButton.setText(borough);
             radioButton.setOnClickListener(l -> {
-                if (l.getParent() == radioGroupBoroughRight) {
-                    radioGroupBoroughLeft.clearCheck();
+                if (l.getParent() == viewHolder.radioGroupBoroughRight) {
+                    viewHolder.radioGroupBoroughLeft.clearCheck();
                 } else {
-                    radioGroupBoroughRight.clearCheck();
+                    viewHolder.radioGroupBoroughRight.clearCheck();
                 }
                 this.borough = borough;
             });
             if (left) {
-                radioGroupBoroughLeft.addView(radioButton);
+                viewHolder.radioGroupBoroughLeft.addView(radioButton);
             } else {
-                radioGroupBoroughRight.addView(radioButton);
+                viewHolder.radioGroupBoroughRight.addView(radioButton);
             }
             left = !left;
         }
@@ -239,14 +201,15 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
                 }
             });
             if (left) {
-                checkBoxGrpLeft.addView(checkBox);
+                viewHolder.checkBoxGrpLeft.addView(checkBox);
             } else {
-                checkBoxGrpRight.addView(checkBox);
+                viewHolder.checkBoxGrpRight.addView(checkBox);
             }
             left = !left;
         }
     }
 
+    // Handle click on calendar
     @OnClick(R.id.fragment_filter_dialog_ib_entry_date_from | R.id.fragment_filter_dialog_ib_entry_date_to
             | R.id.fragment_filter_dialog_ib_sale_date_from | R.id.fragment_filter_dialog_ib_sale_date_to)
     void clickOnCalendar(View v) {
@@ -270,27 +233,28 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
         datePickerFragment.show(fragmentManager, "datePicker");
     }
 
+    // result from the calendar
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         switch (idCalendar) {
             case R.id.fragment_filter_dialog_ib_entry_date_from:
-                tieEntryDateFrom.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
+                viewHolder.tieEntryDateFrom.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
                 break;
             case R.id.fragment_filter_dialog_ib_entry_date_to:
-                tieEntryDateTo.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
+                viewHolder.tieEntryDateTo.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
                 break;
             case R.id.fragment_filter_dialog_ib_sale_date_from:
-                tieSaleDateFrom.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
+                viewHolder.tieSaleDateFrom.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
                 break;
             case R.id.fragment_filter_dialog_ib_sale_date_to:
-                tieSaleDateTo.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
+                viewHolder.tieSaleDateTo.setText(String.format("%s/%s/%s", month + 1, dayOfMonth, year));
                 break;
         }
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int number, boolean b) {
-        nbrPhotos.setText(String.valueOf(number + 1));
+        viewHolder.nbrPhotos.setText(String.valueOf(number + 1));
         photos = number + 1;
     }
 
@@ -304,103 +268,7 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
 
     }
 
-    private boolean checkCast() {
-        if (minPrice.getText() != null && !minPrice.getText().toString().isEmpty()) {
-            try {
-                filter.setMinPrice(Double.parseDouble(minPrice.getText().toString()));
-            } catch (NumberFormatException e) {
-                callback.filterError("Error in the min price format");
-                return false;
-            }
-        }
-
-        // Check max price
-        if (maxPrice.getText() != null && !maxPrice.getText().toString().isEmpty()) {
-            try {
-                filter.setMaxPrice(Double.parseDouble(maxPrice.getText().toString()));
-            } catch (NumberFormatException e) {
-                callback.filterError("Error in the max price format");
-                return false;
-            }
-        }
-
-        // Check min surface
-        if (minSurface.getText() != null && !minSurface.getText().toString().isEmpty()) {
-            try {
-                filter.setMinSurface(Double.parseDouble(minSurface.getText().toString()));
-            } catch (NumberFormatException e) {
-                callback.filterError("Error in the min surface format");
-                return false;
-            }
-        }
-
-        // Check max surface
-        if (maxSurface.getText() != null && !maxSurface.getText().toString().isEmpty()) {
-            try {
-                filter.setMaxSurface(Double.parseDouble(maxSurface.getText().toString()));
-            } catch (NumberFormatException e) {
-                callback.filterError("Error in the max surface format");
-                return false;
-            }
-        }
-
-        if (checkBoxSold.isChecked()) {
-            filter.setStatus(2);
-        } else if (checkBoxOnSale.isChecked()) {
-            filter.setStatus(1);
-        }
-
-        // Check sale idCalendar from
-        if (tieSaleDateFrom.getText() != null && !tieSaleDateFrom.getText().toString().isEmpty()) {
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                Date date = simpleDateFormat.parse(tieSaleDateFrom.getText().toString());
-                filter.setSaleDateFrom(date.getTime());
-            } catch (ParseException p) {
-                callback.filterError("Error on the sale idCalendar from");
-                return false;
-            }
-        }
-
-        // Check sale idCalendar to
-        if (tieSaleDateTo.getText() != null && !tieSaleDateTo.getText().toString().isEmpty()) {
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                Date date = simpleDateFormat.parse(tieSaleDateTo.getText().toString());
-                filter.setSaleDateTo(date.getTime());
-            } catch (ParseException p) {
-                callback.filterError("Error on the sale idCalendar to");
-                return false;
-            }
-        }
-
-        // Check entry idCalendar from
-        if (tieEntryDateFrom.getText() != null && !tieEntryDateFrom.getText().toString().isEmpty()) {
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                Date date = simpleDateFormat.parse(tieEntryDateFrom.getText().toString());
-                filter.setEntryDateFrom(date.getTime());
-            } catch (ParseException p) {
-                callback.filterError("Error on the entry idCalendar from");
-                return false;
-            }
-        }
-
-        // Check entry idCalendar to
-        if (tieEntryDateTo.getText() != null && !tieEntryDateTo.getText().toString().isEmpty()) {
-            try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                Date date = simpleDateFormat.parse(tieEntryDateTo.getText().toString());
-                filter.setEntryDateTo(date.getTime());
-            } catch (ParseException p) {
-                callback.filterError("Error on the entry idCalendar from");
-                return false;
-            }
-        }
-
-        return true;
-    }
-
+    // End of the filter creation
     private Filter createFilter() {
         filter.setType(this.type);
         filter.setNbrPhotos(this.photos);

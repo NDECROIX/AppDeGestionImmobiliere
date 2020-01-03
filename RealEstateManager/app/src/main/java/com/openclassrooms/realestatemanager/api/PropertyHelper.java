@@ -7,6 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.openclassrooms.realestatemanager.model.Property;
 
+/**
+ * Manage calls on the Firebase database properties collection.
+ */
 public class PropertyHelper {
 
     /**

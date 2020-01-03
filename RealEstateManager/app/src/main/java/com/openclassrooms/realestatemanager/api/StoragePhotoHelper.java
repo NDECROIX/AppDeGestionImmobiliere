@@ -10,6 +10,9 @@ import com.google.firebase.storage.UploadTask;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+/**
+ * Manage photo storage on firebase storage
+ */
 public class StoragePhotoHelper {
 
     /**
@@ -41,7 +44,7 @@ public class StoragePhotoHelper {
     }
 
     /**
-     * Retrieves the url from firebase storage
+     * Retrieve the url from firebase storage
      *
      * @param photoDeviceUri Device uri
      * @param uid            Image uid
@@ -51,6 +54,12 @@ public class StoragePhotoHelper {
         return getStorageReference(photoDeviceUri).child(Utils.convertStringMd5(uid)).getDownloadUrl();
     }
 
+    /**
+     * Retrieve photo from database and saves it in a path
+     * @param photo Photo to retrieve
+     * @param path Path where save the photo
+     * @return File download task
+     */
     public static FileDownloadTask savePictureToFile(Photo photo, String path){
         return getStorageReference(photo.getPropertyID()).child(photo.getHash()).getFile(Uri.parse(path));
     }

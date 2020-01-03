@@ -12,29 +12,47 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.Objects;
 
+/**
+ * Representation of an agent
+ */
 @Entity
 public class Agent {
 
+    // unique id create by first name, last name and email in the constructor
+    @SuppressWarnings("NullableProblems")
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
     private String id;
 
+    // Agent first name
     @ColumnInfo(name = "first_name")
     private String firstName;
 
+    // Agent last name
     @ColumnInfo(name = "last_name")
     private String lastName;
 
+    // Agent email
     @ColumnInfo(name = "email")
     private String email;
 
+    // Agent phone number
     @ColumnInfo(name = "phone")
     private String phone;
 
+    // Date of his update
     @ColumnInfo(name = "update_date")
     private long updateDate;
 
+    /**
+     * Constructor
+     *
+     * @param firstName Agent first name
+     * @param lastName  Agent last name
+     * @param email     Agent email
+     * @param phone     Agent phone number
+     */
     public Agent(@NonNull String firstName, @NonNull String lastName, @NonNull String email, @NonNull String phone) {
         this.id = Utils.convertStringMd5(String.format("%s%s%s", firstName, lastName, email));
         this.firstName = firstName;
@@ -51,16 +69,17 @@ public class Agent {
 
     /**
      * Create the id if the empty constructor has been used.
+     * Id can be null if created by the empty constructor
      */
-    public void createId(){
-        if (this.id != null && !this.id.isEmpty()){
+    @SuppressWarnings("ConstantConditions")
+    public void createId() {
+        if (this.id != null && !this.id.isEmpty()) {
             return;
         }
         this.id = Utils.convertStringMd5(String.format("%s%s%s", firstName, lastName, email));
     }
 
-    // --- UTILS ---
-
+    // Content provider
     public static Agent fromContentValues(ContentValues values) {
         final Agent agent = new Agent();
         if (values.containsKey("firstName")) agent.setFirstName(values.getAsString("firstName"));

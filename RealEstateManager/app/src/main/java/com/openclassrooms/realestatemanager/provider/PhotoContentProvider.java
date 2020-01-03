@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.Photo;
 
+/**
+ * Provide access to the photos from the local database
+ */
 public class PhotoContentProvider extends ContentProvider {
 
     // FOR DATA

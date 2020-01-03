@@ -15,6 +15,9 @@ import com.openclassrooms.realestatemanager.view.holders.PhotoViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter that binds photos to view
+ */
 public class EditActivityPhotoRecyclerViewAdapter extends RecyclerView.Adapter<PhotoViewHolder> {
 
     public interface OnClickPhotoListener {

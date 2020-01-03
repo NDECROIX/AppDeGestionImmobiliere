@@ -7,6 +7,9 @@ import com.openclassrooms.realestatemanager.model.Poi;
 
 import java.util.List;
 
+/**
+ * Repository of points of interest
+ */
 public class PoiDataRepository {
 
     private final PoiDAO poiDAO;

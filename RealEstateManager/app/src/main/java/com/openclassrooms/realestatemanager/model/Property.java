@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * representation of a property
+ */
 @Entity
 public class Property implements Serializable {
 
@@ -187,7 +190,7 @@ public class Property implements Serializable {
     public Property() {
     }
 
-    // --- UTILS ---
+    // Content provider
     public static Property fromContentValues(ContentValues values) {
         final Property property = new Property();
         if (values.containsKey("id")) property.setId(values.getAsString("id"));
@@ -213,7 +216,8 @@ public class Property implements Serializable {
         if (values.containsKey("sold")) property.setSold(values.getAsBoolean("sold"));
         if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
         if (values.containsKey("saleDate")) property.setSaleDate(values.getAsLong("saleDate"));
-        if (values.containsKey("updateDate")) property.setUpdateDate(values.getAsLong("updateDate"));
+        if (values.containsKey("updateDate"))
+            property.setUpdateDate(values.getAsLong("updateDate"));
         if (values.containsKey("latitude")) property.setLatitude(values.getAsDouble("latitude"));
         if (values.containsKey("longitude")) property.setLongitude(values.getAsDouble("longitude"));
         if (values.containsKey("agentID")) property.setAgentID(values.getAsString("agentID"));
@@ -441,5 +445,4 @@ public class Property implements Serializable {
     public void setAgentID(String agentID) {
         this.agentID = agentID;
     }
-
 }

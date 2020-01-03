@@ -49,18 +49,35 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
- * create an instance of this fragment.
+ * Display a google map view
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
 
+    /**
+     * Object as a tag in the marker that contains property and photos
+     */
+    public class MarkerObject {
+        public Property property;
+        public List<Photo> photos;
 
+        MarkerObject(Property property, List<Photo> photos) {
+            this.property = property;
+            this.photos = new ArrayList<>(photos);
+        }
+    }
+
+    // Request permission to fine location
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 898;
     private static final int DEFAULT_ZOOM = 18;
 
+    // View model
     private PropertyViewModel propertyViewModel;
     private GoogleMap mMap;
+
+    // Init detail with first property
     private boolean initDetail;
 
+    // Activity context
     private Context context;
 
     public MapsFragment() {
@@ -138,6 +155,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         }
     }
 
+    /**
+     * Add a marker where a property is located
+     * @param properties Properties to locate
+     */
     private void addMarker(List<Property> properties) {
         mMap.clear();
         for (Property property : properties) {
@@ -159,6 +180,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         }
     }
 
+    /**
+     * Display photo from property as marker
+     * @param property Property
+     */
     private void addMarkerWithBitmap(Property property) {
         propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos -> {
             if (!initDetail){
@@ -190,16 +215,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                         }
                     });
                 });
-    }
-
-    public class MarkerObject {
-        public Property property;
-        public List<Photo> photos;
-
-        MarkerObject(Property property, List<Photo> photos) {
-            this.property = property;
-            this.photos = new ArrayList<>(photos);
-        }
     }
 
     /**

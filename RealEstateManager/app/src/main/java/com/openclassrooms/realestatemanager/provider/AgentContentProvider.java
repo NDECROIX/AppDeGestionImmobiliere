@@ -12,6 +12,9 @@ import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Photo;
 
+/**
+ * Provide data on agent from the local database
+ */
 public class AgentContentProvider extends ContentProvider {
 
     // FOR DATA

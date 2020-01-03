@@ -7,6 +7,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.openclassrooms.realestatemanager.model.Photo;
 
+/**
+ * Manage calls on the Firebase database photo collection
+ */
 public class PhotoHelper {
 
     /**

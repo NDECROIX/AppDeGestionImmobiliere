@@ -9,6 +9,9 @@ import com.openclassrooms.realestatemanager.model.Type;
 
 import java.util.List;
 
+/**
+ * Repository of type
+ */
 public class TypeDataRepository {
 
     private final TypeDAO typeDAO;

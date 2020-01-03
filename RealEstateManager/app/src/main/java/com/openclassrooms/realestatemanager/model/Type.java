@@ -10,9 +10,13 @@ import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
+/**
+ * Type of property
+ */
 @Entity
 public class Type {
 
+    // Name
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "name")
@@ -27,8 +31,13 @@ public class Type {
 
     }
 
+    /**
+     * Get all types of property
+     *
+     * @return List of property types
+     */
     @Ignore
-    public static Type[] getAllTypes(){
+    public static Type[] getAllTypes() {
         return new Type[]{
                 new Type("Apartment"),
                 new Type("House"),
@@ -39,8 +48,7 @@ public class Type {
         };
     }
 
-    // --- UTILS ---
-
+    // Content provider
     public static Type fromContentValues(ContentValues values) {
         final Type type = new Type();
         if (values.containsKey("name")) type.setName(values.getAsString("name"));
@@ -69,5 +77,4 @@ public class Type {
     public void setName(String name) {
         this.name = name;
     }
-
 }

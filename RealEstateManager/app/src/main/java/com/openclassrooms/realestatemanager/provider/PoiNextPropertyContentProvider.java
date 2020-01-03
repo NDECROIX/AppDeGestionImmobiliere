@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 
+/**
+ * Provide access to the PoiNextProperty from the local database
+ */
 public class PoiNextPropertyContentProvider extends ContentProvider {
 
     // FOR DATA

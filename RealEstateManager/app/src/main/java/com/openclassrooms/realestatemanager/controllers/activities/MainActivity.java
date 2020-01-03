@@ -3,8 +3,6 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,14 +10,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -57,6 +52,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
         EditActivity.startEditActivityListener, UpdateData.UpdateDataListener {
 
+    // Views
     @BindView(R.id.main_activity_drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.main_activity_toolbar)
@@ -71,9 +67,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @BindView(R.id.main_activity_progress_bar)
     ProgressBar progressBar;
 
-    public static final int RC_READ_WRITE = 854;
     public static final String SUBSCRIBE_TOPICS_TOKEN = "subscribe_topics_token";
 
+    // View model
     private PropertyViewModel propertyViewModel;
 
     //Fragments
@@ -81,6 +77,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     private final ListFragment listFragment = new ListFragment();
     private final DetailFragment detailFragment = new DetailFragment();
 
+    // Save on rotation
     private Property property;
     private List<Photo> photos;
     private List<PoiNextProperty> poiNextProperties;
@@ -104,12 +101,18 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         }
     }
 
+    /**
+     * Configure the progress bar that starts during data synchronization
+     */
     private void configProgressBar() {
         progressBar.setVisibility(View.GONE);
         progressBar.getIndeterminateDrawable().setColorFilter(
                 this.getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
+    /**
+     * Subscribe the user to firebase topics if token has be change
+     */
     private void configSubscribeToTopics() {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String lastToken = sharedPref.getString(SUBSCRIBE_TOPICS_TOKEN, "");
@@ -127,6 +130,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 });
     }
 
+    /**
+     * Display fragment(s)
+     */
     private void configFragment() {
         activeFragment = listFragment;
         this.getSupportFragmentManager().beginTransaction()
@@ -139,6 +145,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         }
     }
 
+    /**
+     * Init the property view model
+     */
     private void configViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
@@ -157,6 +166,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         }
     }
 
+    /**
+     * Replace fragment if active fragment is detail fragment.
+     */
     @Override
     public void onBackPressed() {
         if (activeFragment == detailFragment) {
@@ -211,6 +223,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Subscribe to topics to be notified when new agent or property is added on firebase
+     */
     private void subscribeToTopics() {
         FirebaseMessaging.getInstance().subscribeToTopic("newAgent")
                 .addOnCompleteListener(task -> {
@@ -228,6 +243,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 });
     }
 
+    /**
+     * Synchronize the local database with firebase database
+     */
     @AfterPermissionGranted(RC_READ_WRITE)
     public void synchronizeData() {
         if (progressBar != null && progressBar.getVisibility() != View.GONE) {
@@ -242,10 +260,13 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             progressBar.setVisibility(View.VISIBLE);
             updateData.startSynchronisation();
         } else {
-            getPermission();
+            getReadWriteExternalStoragePermission();
         }
     }
 
+    /**
+     * Display the filter fragment
+     */
     private void startFilterDialogFragment() {
         if (activeFragment != listFragment) {
             return;
@@ -255,6 +276,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 
+    /**
+     * Start Edit property to update a property
+     */
     private void editProperty() {
         if (propertyViewModel.getCurrentProperty() != null) {
             startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
@@ -275,6 +299,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         toggle.syncState();
     }
 
+    // Display the details of the selected property
     @Override
     public void onClickPropertyListener(Property property, List<Photo> photos) {
         propertyViewModel.setCurrentProperty(property);
@@ -287,6 +312,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         }
     }
 
+    // Update views with the first property added in the recycler view
     @Override
     public void firstPropertyAdded(Property property, List<Photo> photos) {
         noProperty.setVisibility(View.GONE);
@@ -296,6 +322,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         }
     }
 
+    // Notified an empty recycler view
     @Override
     public void recyclerViewEmpty() {
         noProperty.setVisibility(View.VISIBLE);
@@ -306,13 +333,35 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == RC_READ_WRITE) {
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        } else {
+            activeFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    // Synchronization with firebase database complete
+    @Override
+    public void synchronisationComplete() {
+        customToast(this, "Synchronization complete");
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    // Error on the synchronization with firebase database
+    @Override
+    public void notification(String notification) {
+        showToastMessage(this, notification);
+    }
+
+    // Start Edit activity to create a property
+    @Override
     public void createProperty() {
         startActivity(EditActivity.newIntent(this, null, null, null));
     }
-
-    public static final String PROPERTY = "property";
-    public static final String PHOTOS = "photo";
-    public static final String POIS = "pois";
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -330,40 +379,5 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         property = (Property) savedInstanceState.getSerializable(PROPERTY);
         photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
         poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == RC_READ_WRITE) {
-            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-        } else {
-            activeFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void synchronisationComplete() {
-        customToast(this, "Synchronization complete");
-        if (progressBar != null) {
-            progressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void notification(String notification) {
-        showToastMessage(this, notification);
-    }
-
-    /**
-     * Get the read/write external storage permission.
-     */
-    private void getPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE},
-                    RC_READ_WRITE);
-        }
     }
 }

@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+/**
+ * View model that manages the local database
+ */
 public class PropertyViewModel extends ViewModel {
 
     // REPOSITORY
@@ -172,9 +175,10 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Delete a photo from the database
+     *
      * @param photo Photo to delete
      */
-    public void deletePhoto(Photo photo){
+    public void deletePhoto(Photo photo) {
         executor.execute(() -> photoDataRepository.deletePhoto(photo));
     }
 
@@ -269,35 +273,38 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Get Agents from the AppDatabase
+     *
      * @return List of agent
      */
-    public LiveData<List<Agent>> getAgents(){
+    public LiveData<List<Agent>> getAgents() {
         return agentDataRepository.getAgents();
     }
 
     /**
      * Get an agent from the database
+     *
      * @param agentID agent id
      * @return agent with id passed in parameter
      */
-    public LiveData<Agent> getAgent(String agentID){
+    public LiveData<Agent> getAgent(String agentID) {
         return agentDataRepository.getAgent(agentID);
     }
 
     /**
      * Insert an agent in the database
+     *
      * @param agent agent to insert
      */
-    public void insertAgent(Agent agent){
+    public void insertAgent(Agent agent) {
         executor.execute(() -> agentDataRepository.insertAgent(agent));
     }
 
     /**
      * Update an agent in the database
+     *
      * @param agent agent to update
      */
-    public void updateAgent(Agent agent){
+    public void updateAgent(Agent agent) {
         executor.execute(() -> agentDataRepository.updateAgent(agent));
     }
-
 }

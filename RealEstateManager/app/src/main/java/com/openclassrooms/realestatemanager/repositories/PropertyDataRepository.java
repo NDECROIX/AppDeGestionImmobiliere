@@ -7,6 +7,9 @@ import com.openclassrooms.realestatemanager.model.Property;
 
 import java.util.List;
 
+/**
+ * Repository of properties
+ */
 public class PropertyDataRepository {
 
     private final PropertyDAO propertyDao;
@@ -46,7 +49,4 @@ public class PropertyDataRepository {
     public void updateProperty(Property property){
         this.propertyDao.updateProperty(property);
     }
-
-
-
 }

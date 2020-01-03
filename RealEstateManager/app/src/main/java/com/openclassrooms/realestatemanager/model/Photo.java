@@ -19,6 +19,9 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 import java.io.File;
 import java.util.Objects;
 
+/**
+ * Representation of a photo
+ */
 @Entity(primaryKeys = {"uri", "property_id"},
         foreignKeys = @ForeignKey(
                 entity = Property.class,
@@ -27,17 +30,27 @@ import java.util.Objects;
         indices = @Index(value = "property_id"))
 public class Photo implements Parcelable {
 
+    // Uri path where the photo is located
     @ColumnInfo(name = "uri")
     @NonNull
     private String uri;
 
+    // Property owner
     @NonNull
     @ColumnInfo(name = "property_id")
     private String propertyID;
 
+    // Short photo description
     @ColumnInfo(name = "description")
     private String description;
 
+    /**
+     * Constructor
+     *
+     * @param uri         Path where the photo is located
+     * @param propertyID  Id of the property owner
+     * @param description Short photo description
+     */
     public Photo(@NonNull String uri, @NonNull String propertyID, String description) {
         this.uri = uri;
         this.propertyID = propertyID;
@@ -51,6 +64,11 @@ public class Photo implements Parcelable {
 
     // --- UTILS ---
 
+    /**
+     * Hash to identify the photo in the firebase database
+     *
+     * @return String hash
+     */
     @Ignore
     @Exclude
     public String getHash() {
@@ -58,6 +76,11 @@ public class Photo implements Parcelable {
         return Utils.convertStringMd5(value);
     }
 
+    /**
+     * Return the name of the photo
+     *
+     * @return Photo name
+     */
     @Ignore
     @Exclude
     public String getName() {
@@ -65,6 +88,7 @@ public class Photo implements Parcelable {
         return splitUri[splitUri.length - 1];
     }
 
+    // Content provider
     public static Photo fromContentValues(ContentValues values) {
         final Photo photo = new Photo();
         if (values.containsKey("uri")) photo.setUri(values.getAsString("uri"));
@@ -76,6 +100,12 @@ public class Photo implements Parcelable {
 
     // --- GETTER ---
 
+    /**
+     * Get the path of the photo
+     *
+     * @param context Context
+     * @return Path of the photo
+     */
     public String getUri(Context context) {
         String uri = "";
         File file = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -100,11 +130,11 @@ public class Photo implements Parcelable {
 
     // --- SETTER ---
 
-    public void setUri(String uri) {
+    public void setUri(@NonNull String uri) {
         this.uri = uri;
     }
 
-    public void setPropertyID(String propertyID) {
+    public void setPropertyID(@NonNull String propertyID) {
         this.propertyID = propertyID;
     }
 

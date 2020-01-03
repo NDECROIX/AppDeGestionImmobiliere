@@ -16,6 +16,9 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.util.Objects;
 
+/**
+ * Link point of interest with a property
+ */
 @Entity(primaryKeys = {"property_id", "poi_name"},
         foreignKeys = @ForeignKey(entity = Property.class,
                 parentColumns = "id",
@@ -46,11 +49,14 @@ public class PoiNextProperty implements Parcelable {
     public PoiNextProperty() {
     }
 
-    // --- UTILS ---
-
+    /**
+     * Create hash with propertyId and poi name to create an unique id for firebase database
+     *
+     * @return Unique id
+     */
     @Ignore
     @Exclude
-    public String getHash(){
+    public String getHash() {
         String value = this.propertyID + this.poiName;
         return Utils.convertStringMd5(value);
     }
@@ -72,6 +78,7 @@ public class PoiNextProperty implements Parcelable {
         }
     };
 
+    // Content provider
     public static PoiNextProperty fromContentValues(ContentValues values) {
         final PoiNextProperty poiNextProperty = new PoiNextProperty();
         if (values.containsKey("propertyID"))

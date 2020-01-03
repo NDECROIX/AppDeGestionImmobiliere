@@ -43,6 +43,7 @@ import static com.openclassrooms.realestatemanager.controllers.activities.MainAc
 public class AgentActivity extends BaseActivity implements AgentActivityRecyclerViewAdapter.OnClickAgentListener,
         AgentDialogFragment.CreateAgentListener, UpdateData.UpdateDataListener {
 
+    // Views
     @BindView(R.id.activity_agent_layout)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.activity_agent_recycler_view)
@@ -54,8 +55,13 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
     @BindView(R.id.agent_activity_progress_bar)
     ProgressBar progressBar;
 
+    // Agent RecyclerView adapter
     private AgentActivityRecyclerViewAdapter adapter;
+
+    // View model
     private PropertyViewModel propertyViewModel;
+
+    // List of agent from the local database
     private List<Agent> agents;
 
     @Override
@@ -63,23 +69,44 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent);
         ButterKnife.bind(this);
+        configToolbar();
+        configProgressBar();
+        configViewModel();
+        configRecyclerView();
+    }
+
+    /**
+     * Configure the toolbar
+     */
+    private void configToolbar() {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Agents");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        configProgressBar();
-        configViewModel();
-        configObserver();
-        configRecyclerView();
     }
 
+    /**
+     * Configure the progress bar that starts during data synchronization
+     */
     private void configProgressBar() {
         progressBar.setVisibility(View.GONE);
         progressBar.getIndeterminateDrawable().setColorFilter(
                 this.getResources().getColor(R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
+    /**
+     * Configure the property view model
+     */
+    private void configViewModel() {
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
+        configObserver();
+    }
+
+    /**
+     * Create an observer on the Agents
+     */
     private void configObserver() {
         propertyViewModel.getAgents().observe(this, agents -> {
             this.agents = agents;
@@ -87,11 +114,9 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         });
     }
 
-    private void configViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
-        this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
-    }
-
+    /**
+     * Configure the recycler view
+     */
     private void configRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -100,6 +125,9 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         configureSwipeRefreshLayout();
     }
 
+    /**
+     * Reload data from the firebase database when swipe the recycler view
+     */
     private void configureSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             synchronizeData();
@@ -107,9 +135,12 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         });
     }
 
+    /**
+     * Synchronize data with firebase database
+     */
     @AfterPermissionGranted(RC_READ_WRITE)
     public void synchronizeData() {
-        if (progressBar != null && progressBar.getVisibility() != View.GONE){
+        if (progressBar != null && progressBar.getVisibility() != View.GONE) {
             return;
         }
         if (!Utils.isInternetAvailable(this)) {
@@ -137,21 +168,39 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         }
     }
 
+    /**
+     * Open a dialog box with the agent data when the user clicks on an agent item.
+     *
+     * @param agent Agent to update
+     */
     @Override
     public void onClickAgent(Agent agent) {
         startAgentDialogFragment(agent);
     }
 
+    /**
+     * Open a dialog box to create an agent
+     */
     @OnClick(R.id.activity_agent_fab)
     public void addAgent() {
         startAgentDialogFragment(null);
     }
 
+    /**
+     * Call the fragment that display a dialog box to create  or update an agent.
+     *
+     * @param agent Agent to update, can be null if create
+     */
     private void startAgentDialogFragment(Agent agent) {
         AgentDialogFragment agentDialogFragment = new AgentDialogFragment(this, this, this.getLayoutInflater(), agent);
         agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
 
+    /**
+     * Add the agent in the local database
+     *
+     * @param agent Agent to add in the database
+     */
     @Override
     public void createAgent(Agent agent) {
         if (agents == null || !agents.contains(agent)) {
@@ -164,6 +213,11 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
         }
     }
 
+    /**
+     * Update an agent in the local database
+     *
+     * @param agent Agent to update
+     */
     @Override
     public void updateAgent(Agent agent) {
         propertyViewModel.updateAgent(agent);
@@ -172,10 +226,13 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
                 Snackbar.LENGTH_SHORT).show();
     }
 
+    /**
+     * Call when the synchronization with Firebase database is complete
+     */
     @Override
     public void synchronisationComplete() {
         customToast(this, "Synchronization complete");
-        if (progressBar != null){
+        if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
     }

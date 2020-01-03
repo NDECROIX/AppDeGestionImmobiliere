@@ -23,6 +23,9 @@ import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
 
+/**
+ * Application database
+ */
 @Database(entities = {Property.class, Photo.class, Poi.class, PoiNextProperty.class, Type.class, Agent.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -42,7 +45,12 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract AgentDao agentDAO();
 
-    //--- INSTANCE ---
+    /**
+     * get a singleton instance of the database
+     *
+     * @param context Application context
+     * @return AppDatabase
+     */
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -57,27 +65,44 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    /**
+     * Prepopulate database with points of interest and types
+     *
+     * @return Callback
+     */
     private static Callback prePopulateDatabase() {
         return new Callback() {
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
-                for (Poi poi : Poi.getAllPoi()){
+                for (Poi poi : Poi.getAllPoi()) {
                     db.insert("Poi", OnConflictStrategy.IGNORE, insertPoi(poi));
                 }
-                for (Type type : Type.getAllTypes()){
+                for (Type type : Type.getAllTypes()) {
                     db.insert("Type", OnConflictStrategy.IGNORE, insertType(type));
                 }
             }
         };
     }
 
+    /**
+     * Prepopulate the database with the points of interest
+     *
+     * @param poi poi to add
+     * @return ContentValues
+     */
     private static ContentValues insertPoi(Poi poi) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", poi.getName());
         return contentValues;
     }
 
+    /**
+     * Prepopulate the database with type
+     *
+     * @param type type to add
+     * @return ContentValues
+     */
     private static ContentValues insertType(Type type) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", type.getName());

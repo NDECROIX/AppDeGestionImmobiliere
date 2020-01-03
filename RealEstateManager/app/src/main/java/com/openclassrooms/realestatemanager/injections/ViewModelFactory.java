@@ -14,8 +14,12 @@ import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.util.concurrent.Executor;
 
+/**
+ * View model factory
+ */
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
+    // Repositories
     private final PhotoDataRepository photoDataRepository;
     private final PoiDataRepository poiDataRepository;
     private final TypeDataRepository typeDataRepository;
@@ -24,11 +28,12 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private final AgentDataRepository agentDataRepository;
     private final Executor executor;
 
-    public ViewModelFactory(PhotoDataRepository photoDataRepository,
-                            PoiDataRepository poiDataRepository,
-                            TypeDataRepository typeDataRepository,
-                            PoiNextPropertyDataRepository poiNextPropertyDataRepository,
-                            PropertyDataRepository propertyDataRepository, AgentDataRepository agentDataRepository, Executor executor) {
+    // View model for PropertyViewModel
+    ViewModelFactory(PhotoDataRepository photoDataRepository,
+                     PoiDataRepository poiDataRepository,
+                     TypeDataRepository typeDataRepository,
+                     PoiNextPropertyDataRepository poiNextPropertyDataRepository,
+                     PropertyDataRepository propertyDataRepository, AgentDataRepository agentDataRepository, Executor executor) {
         this.photoDataRepository = photoDataRepository;
         this.poiDataRepository = poiDataRepository;
         this.typeDataRepository = typeDataRepository;
@@ -42,7 +47,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(PropertyViewModel.class)){
+        if (modelClass.isAssignableFrom(PropertyViewModel.class)) {
             return (T) new PropertyViewModel(photoDataRepository, poiDataRepository, typeDataRepository,
                     poiNextPropertyDataRepository, propertyDataRepository, agentDataRepository, executor);
         }

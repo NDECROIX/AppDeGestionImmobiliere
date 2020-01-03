@@ -22,6 +22,9 @@ import com.openclassrooms.realestatemanager.view.holders.PropertyViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter that binds properties to view
+ */
 public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<PropertyViewHolder> {
 
     public interface PropertyOnClickListener {
@@ -116,12 +119,14 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         });
     }
 
-
     @Override
     public int getItemCount() {
         return properties.size();
     }
 
+    /**
+     * Filter the properties
+     */
     private void filterProperty() {
         if (filter == null) {
             return;

@@ -10,9 +10,13 @@ import androidx.room.PrimaryKey;
 
 import java.util.Objects;
 
+/**
+ * Point of interest
+ */
 @Entity
 public class Poi {
 
+    // Name
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "name")
@@ -23,12 +27,17 @@ public class Poi {
     }
 
     @Ignore
-    public Poi(){
+    public Poi() {
 
     }
 
+    /**
+     * return all points of interest
+     *
+     * @return List of point of interest
+     */
     @Ignore
-    public static Poi[] getAllPoi(){
+    public static Poi[] getAllPoi() {
         return new Poi[]{
                 new Poi("School"),
                 new Poi("Police"),
@@ -37,7 +46,7 @@ public class Poi {
                 new Poi("Gym"),
                 new Poi("Restaurant"),
                 new Poi("Garage"),
-                new Poi("Churches"),
+                new Poi("Church"),
                 new Poi("Bank"),
                 new Poi("Cafe"),
                 new Poi("Dentist"),
@@ -49,8 +58,8 @@ public class Poi {
         };
     }
 
-    // --- UTILS ---
 
+    // Content provider
     public static Poi fromContentValues(ContentValues values) {
         final Poi poi = new Poi();
         if (values.containsKey("name")) poi.setName(values.getAsString("name"));
