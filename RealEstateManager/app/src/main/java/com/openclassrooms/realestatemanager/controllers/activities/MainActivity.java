@@ -365,7 +365,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        getSupportFragmentManager().beginTransaction().remove(detailFragment).commitAllowingStateLoss();
+        if (frameLayoutDetail != null) {
+            getSupportFragmentManager().beginTransaction().remove(detailFragment).commitAllowingStateLoss();
+        }
         outState.putSerializable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
         outState.putSerializable(PHOTOS, (Serializable) propertyViewModel.getCurrentPhotosProperty().getValue());
         outState.putSerializable(POIS, (Serializable) propertyViewModel.getCurrentPoisNextProperty().getValue());

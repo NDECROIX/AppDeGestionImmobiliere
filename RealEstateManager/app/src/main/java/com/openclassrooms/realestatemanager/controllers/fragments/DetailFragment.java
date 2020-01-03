@@ -1,9 +1,12 @@
 package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +21,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -41,6 +45,8 @@ import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.DetailFragmentPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -56,7 +62,7 @@ import static android.Manifest.permission.INTERNET;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Property detail
  */
 public class DetailFragment extends Fragment implements OnMapReadyCallback, DetailFragmentPhotoRecyclerViewAdapter.OnClickPhotoListener {
 
@@ -188,6 +194,12 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
 
     @Override
     public void onClickPhoto(Photo photo) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri photoURI = FileProvider.getUriForFile(context,
+                getString(R.string.activity_edit_authority_uri), new File(photo.getUri(context)));
+        intent.setDataAndType(photoURI, "image/*");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 
     private void displayPropertyData(Property property) {
