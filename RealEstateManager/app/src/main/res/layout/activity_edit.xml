@@ -499,99 +499,125 @@
                 app:layout_constraintStart_toEndOf="@id/activity_edit_check_box_grp_poi_left"
                 app:layout_constraintTop_toBottomOf="@id/activity_edit_tv_poi" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/activity_edit_til_date"
-                android:layout_width="150dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activity_edit_layout_entry_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/gutter"
                 android:layout_marginEnd="@dimen/gutter"
-                android:hint="@string/activity_edit_til_date_hint"
-                app:helperText="@string/activity_edit_til_date_helper"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/activity_edit_layout_date_sell"
                 app:layout_constraintTop_toBottomOf="@+id/activity_edit_check_box_grp_poi_left">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_edit_tie_date"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_edit_til_date"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="date"
-                    android:nextFocusDown="@+id/activity_edit_ib_agent" />
+                    android:hint="@string/activity_edit_til_date_hint"
+                    app:helperText="@string/activity_edit_til_date_helper"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/activity_edit_id_calendar"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_edit_tie_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:inputType="date"
+                        android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
-            <ImageButton
-                android:id="@+id/activity_edit_id_calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/gutter"
-                android:layout_marginEnd="@dimen/margin"
-                android:background="@null"
-                android:contentDescription="@string/activity_edit_id_calendar"
-                android:src="@drawable/ic_calendar_24"
-                app:layout_constraintStart_toEndOf="@id/activity_edit_til_date"
-                app:layout_constraintTop_toTopOf="@+id/activity_edit_til_date" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/activity_edit_til_date_sell"
-                android:layout_width="150dp"
+                <ImageButton
+                    android:id="@+id/activity_edit_id_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/activity_edit_id_calendar"
+                    android:src="@drawable/ic_calendar_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activity_edit_layout_date_sell"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/gutter"
                 android:layout_marginEnd="@dimen/gutter"
-                android:hint="@string/activity_edit_til_date_sell_hint"
-                app:helperText="@string/activity_edit_til_date_sell_helper"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/activity_edit_layout_entry_date"
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_check_box_grp_poi_left">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_edit_tie_date_sell"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/activity_edit_til_date_sell"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="date"
-                    android:nextFocusDown="@+id/activity_edit_ib_agent" />
+                    android:layout_marginEnd="@dimen/gutter"
+                    android:hint="@string/activity_edit_til_date_sell_hint"
+                    app:helperText="@string/activity_edit_til_date_sell_helper"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/activity_edit_id_calendar_sell"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_edit_tie_date_sell"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:inputType="date"
+                        android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
-            <ImageButton
-                android:id="@+id/activity_edit_id_calendar_sell"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/gutter"
-                android:layout_marginEnd="@dimen/margin"
-                android:background="@null"
-                android:contentDescription="@string/activity_edit_id_calendar_sell"
-                android:src="@drawable/ic_calendar_24"
-                app:layout_constraintStart_toEndOf="@id/activity_edit_til_date_sell"
-                app:layout_constraintTop_toTopOf="@+id/activity_edit_til_date_sell" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/activity_edit_id_calendar_sell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="@string/activity_edit_id_calendar_sell"
+                    android:src="@drawable/ic_calendar_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/activity_edit_til_date_sell" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
                 android:id="@+id/activity_edit_ib_agent"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginTop="@dimen/gutter"
                 android:layout_marginEnd="@dimen/gutter"
+                android:layout_marginBottom="@dimen/margin"
                 android:background="@null"
                 android:contentDescription="@string/activity_edit_ib_agent"
                 android:src="@drawable/ic_person_add_24"
+                app:layout_constraintEnd_toStartOf="@+id/activity_edit_tv_agent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date_sell" />
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_layout_entry_date" />
 
             <TextView
                 android:id="@+id/activity_edit_tv_agent"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingStart="@dimen/gutter"
+                android:paddingEnd="@dimen/gutter"
                 android:layout_marginTop="@dimen/gutter"
                 android:layout_marginEnd="@dimen/margin"
-                android:paddingBottom="?actionBarSize"
+                android:layout_marginBottom="@dimen/margin"
                 android:text="@string/activity_edit_tv_agent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_edit_ib_agent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_edit_til_date_sell" />
+                app:layout_constraintTop_toBottomOf="@+id/activity_edit_layout_entry_date" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
