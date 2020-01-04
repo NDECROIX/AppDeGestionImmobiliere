@@ -286,6 +286,7 @@ public class EditActivityViewHolder {
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
             Date date = simpleDateFormat.parse(tieEntryDate.getText().toString());
+            assert date != null;
             property.setEntryDate(date.getTime());
         } catch (ParseException p) {
             callback.error("Error on the date");
@@ -297,6 +298,7 @@ public class EditActivityViewHolder {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieSaleDate.getText().toString());
+                assert date != null;
                 property.setSaleDate(date.getTime());
                 property.setSold(true);
             } catch (ParseException p) {

@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     NavigationView navigationView;
     @Nullable
     @BindView(R.id.activity_main_frame_layout_detail)
-    FrameLayout frameLayoutDetail;
+    public FrameLayout frameLayoutDetail;
     @BindView(R.id.main_activity_tv_empty)
     TextView noProperty;
     @BindView(R.id.main_activity_progress_bar)
@@ -123,7 +124,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                     }
                     // Get new Instance ID token
                     String newToken = task.getResult().getToken();
-                    if (lastToken != null && !lastToken.equals(newToken)) {
+                    if (!lastToken.equals(newToken)) {
                         subscribeToTopics();
                         sharedPref.edit().putString(SUBSCRIBE_TOPICS_TOKEN, newToken).apply();
                     }
@@ -364,6 +365,21 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onResume() {
+        if (frameLayoutDetail != null && !detailFragment.isInLayout()) {
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.activity_main_frame_layout_detail, detailFragment)
+                    .commitNow();
+        }
+        super.onResume();
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (frameLayoutDetail != null) {
             getSupportFragmentManager().beginTransaction().remove(detailFragment).commitAllowingStateLoss();
@@ -377,9 +393,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @Override
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
         property = (Property) savedInstanceState.getSerializable(PROPERTY);
         photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
         poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

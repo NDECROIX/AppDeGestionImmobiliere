@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,7 +45,6 @@ import com.openclassrooms.realestatemanager.view.adapters.DetailFragmentPhotoRec
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -140,8 +138,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     }
 
     private void configToolbar() {
-        if (getActivity() instanceof MainActivity &&
-                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getActivity() instanceof MainActivity && ((MainActivity) context).frameLayoutDetail != null) {
             return;
         }
         if (getActivity() instanceof MapsActivity) {

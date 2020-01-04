@@ -30,6 +30,7 @@ import com.openclassrooms.realestatemanager.view.holders.FilterViewHolder;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -124,8 +125,10 @@ public class FilterDialogFragment extends DialogFragment implements SeekBar.OnSe
 
     private void configObserver() {
         displayBoroughRadioBtn();
-        propertyViewModel.getTypes().observe(this, this::updateTypeRadioBtn);
-        propertyViewModel.getAllPoi().observe(this, this::updatePoiCheckBox);
+        updateTypeRadioBtn(Arrays.asList(Type.getAllTypes()));
+        updatePoiCheckBox(Arrays.asList(Poi.getAllPoi()));
+        //propertyViewModel.getTypes().observe(this, this::updateTypeRadioBtn);
+        //propertyViewModel.getAllPoi().observe(this, this::updatePoiCheckBox);
     }
 
     /**

@@ -127,6 +127,7 @@
                         android:id="@+id/fragment_filter_dialog_tie_entry_date_to"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
                         android:inputType="date" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -219,6 +220,7 @@
                         android:id="@+id/fragment_filter_dialog_tie_sale_date_to"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
                         android:inputType="date" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -350,9 +352,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_surface_24"
-                    android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:nextFocusDown="@+id/fragment_filter_dialog_tie_price_min" />
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

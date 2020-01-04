@@ -40,6 +40,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
                     android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -58,6 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
                     android:nextFocusDown="@+id/activity_edit_ib_agent" />
 
             </com.google.android.material.textfield.TextInputLayout>
