@@ -442,7 +442,8 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                         saveBitmapToThePath(data);
                     }
                     TextInputEditText title = view.findViewById(R.id.activity_edit_dialog_tie_title);
-                    Photo photo = new Photo(currentPhotoPath, null, (title.getText() == null) ? "" : title.getText().toString());
+                    String name = Photo.getName(currentPhotoPath);
+                    Photo photo = new Photo(name, null, (title.getText() == null) ? "" : title.getText().toString());
                     adapter.setPhoto(photo);
                     dialog.dismiss();
                 })
@@ -666,7 +667,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         if (this.propertyPhotos != null && !this.propertyPhotos.isEmpty())
             for (Photo photo : propertyPhotos) {
                 propertyViewModel.deletePhoto(photo);
-                File fileToDelete = new File(photo.getUri());
+                File fileToDelete = new File(photo.getName());
                 fileToDelete.deleteOnExit();
             }
     }
@@ -674,7 +675,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     @Override
     public void onClickDeletePhoto(Photo photo) {
         if (propertyToUpdate != null) {
-            File photoToDelete = new File(photo.getUri());
+            File photoToDelete = new File(photo.getName());
             photoToDelete.deleteOnExit();
         }
     }

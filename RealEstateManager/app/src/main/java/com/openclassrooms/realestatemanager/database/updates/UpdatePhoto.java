@@ -138,7 +138,7 @@ class UpdatePhoto {
         // Add photo to database
         PhotoHelper.updatePhoto(photo.getHash(), photo).addOnFailureListener(callback::error);
         // Add photo to storage
-        StoragePhotoHelper.putFileOnFirebaseStorage(photo.getPropertyID(), photo.getUri())
+        StoragePhotoHelper.putFileOnFirebaseStorage(photo.getPropertyID(), photo.getUri(context))
                 .addOnFailureListener(callback::error);
     }
 
@@ -192,7 +192,7 @@ class UpdatePhoto {
      * @param photo Photo
      */
     private void addPhotoInRoom(Photo photo) {
-        StoragePhotoHelper.getUrlPicture(photo.getPropertyID(), photo.getUri()).addOnCompleteListener(task -> {
+        StoragePhotoHelper.getUrlPicture(photo.getPropertyID(), photo.getName()).addOnCompleteListener(task -> {
             Uri downloadUri = task.getResult();
             if (downloadUri != null) {
                 Executor executor = Executors.newSingleThreadExecutor();

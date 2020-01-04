@@ -33,7 +33,7 @@ public class StoragePhotoHelper {
      * @return Upload task
      */
     public static UploadTask putFileOnFirebaseStorage(String propertyId, String imageUid) {
-        return getStorageReference(propertyId).child(Utils.convertStringMd5(imageUid)).putFile(Uri.parse("file:" + imageUid));
+        return getStorageReference(propertyId).child(Utils.convertStringMd5(imageUid)).putFile(Uri.parse("file://" + imageUid));
     }
 
     /**
@@ -56,11 +56,12 @@ public class StoragePhotoHelper {
 
     /**
      * Retrieve photo from database and saves it in a path
+     *
      * @param photo Photo to retrieve
-     * @param path Path where save the photo
+     * @param path  Path where save the photo
      * @return File download task
      */
-    public static FileDownloadTask savePictureToFile(Photo photo, String path){
+    public static FileDownloadTask savePictureToFile(Photo photo, String path) {
         return getStorageReference(photo.getPropertyID()).child(photo.getHash()).getFile(Uri.parse(path));
     }
 }

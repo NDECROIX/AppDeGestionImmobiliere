@@ -298,7 +298,6 @@ public class EditActivityViewHolder {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieSaleDate.getText().toString());
-                assert date != null;
                 property.setSaleDate(date.getTime());
                 property.setSold(true);
             } catch (ParseException p) {

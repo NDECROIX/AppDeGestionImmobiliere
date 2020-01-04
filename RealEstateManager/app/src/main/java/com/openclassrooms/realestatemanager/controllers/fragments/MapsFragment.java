@@ -193,7 +193,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             }
             Glide.with(this)
                     .asBitmap()
-                    .load(photos.get(0).getUri())
+                    .load(photos.get(0).getUri(context))
                     .apply(RequestOptions.circleCropTransform())
                     .into(new CustomTarget<Bitmap>(80, 80) {
                         @Override

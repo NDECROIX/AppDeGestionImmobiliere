@@ -50,7 +50,7 @@ public class DetailFragmentPhotoRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(@NonNull DetailPhotoViewHolder holder, int position) {
         Photo photo = photos.get(position);
-        Glide.with(holder.itemView).load(photo.getUri()).into(holder.photo);
+        Glide.with(holder.itemView).load(photo.getUri(holder.itemView.getContext())).into(holder.photo);
         holder.title.setText(photo.getDescription());
         holder.itemView.setOnClickListener(l -> callback.onClickPhoto(photo));
     }

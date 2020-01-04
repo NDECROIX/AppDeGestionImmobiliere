@@ -59,7 +59,7 @@ public class EditActivityPhotoRecyclerViewAdapter extends RecyclerView.Adapter<P
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         Photo photo = photos.get(position);
-        Glide.with(holder.itemView).load(photo.getUri()).into(holder.photo);
+        Glide.with(holder.itemView).load(photo.getUri(holder.itemView.getContext())).into(holder.photo);
         holder.title.setText(photo.getDescription());
         holder.deleteBtn.setOnClickListener(l -> {
             callback.onClickDeletePhoto(photo);
