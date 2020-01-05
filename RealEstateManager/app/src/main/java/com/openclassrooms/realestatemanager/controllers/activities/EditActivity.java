@@ -42,6 +42,7 @@ import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
 import com.openclassrooms.realestatemanager.utils.Utils;
+import com.openclassrooms.realestatemanager.utils.UtilsPhoto;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.view.holders.EditActivityViewHolder;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
@@ -414,7 +415,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         return BitmapFactory.decodeFile(currentPhotoPath, bmOptions);
     }
 
-
     /**
      * Display a dialog to add title.
      * The photo is not added to database so we don't need to add the property id.
@@ -457,18 +457,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      * @param data Bitmap uri
      */
     private void saveBitmapToThePath(Uri data) {
-        try {
-            InputStream iStream = getContentResolver().openInputStream(data);
-            byte[] inputData = new byte[0];
-            if (iStream != null) {
-                inputData = Utils.getBytes(iStream);
-            }
-            FileOutputStream out = new FileOutputStream(createImageFile());
-            out.write(inputData);
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       currentPhotoPath = UtilsPhoto.saveBitmapToThePath(this, data);
     }
 
     @Override
@@ -529,16 +518,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      * @throws IOException Create temp file
      */
     private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        // Save a file: path for use with ACTION_VIEW intents
+        File image = UtilsPhoto.createImageFile(this);
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -547,11 +527,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      * Add the current picture to the gallery
      */
     private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
+        UtilsPhoto.galleryAddPic(this, currentPhotoPath);
     }
 
     /**

@@ -14,6 +14,8 @@ import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.utils.UtilsPhoto;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -40,10 +42,10 @@ class UpdatePhoto {
     private LifecycleOwner lifecycleOwner;
     // Properties updated in room from firebase database
     private List<String> propertiesDown;
-    // Call on the api one after one to respect the unique constraint
-    private int count = 0;
     // Activity context
     private Context context;
+
+    private List<Photo> photosFirebase;
 
     /**
      * Constructor
@@ -72,11 +74,7 @@ class UpdatePhoto {
             public void onChanged(List<Photo> photos) {
                 if (photosRoom == null) {
                     photosRoom = new ArrayList<>(photos);
-                    if (!photosRoom.isEmpty()) {
-                        updatePhotos();
-                    } else {
-                        getNewPhotosFromFirebase();
-                    }
+                    getPhotosFromFirebase();
                 }
                 propertyViewModel.getPhotos().removeObserver(this);
             }
@@ -84,40 +82,44 @@ class UpdatePhoto {
     }
 
     /**
-     * Compare local photos with distance photos.
-     * If photo does not exist on the firebase database and the property has been updated from
-     * the firebase database, delete the photo from the local database, otherwise upload it on
-     * the firebase database.
+     * Get photos from Firebase database
      */
-    private void updatePhotos() {
-        if (count >= photosRoom.size()) return;
-        final int count = this.count;
-        PhotoHelper.getPhoto(photosRoom.get(count).getHash()).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                Photo photoFirebase = task.getResult().toObject(Photo.class);
-                if (photoFirebase == null) {
-                    if (propertiesDown.contains(photosRoom.get(count).getPropertyID())) {
-                        deletePhotoFromRoom(photosRoom.get(count));
-                    } else {
-                        addPhotoToFirebase(photosRoom.get(count));
-                    }
-                }
-            } else if (task.isSuccessful() && task.getResult() == null) {
-                if (propertiesDown.contains(photosRoom.get(count).getPropertyID())) {
-                    deletePhotoFromRoom(photosRoom.get(count));
-                } else {
-                    addPhotoToFirebase(photosRoom.get(count));
-                }
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
+    private void getPhotosFromFirebase(){
+        PhotoHelper.getPhotos().addOnCompleteListener( task -> {
+            photosFirebase = new ArrayList<>();
+            if (task.isSuccessful() && task.getResult() != null){
+                photosFirebase.addAll(task.getResult().toObjects(Photo.class));
             }
-            this.count++;
-            if (this.count < photosRoom.size()) {
-                updatePhotos();
-            } else {
-                getNewPhotosFromFirebase();
-            }
+            syncData();
         });
+    }
+
+    /**
+     * Synchronize data between databases
+     */
+    private void syncData() {
+        // Download photos from Firebase database
+        for (Photo photoFirebase : photosFirebase){
+            final int index = photosRoom.indexOf(photoFirebase);
+            if (index < 0){
+                if (propertiesDown.contains(photoFirebase.getPropertyID())) {
+                    addPhotoInRoom(photoFirebase);
+                } else {
+                    deletePhotoFromFirebase(photoFirebase);
+                }
+            } else {
+                photosRoom.remove(index);
+            }
+        }
+        // Upload photos in Firebase database
+        for (Photo photoRoom : photosRoom){
+            if (propertiesDown.contains(photoRoom.getPropertyID())){
+                deletePhotoFromRoom(photoRoom);
+            } else {
+                addPhotoToFirebase(photoRoom);
+            }
+        }
+        callback.photosSynchronized();
     }
 
     /**
@@ -127,6 +129,7 @@ class UpdatePhoto {
      */
     private void deletePhotoFromRoom(Photo photo) {
         propertyViewModel.deletePhoto(photo);
+        new File(photo.getUri(context)).deleteOnExit();
     }
 
     /**
@@ -138,32 +141,8 @@ class UpdatePhoto {
         // Add photo to database
         PhotoHelper.updatePhoto(photo.getHash(), photo).addOnFailureListener(callback::error);
         // Add photo to storage
-        StoragePhotoHelper.putFileOnFirebaseStorage(photo.getPropertyID(), photo.getUri(context))
+        StoragePhotoHelper.putFileOnFirebaseStorage(photo.getPropertyID(), photo.getHash(), photo.getUri(context))
                 .addOnFailureListener(callback::error);
-    }
-
-    /**
-     * Get photos from the firebase database that does not exist in the local database
-     */
-    private void getNewPhotosFromFirebase() {
-        PhotoHelper.getPhotos().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                List<Photo> photos = new ArrayList<>(task.getResult().toObjects(Photo.class));
-                for (Photo photo : photos) {
-                    if (!photosRoom.contains(photo)) {
-                        if (propertiesDown.contains(photo.getPropertyID())) {
-                            addPhotoInRoom(photo);
-                        } else {
-                            deletePhotoFromFirebase(photo);
-                        }
-
-                    }
-                }
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
-            }
-            callback.photosSynchronized();
-        });
     }
 
     /**
@@ -172,16 +151,8 @@ class UpdatePhoto {
      * @param photo Photo to delete
      */
     private void deletePhotoFromFirebase(Photo photo) {
-        StoragePhotoHelper.getStorageReference(photo.getPropertyID()).listAll().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                for (StorageReference reference : task.getResult().getItems()) {
-                    if (reference.getPath().contains(photo.getHash())) {
-                        StoragePhotoHelper.deleteFileFromFirebaseStorage(reference.getPath());
-                        break;
-                    }
-                }
-            }
-        }).addOnFailureListener(callback::error);
+        StoragePhotoHelper.deleteFileFromFirebaseStorage(photo.getPropertyID(), photo.getHash())
+                .addOnFailureListener(callback::error);
 
         PhotoHelper.deletePhoto(photo.getHash()).addOnFailureListener(callback::error);
     }
@@ -192,20 +163,8 @@ class UpdatePhoto {
      * @param photo Photo
      */
     private void addPhotoInRoom(Photo photo) {
-        StoragePhotoHelper.getUrlPicture(photo.getPropertyID(), photo.getName()).addOnCompleteListener(task -> {
-            Uri downloadUri = task.getResult();
-            if (downloadUri != null) {
-                Executor executor = Executors.newSingleThreadExecutor();
-                executor.execute(() -> {
-                    Bitmap bitmap = UtilsPhoto.getBitmapFromURL(downloadUri.toString());
-                    if (bitmap != null) {
-                        String path = photo.getUri(context);
-                        StoragePhotoHelper.savePictureToFile(photo, path).addOnSuccessListener(voidTask ->
-                                propertyViewModel.insertPropertyPhoto(photo)
-                        ).addOnFailureListener(callback::error);
-                    }
-                });
-            }
-        }).addOnFailureListener(callback::error);
+        StoragePhotoHelper.savePictureToFile(photo.getPropertyID(), photo.getHash(), photo.getUri(context)).addOnSuccessListener(voidTask ->
+                propertyViewModel.insertPropertyPhoto(photo)
+        ).addOnFailureListener(callback::error);
     }
 }

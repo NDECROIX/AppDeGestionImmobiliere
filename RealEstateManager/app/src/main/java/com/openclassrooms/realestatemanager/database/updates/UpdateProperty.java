@@ -31,8 +31,8 @@ class UpdateProperty {
     private LifecycleOwner lifecycleOwner;
     // Properties updated from the firebase database
     private List<String> propertiesDown;
-    // Call on the api one after other to respect the unique constraint
-    private int count;
+
+    private List<Property> propertiesFirebase;
 
     /**
      * Constructor
@@ -57,11 +57,7 @@ class UpdateProperty {
                 if (propertiesRoom == null) {
                     propertiesDown = new ArrayList<>();
                     propertiesRoom = new ArrayList<>(properties);
-                    if (!propertiesRoom.isEmpty()) {
-                        updateProperties();
-                    } else {
-                        getNewPropertiesFromFirebase();
-                    }
+                    getPropertiesFromFirebase();
                 }
                 propertyViewModel.getProperties().removeObserver(this);
             }
@@ -69,36 +65,39 @@ class UpdateProperty {
     }
 
     /**
-     * Compare local properties with distance properties.
-     * If update date is more recent on firebase, download data otherwise upload data.
+     * Get properties from firebase database
      */
-    private void updateProperties() {
-        if (this.count >= propertiesRoom.size()) return;
-        final int count = this.count;
-        PropertyHelper.getProperty(propertiesRoom.get(count).getId()).addOnCompleteListener(task -> {
+    private void getPropertiesFromFirebase() {
+        PropertyHelper.getProperties().addOnCompleteListener(task -> {
+            propertiesFirebase = new ArrayList<>();
             if (task.isSuccessful() && task.getResult() != null) {
-                Property property = task.getResult().toObject(Property.class);
-                if (property != null && property.getUpdateDate() != propertiesRoom.get(count).getUpdateDate()) {
-                    if (property.getUpdateDate() > propertiesRoom.get(count).getUpdateDate()) {
-                        updatePropertyInRooms(property);
-                    } else if (property.getUpdateDate() < propertiesRoom.get(count).getUpdateDate()) {
-                        updatePropertyInFirebase(propertiesRoom.get(count));
-                    }
-                } else if (property == null) {
-                    updatePropertyInFirebase(propertiesRoom.get(count));
-                }
-            } else if (task.isSuccessful() && task.getResult() == null) {
-                updatePropertyInFirebase(propertiesRoom.get(count));
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
+                propertiesFirebase.addAll(task.getResult().toObjects(Property.class));
             }
-            this.count++;
-            if (this.count < propertiesRoom.size()) {
-                updateProperties();
-            } else {
-                getNewPropertiesFromFirebase();
-            }
+            syncData();
         });
+    }
+
+    /**
+     * Sync data between local database and firebase database
+     */
+    private void syncData() {
+        for (Property propertyFirebase : propertiesFirebase) {
+            final int index = propertiesRoom.indexOf(propertyFirebase);
+            if (index >= 0) {
+                if (propertyFirebase.getUpdateDate() > propertiesRoom.get(index).getUpdateDate()) {
+                    updatePropertyInRooms(propertyFirebase);
+                } else if (propertyFirebase.getUpdateDate() < propertiesRoom.get(index).getUpdateDate()) {
+                    updatePropertyInFirebase(propertiesRoom.get(index));
+                }
+                propertiesRoom.remove(index);
+            } else {
+                addPropertyInRoom(propertyFirebase);
+            }
+        }
+        for (Property propertyRoom : propertiesRoom) {
+            updatePropertyInFirebase(propertyRoom);
+        }
+        callback.propertiesSynchronized(propertiesDown);
     }
 
     /**
@@ -118,26 +117,6 @@ class UpdateProperty {
     private void updatePropertyInRooms(Property property) {
         propertiesDown.add(property.getId());
         propertyViewModel.updateProperty(property);
-    }
-
-    /**
-     * Get properties from the firebase database and download any properties that do not exist
-     * in the local database
-     */
-    private void getNewPropertiesFromFirebase() {
-        PropertyHelper.getProperties().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                List<Property> properties = new ArrayList<>(task.getResult().toObjects(Property.class));
-                for (Property property : properties) {
-                    if (!propertiesRoom.contains(property)) {
-                        addPropertyInRoom(property);
-                    }
-                }
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
-            }
-            callback.propertiesSynchronized(propertiesDown);
-        });
     }
 
     /**

@@ -31,8 +31,8 @@ class UpdatePoisNextProperties {
     private LifecycleOwner lifecycleOwner;
     // Properties updated in room from firebase database
     private List<String> propertiesDown;
-    // Call on the api one after one to respect the unique constraint
-    private int count = 0;
+
+    private List<PoiNextProperty> poisNextPropertiesFirebase;
 
     /**
      * Constructor
@@ -59,11 +59,7 @@ class UpdatePoisNextProperties {
             public void onChanged(List<PoiNextProperty> pois) {
                 if (poisNextPropertiesRoom == null) {
                     poisNextPropertiesRoom = new ArrayList<>(pois);
-                    if (!poisNextPropertiesRoom.isEmpty()) {
-                        updatePoisNextProperties();
-                    } else {
-                        getNewPoisFromFirebase();
-                    }
+                    getPoisNextPropertiesFromFirebase();
                 }
                 propertyViewModel.getPoisNextProperties().removeObserver(this);
             }
@@ -71,38 +67,42 @@ class UpdatePoisNextProperties {
     }
 
     /**
-     * Compare the Room value with the Firebase Value if Firebase does not contain the value and the property
-     * of the value has been updated we remove the value from Room database otherwise  we add it to Firebase.
+     * Get pois from firebase database
      */
-    private void updatePoisNextProperties() {
-        if (count >= poisNextPropertiesRoom.size()) return;
-        final int count = this.count;
-        PoisNexPropertiesHelper.getPoiNextProperty(poisNextPropertiesRoom.get(count).getHash()).addOnCompleteListener(task -> {
+    private void getPoisNextPropertiesFromFirebase() {
+        PoisNexPropertiesHelper.getPoisNextProperties().addOnCompleteListener(task -> {
+            poisNextPropertiesFirebase = new ArrayList<>();
             if (task.isSuccessful() && task.getResult() != null) {
-                PoiNextProperty poisFirebase = task.getResult().toObject(PoiNextProperty.class);
-                if (poisFirebase == null) {
-                    if (propertiesDown.contains(poisNextPropertiesRoom.get(count).getPropertyID())) {
-                        deletePoiFromRooms(poisNextPropertiesRoom.get(count));
-                    } else {
-                        addPoiToFirebase(poisNextPropertiesRoom.get(count));
-                    }
-                }
-            } else if (task.isSuccessful() && task.getResult() == null) {
-                if (propertiesDown.contains(poisNextPropertiesRoom.get(count).getPropertyID())) {
-                    deletePoiFromRooms(poisNextPropertiesRoom.get(count));
-                } else {
-                    addPoiToFirebase(poisNextPropertiesRoom.get(count));
-                }
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
+                poisNextPropertiesFirebase.addAll(task.getResult().toObjects(PoiNextProperty.class));
             }
-            this.count++;
-            if (this.count < poisNextPropertiesRoom.size()) {
-                updatePoisNextProperties();
-            } else {
-                getNewPoisFromFirebase();
-            }
+            syncData();
         });
+    }
+
+    /**
+     * Synchronize data between the local database and Firebase database
+     */
+    private void syncData() {
+        for (PoiNextProperty poiNextPropertyFirebase : poisNextPropertiesFirebase) {
+            final int index = poisNextPropertiesRoom.indexOf(poiNextPropertyFirebase);
+            if (index < 0) {
+                if (propertiesDown.contains(poiNextPropertyFirebase.getPropertyID())) {
+                    addPoiNextPropertyInRoom(poiNextPropertyFirebase);
+                } else {
+                    deletePoiNextPropertyFromFirebase(poiNextPropertyFirebase);
+                }
+            } else {
+                poisNextPropertiesRoom.remove(index);
+            }
+        }
+        for (PoiNextProperty poiNextPropertyRoom : poisNextPropertiesRoom) {
+            if (propertiesDown.contains(poiNextPropertyRoom.getPropertyID())) {
+                deletePoiFromRooms(poiNextPropertyRoom);
+            } else {
+                addPoiToFirebase(poiNextPropertyRoom);
+            }
+        }
+        callback.poisNextPropertiesSynchronized();
     }
 
     /**
@@ -121,32 +121,6 @@ class UpdatePoisNextProperties {
      */
     private void addPoiToFirebase(PoiNextProperty poiNextProperty) {
         PoisNexPropertiesHelper.addPoisNextProperties(poiNextProperty).addOnFailureListener(callback::error);
-    }
-
-    /**
-     * After comparing the values between Room and Firebase, we get all the values from Firebase
-     * we do not have.
-     */
-    private void getNewPoisFromFirebase() {
-        PoisNexPropertiesHelper.getPoisNextProperties().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                List<PoiNextProperty> poisNextProperties = new ArrayList<>(task.getResult().toObjects(PoiNextProperty.class));
-                for (PoiNextProperty poiNextProperty : poisNextProperties) {
-                    if (!poisNextPropertiesRoom.contains(poiNextProperty)) {
-                        if (propertiesDown.contains(poiNextProperty.getPropertyID())) {
-                            addPoiNextPropertyInRoom(poiNextProperty);
-                        } else {
-                            deletePoiNextPropertyFromFirebase(poiNextProperty);
-                        }
-                    } else {
-                        poisNextPropertiesRoom.remove(poiNextProperty);
-                    }
-                }
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
-            }
-            callback.poisNextPropertiesSynchronized();
-        });
     }
 
     /**

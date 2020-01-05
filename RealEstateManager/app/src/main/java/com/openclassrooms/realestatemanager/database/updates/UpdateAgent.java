@@ -29,7 +29,6 @@ class UpdateAgent {
     private final PropertyViewModel propertyViewModel;
     private UpdateAgentListener callback;
     private LifecycleOwner lifecycleOwner;
-    private int count = 0;
 
     UpdateAgent(LifecycleOwner lifecycleOwner, PropertyViewModel propertyViewModel, UpdateAgentListener callback) {
         this.callback = callback;
@@ -46,48 +45,49 @@ class UpdateAgent {
             public void onChanged(List<Agent> agents) {
                 if (agentsRoom == null) {
                     agentsRoom = new ArrayList<>(agents);
-                    if (!agentsRoom.isEmpty()) {
-                        updateAgents();
-                    } else {
-                        getNewAgentsFromFirebase();
-                    }
+                    getAgentsFromFirebase();
                 }
                 propertyViewModel.getAgents().removeObserver(this);
             }
         });
     }
 
+    private List<Agent> agentsFirebase;
+
     /**
-     * Compare local agents with distance agent.
-     * If update date is more recent on firebase, download data otherwise upload data.
+     * Get agents from Firebase database
      */
-    private void updateAgents() {
-        if (this.count >= agentsRoom.size()) return;
-        final int count = this.count;
-        AgentHelper.getAgent(agentsRoom.get(count).getId()).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                Agent agentFirebase = task.getResult().toObject(Agent.class);
-                if (agentFirebase != null && agentFirebase.getUpdateDate() != agentsRoom.get(count).getUpdateDate()) {
-                    if (agentFirebase.getUpdateDate() > agentsRoom.get(count).getUpdateDate()) {
-                        updateAgentInRooms(agentFirebase);
-                    } else {
-                        updateAgentInFirebase(agentsRoom.get(count));
-                    }
-                } else if (agentFirebase == null) {
-                    updateAgentInFirebase(agentsRoom.get(count));
-                }
-            } else if (task.isSuccessful() && task.getResult() == null) {
-                updateAgentInFirebase(agentsRoom.get(count));
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
+    private void getAgentsFromFirebase(){
+        AgentHelper.getAgents().addOnCompleteListener( task -> {
+            agentsFirebase = new ArrayList<>();
+            if (task.isSuccessful() && task.getResult() != null){
+                agentsFirebase.addAll(task.getResult().toObjects(Agent.class));
             }
-            this.count++;
-            if (this.count < agentsRoom.size()) {
-                updateAgents();
-            } else {
-                getNewAgentsFromFirebase();
-            }
+            syncData();
         });
+    }
+
+    /**
+     * Compare agents from the local database with agents from the firebase database
+     */
+    private void syncData() {
+        for (Agent agentFirebase : agentsFirebase){
+            final int index = agentsRoom.indexOf(agentFirebase);
+            if (index >= 0){
+                if (agentFirebase.getUpdateDate() > agentsRoom.get(index).getUpdateDate()) {
+                    updateAgentInRooms(agentFirebase);
+                } else if (agentFirebase.getUpdateDate() < agentsRoom.get(index).getUpdateDate()){
+                    updateAgentInFirebase(agentsRoom.get(index));
+                }
+                agentsRoom.remove(index);
+            } else {
+                addAgentInRoom(agentFirebase);
+            }
+        }
+        for (Agent agentRoom : agentsRoom){
+            updateAgentInFirebase(agentRoom);
+        }
+        callback.agentsSynchronized();
     }
 
     /**
@@ -106,25 +106,6 @@ class UpdateAgent {
      */
     private void updateAgentInRooms(Agent agent) {
         propertyViewModel.updateAgent(agent);
-    }
-
-    /**
-     * Download agents from firebase database not present in the local database
-     */
-    private void getNewAgentsFromFirebase() {
-        AgentHelper.getAgents().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                List<Agent> agents = new ArrayList<>(task.getResult().toObjects(Agent.class));
-                for (Agent agent : agents) {
-                    if (!agentsRoom.contains(agent)) {
-                        addAgentInRoom(agent);
-                    }
-                }
-            } else if (task.getException() != null) {
-                callback.error(task.getException());
-            }
-            callback.agentsSynchronized();
-        });
     }
 
     /**

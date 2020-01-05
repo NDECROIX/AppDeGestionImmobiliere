@@ -16,6 +16,8 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
+import java.util.Objects;
+
 public class NotificationService extends FirebaseMessagingService {
 
     private static final int NOTIFICATION_ID = 777;
@@ -32,16 +34,20 @@ public class NotificationService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getFrom().contains(getString(R.string.notification_service_new_agent_topic_name))) {
             title = getString(R.string.notification_service_new_agent_title);
-            message = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_first_name_key))
+            String firstName = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_first_name_key));
+            if (Objects.equals(firstName, "test")) return;
+            message = firstName
                     + " " + remoteMessage.getData().get(getString(R.string.notification_service_new_agent_last_name_key));
         } else if (remoteMessage.getFrom().contains(getString(R.string.notification_service_new_property_topic_name))) {
             title = getString(R.string.notification_service_new_property_title);
             String p = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_price_key));
+            String type = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_type_key));
+            if (Objects.equals(type, "test")) return;
             if (p != null) {
                 Double price = Double.valueOf(p);
-                message = String.format("%s $ %s ", remoteMessage.getData().get(getString(R.string.notification_service_new_agent_type_key)), Utils.getPrice(price));
+                message = String.format("%s $ %s ", type, Utils.getPrice(price));
             } else {
-                message = remoteMessage.getData().get(getString(R.string.notification_service_new_agent_type_key));
+                message = type;
             }
         } else {
             return;

@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.api;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,6 +36,17 @@ public class PropertyHelper {
      */
     public static Task<Void> updateProperty(Property property) {
         return PropertyHelper.getPropertyCollection().document(property.getId()).set(property);
+    }
+
+    /**
+     * Delete a property from Firebase database
+     *
+     * @param property property to delete
+     * @return Void task
+     */
+    @VisibleForTesting
+    static Task<Void> deleteProperty(Property property) {
+        return PropertyHelper.getPropertyCollection().document(property.getId()).delete();
     }
 
     /**

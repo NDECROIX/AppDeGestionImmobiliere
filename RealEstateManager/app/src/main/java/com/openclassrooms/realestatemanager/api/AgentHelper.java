@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.api;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,6 +36,16 @@ public class AgentHelper {
      */
     public static Task<Void> updateAgent(Agent agent){
         return AgentHelper.getAgentCollection().document(agent.getId()).set(agent);
+    }
+
+    /**
+     * Delete an Agent from firebase database
+     * @param agent Agent to delete
+     * @return Void task
+     */
+    @VisibleForTesting
+    static Task<Void> deleteAgent(Agent agent){
+        return AgentHelper.getAgentCollection().document(agent.getId()).delete();
     }
 
     /**
