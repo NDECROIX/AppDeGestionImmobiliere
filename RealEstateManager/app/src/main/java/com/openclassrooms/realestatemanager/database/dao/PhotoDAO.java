@@ -19,7 +19,7 @@ public interface PhotoDAO {
     LiveData<List<Photo>> getPropertyPhotos(String propertyID);
 
     @Query("SELECT * FROM photo")
-    LiveData<List<Photo>> getAll();
+    LiveData<List<Photo>> getPhotos();
 
     @Query("SELECT * FROM photo")
     Cursor getAllWithCursor();

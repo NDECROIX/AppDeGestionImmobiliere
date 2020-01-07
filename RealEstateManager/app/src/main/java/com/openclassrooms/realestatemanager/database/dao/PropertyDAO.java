@@ -16,7 +16,7 @@ import java.util.List;
 public interface PropertyDAO {
 
     @Query("SELECT * FROM Property")
-    LiveData<List<Property>> getAll();
+    LiveData<List<Property>> getProperties();
 
     @Query("SELECT * FROM Property WHERE id LIKE :propertyID")
     LiveData<Property> getProperty(String propertyID);

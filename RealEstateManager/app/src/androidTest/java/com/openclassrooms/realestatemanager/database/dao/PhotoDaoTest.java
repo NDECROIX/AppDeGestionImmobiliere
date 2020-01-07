@@ -10,7 +10,6 @@ import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.utils.LiveDataTestUtil;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.After;
 import org.junit.Before;

@@ -23,7 +23,7 @@ public class PropertyDataRepository {
      * @return List of all property
      */
     public LiveData<List<Property>> getProperties() {
-        return this.propertyDao.getAll();
+        return this.propertyDao.getProperties();
     }
 
     /**

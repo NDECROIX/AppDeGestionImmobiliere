@@ -34,7 +34,7 @@ public class PhotoDataRepository {
      * @return All photos
      */
     public LiveData<List<Photo>> getPhotos() {
-        return this.photoDAO.getAll();
+        return this.photoDAO.getPhotos();
     }
 
     /**

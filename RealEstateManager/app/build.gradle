@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // Test
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.mockito:mockito-core:2.28.2"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'

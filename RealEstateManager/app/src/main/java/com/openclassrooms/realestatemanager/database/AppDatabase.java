@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Room;
@@ -70,7 +71,8 @@ public abstract class AppDatabase extends RoomDatabase {
      *
      * @return Callback
      */
-    private static Callback prePopulateDatabase() {
+    @VisibleForTesting
+    public static Callback prePopulateDatabase() {
         return new Callback() {
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
