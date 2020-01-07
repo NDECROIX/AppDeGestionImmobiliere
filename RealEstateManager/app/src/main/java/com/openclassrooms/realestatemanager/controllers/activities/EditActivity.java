@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -41,21 +40,16 @@ import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
-import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.utils.UtilsPhoto;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.view.holders.EditActivityViewHolder;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -111,6 +105,9 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     // Path where the current photo is located
     private String currentPhotoPath;
+
+    // Pass too true if data has been modified
+    private boolean dataHasBeenChanged;
 
     // Property data
     private String type;
@@ -250,8 +247,14 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             if (insertPropertyInDatabase()) {
                 insertPoiInDatabase();
                 insertPhotoInDatabase();
-                customToast(this, type + ((propertyToUpdate == null) ? " added!" : " updated!"));
+                if (dataHasBeenChanged) {
+                    customToast(this, type + ((propertyToUpdate == null) ? " added!" : " updated!"));
+                } else {
+                    customToast(this, "No change");
+                }
                 startActivity(new Intent(this, MainActivity.class));
+            } else if (propertyToUpdate != null) {
+                showToastMessage(this, "Property already exist!");
             } else {
                 showToastMessage(this, "Property already exist!");
             }
@@ -457,7 +460,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      * @param data Bitmap uri
      */
     private void saveBitmapToThePath(Uri data) {
-       currentPhotoPath = UtilsPhoto.saveBitmapToThePath(this, data);
+        currentPhotoPath = UtilsPhoto.saveBitmapToThePath(this, data);
     }
 
     @Override
@@ -596,7 +599,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      */
     private boolean insertPropertyInDatabase() {
         if (propertyToUpdate == null) {
-            property.setId(Utils.convertStringMd5(property.getStringToHash()));
+            property.setId(property.getHash());
         } else {
             property.setId(propertyToUpdate.getId());
         }
@@ -604,7 +607,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             propertyViewModel.insertProperty(property);
             return true;
         } else if (propertyToUpdate != null) {
-            propertyViewModel.updateProperty(property);
+            if (propertyToUpdate.notEquals(property)) {
+                dataHasBeenChanged = true;
+                Calendar dateUpdate = Calendar.getInstance();
+                property.setUpdateDate(dateUpdate.getTimeInMillis());
+                propertyViewModel.updateProperty(property);
+            }
             return true;
         }
         return false;
@@ -621,11 +629,13 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
             if (this.poisNextProperty != null && this.poisNextProperty.contains(poiNextProperty)) {
                 this.poisNextProperty.remove(poiNextProperty);
             } else {
+                dataHasBeenChanged = true;
                 propertyViewModel.insertPoiNextProperty(poiNextProperty);
             }
         }
         if (this.poisNextProperty != null && !this.poisNextProperty.isEmpty())
             for (PoiNextProperty poiNextProperty : poisNextProperty) {
+                dataHasBeenChanged = true;
                 propertyViewModel.deletePoiNextProperty(poiNextProperty);
             }
     }
@@ -637,15 +647,18 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         for (Photo photo : adapter.getPhotos()) {
             photo.setPropertyID(property.getId());
             if (propertyPhotos == null || !propertyPhotos.remove(photo)) {
+                dataHasBeenChanged = true;
                 propertyViewModel.insertPropertyPhoto(photo);
             }
         }
-        if (this.propertyPhotos != null && !this.propertyPhotos.isEmpty())
+        if (this.propertyPhotos != null && !this.propertyPhotos.isEmpty()) {
+            dataHasBeenChanged = true;
             for (Photo photo : propertyPhotos) {
                 propertyViewModel.deletePhoto(photo);
                 File fileToDelete = new File(photo.getName());
                 fileToDelete.deleteOnExit();
             }
+        }
     }
 
     @Override
