@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,8 @@ public class AgentDialogFragment extends DialogFragment {
     TextInputEditText email;
     @BindView(R.id.fragment_agent_dialog_tie_phone)
     TextInputEditText phone;
+    @BindView(R.id.fragment_agent_dialog_tv_title)
+    TextView title;
 
     public interface CreateAgentListener {
         void createAgent(Agent agent);
@@ -100,6 +103,7 @@ public class AgentDialogFragment extends DialogFragment {
      * Fill in views if update
      */
     private void configView() {
+        title.setText(String.format("Update %s", agent.getLastName()));
         firstName.setText(agent.getFirstName());
         lastName.setText(agent.getLastName());
         email.setText(agent.getEmail());

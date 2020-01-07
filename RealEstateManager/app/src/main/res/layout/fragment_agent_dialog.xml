@@ -9,7 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:padding="5dp"
+        android:paddingStart="@dimen/gutter"
+        android:paddingEnd="@dimen/gutter"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:text="@string/fragment_agent_dialog_tv_title"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
         android:textColor="@android:color/white"
@@ -19,6 +22,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/gutter"
+        android:paddingEnd="@dimen/gutter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_agent_dialog_tv_title">
 
