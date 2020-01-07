@@ -10,6 +10,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.firebase.firestore.Exclude;
+import com.openclassrooms.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -251,6 +252,44 @@ public class Property implements Serializable {
                 this.getZip() +
                 this.getCity() +
                 this.getEntryDate();
+    }
+
+    /**
+     * Create the id
+     *
+     * @return Property id
+     */
+    @Ignore
+    @Exclude
+    public String getHash() {
+        return Utils.convertStringMd5(getStringToHash());
+    }
+
+    /**
+     * Check if data has been changed
+     *
+     * @param property Property to compare
+     * @return True if property has been changed
+     */
+    public boolean notEquals(Property property) {
+        return !((Objects.equals(this.getAgentID(), property.getAgentID())
+                && Objects.equals(this.getSaleDate(), property.getSaleDate())
+                && Objects.equals(this.getEntryDate(), property.getEntryDate())
+                && Objects.equals(this.getBorough(), property.getBorough())
+                && Objects.equals(this.getDescription(), property.getDescription()))
+                && Objects.equals(this.getZip(), property.getZip())
+                && Objects.equals(this.getCountry(), property.getCountry())
+                && Objects.equals(this.getCity(), property.getCity())
+                && Objects.equals(this.getAddressSupplement(), property.getAddressSupplement())
+                && Objects.equals(this.getStreetName(), property.getStreetName())
+                && Objects.equals(this.getStreetNumber(), property.getStreetNumber())
+                && Objects.equals(this.getBathrooms(), property.getBathrooms())
+                && Objects.equals(this.getBedrooms(), property.getBedrooms())
+                && Objects.equals(this.getRooms(), property.getRooms())
+                && Objects.equals(this.getSurface(), property.getSurface())
+                && Objects.equals(this.getPrice(), property.getPrice())
+                && Objects.equals(this.getType(), property.getType())
+                && Objects.equals(this.getId(), property.getId()));
     }
 
     @Override
