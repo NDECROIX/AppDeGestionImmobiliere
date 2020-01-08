@@ -16,7 +16,6 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
-import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
 
 import java.text.DecimalFormat;
@@ -97,6 +96,13 @@ public class EditActivityViewHolder {
         ButterKnife.bind(this, source);
     }
 
+    /**
+     * Fill in all fields
+     *
+     * @param property          property Property used to display data
+     * @param propertyViewModel View model to get a data access
+     * @param lifecycleOwner    Activity lifecycle
+     */
     public void completeFieldsWithProperty(Property property, PropertyViewModel propertyViewModel, LifecycleOwner lifecycleOwner) {
         DecimalFormat df = new DecimalFormat("#.##");
         tiePrice.setText(df.format(property.getPrice()));
@@ -127,8 +133,18 @@ public class EditActivityViewHolder {
                     tvAgent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
     }
 
-    public boolean champNotEmpty(CheckFieldsListener callback, EditActivityPhotoRecyclerViewAdapter adapter, Agent agent, String type, String borough) {
-        // Check than at least one type is selected and if it does not exist in the database, add it.
+    /**
+     * Check that all fields are correctly completed
+     *
+     * @param callback Callback to notify error
+     * @param items    Number of photos in the recycler view
+     * @param agent    Agent of the property
+     * @param type     Type of property
+     * @param borough  Borough of the property
+     * @return That's true if it's all right
+     */
+    public boolean champNotEmpty(CheckFieldsListener callback, int items, Agent agent, String type, String borough) {
+        // Check than at least one type is selected.
         if (type == null) {
             callback.error("Please add a type");
             return false;
@@ -210,7 +226,7 @@ public class EditActivityViewHolder {
         }
 
         // Check if we have at least one photo
-        if (adapter.getItemCount() == 0) {
+        if (items == 0) {
             callback.error("You need at least one photo");
             return false;
         }

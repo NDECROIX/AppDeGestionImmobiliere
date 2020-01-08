@@ -569,7 +569,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      * @return true if all ok
      */
     private boolean champNotEmpty() {
-        return viewHolder.champNotEmpty(this, adapter, agent, type, borough);
+        return viewHolder.champNotEmpty(this, adapter.getItemCount(), agent, type, borough);
     }
 
     /**
