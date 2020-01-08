@@ -116,7 +116,6 @@ public class Photo implements Parcelable {
         return uri;
     }
 
-
     public String getName() {
         return name;
     }

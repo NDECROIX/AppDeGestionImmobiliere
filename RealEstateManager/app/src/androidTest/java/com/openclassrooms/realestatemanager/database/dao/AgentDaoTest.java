@@ -57,7 +57,7 @@ public class AgentDaoTest {
      * @return Agent test
      */
     @DataPoint
-    private Agent createAgent() {
+    public static Agent createTestAgent() {
         return new Agent("test", "test", "test", "test");
     }
 
@@ -68,7 +68,7 @@ public class AgentDaoTest {
      */
     @Test
     public void insertAgentTest() throws Exception {
-        Agent agentTest = createAgent();
+        Agent agentTest = createTestAgent();
         this.database.agentDAO().insertAgent(agentTest);
         Agent agent = LiveDataTestUtil.getValue(database.agentDAO().getAgent(agentTest.getId()));
         assertEquals("Insert agent in the local database", agentTest, agent);
@@ -81,7 +81,7 @@ public class AgentDaoTest {
      */
     @Test
     public void getAgentsTest() throws Exception {
-        Agent agentTest = createAgent();
+        Agent agentTest = createTestAgent();
         this.database.agentDAO().insertAgent(agentTest);
         List<Agent> agents = LiveDataTestUtil.getValue(database.agentDAO().getAgents());
         assertFalse("Get agents from the local database", agents.isEmpty());

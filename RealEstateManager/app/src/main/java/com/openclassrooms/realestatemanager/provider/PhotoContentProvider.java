@@ -17,7 +17,7 @@ import com.openclassrooms.realestatemanager.model.Photo;
 public class PhotoContentProvider extends ContentProvider {
 
     // FOR DATA
-    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider";
+    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.PhotoContentProvider";
     public static final String TABLE_NAME = Photo.class.getSimpleName();
     public static final Uri URI_PHOTO = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 

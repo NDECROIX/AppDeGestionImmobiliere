@@ -1,6 +1,8 @@
 package com.openclassrooms.realestatemanager.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,6 +10,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.model.Property;
 
@@ -17,7 +20,7 @@ import com.openclassrooms.realestatemanager.model.Property;
 public class PropertyContentProvider extends ContentProvider {
 
     // FOR DATA
-    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider";
+    public static final String AUTHORITY = "com.openclassrooms.realestatemanager.PropertyContentProvider";
     public static final String TABLE_NAME = Property.class.getSimpleName();
     public static final Uri URI_PROPERTY = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.openclassrooms.realestatemanager">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -56,28 +57,16 @@
 
         <provider
             android:name=".provider.PropertyContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
-            android:exported="true" />
-        <provider
-            android:name=".provider.AgentContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
-            android:exported="true" />
-        <provider
-            android:name=".provider.PhotoContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
-            android:exported="true" />
-        <provider
-            android:name=".provider.PoiContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
-            android:exported="true" />
+            android:authorities="com.openclassrooms.realestatemanager.PropertyContentProvider"
+            android:exported="false" />
         <provider
             android:name=".provider.PoiNextPropertyContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
-            android:exported="true" />
+            android:authorities="com.openclassrooms.realestatemanager.PoiNextPropertyContentProvider"
+            android:exported="false" />
         <provider
-            android:name=".provider.TypeContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.provider"
-            android:exported="true" />
+            android:name=".provider.PhotoContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.PhotoContentProvider"
+            android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.openclassrooms.realestatemanager.fileprovider"

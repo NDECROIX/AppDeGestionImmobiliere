@@ -57,7 +57,7 @@ public class PropertyDaoTest {
      * @return Property test
      */
     @DataPoint
-    private Property createProperty() {
+    public static Property createTestProperty() {
         Property property = new Property();
         property.setType("test");
         property.setRooms(10);
@@ -78,7 +78,7 @@ public class PropertyDaoTest {
      */
     @Test
     public void insertPropertyTest() throws Exception {
-        Property propertyTest = createProperty();
+        Property propertyTest = createTestProperty();
         this.database.propertyDAO().insertProperty(propertyTest);
         Property property = LiveDataTestUtil.getValue(this.database.propertyDAO().getProperty(propertyTest.getId()));
         assertEquals("Insert property in the local database", propertyTest, property);
@@ -91,7 +91,7 @@ public class PropertyDaoTest {
      */
     @Test
     public void getPropertiesTest() throws Exception {
-        Property propertyTest = createProperty();
+        Property propertyTest = createTestProperty();
         this.database.propertyDAO().insertProperty(propertyTest);
         List<Property> properties = LiveDataTestUtil.getValue(this.database.propertyDAO().getProperties());
         assertFalse("Get properties from the local database", properties.isEmpty());
