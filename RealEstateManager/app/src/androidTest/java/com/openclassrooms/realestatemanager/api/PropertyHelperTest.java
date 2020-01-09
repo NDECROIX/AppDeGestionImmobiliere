@@ -68,7 +68,7 @@ public class PropertyHelperTest {
         property.setZip(10);
         property.setCity("test");
         property.setEntryDate(10);
-        property.setId(Utils.convertStringMd5(property.getStringToHash()));
+        property.setId(property.getHash());
         return property;
     }
 
