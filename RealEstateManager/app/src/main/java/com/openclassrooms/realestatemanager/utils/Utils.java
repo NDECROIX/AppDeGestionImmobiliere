@@ -64,7 +64,10 @@ public class Utils {
      */
     public static Boolean isInternetAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = null;
+        if (cm != null) {
+            activeNetwork = cm.getActiveNetworkInfo();
+        }
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
@@ -97,7 +100,7 @@ public class Utils {
      * @return bytes from the photo
      * @throws IOException fail to read inputStream
      */
-    public static byte[] getBytes(InputStream inputStream) throws IOException {
+    static byte[] getBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];

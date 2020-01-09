@@ -41,5 +41,23 @@ public class UtilsUnitTest {
         assertEquals(dateFormat.format(new Date()), Utils.getTodayDate());
     }
 
+    /**
+     * Test to convert string in MD5
+     */
+    @Test
+    public void convertStringMd5(){
+        String valueToHAsh = "Real Estate Manager";
+        String expected = "5331cc5722b66cd3ba4e327028f72114";
+        assertEquals(expected, Utils.convertStringMd5(valueToHAsh));
+    }
 
+    /**
+     * Test to convert double to string dollar format
+     */
+    @Test
+    public void getPrice(){
+        Double valueToConvert = 2000000d;
+        String expected = "2,000,000";
+        assertEquals(expected, Utils.getPrice(valueToConvert));
+    }
 }
