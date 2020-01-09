@@ -1,6 +1,4 @@
-package com.openclassrooms.realestatemanager;
-
-import com.openclassrooms.realestatemanager.utils.Utils;
+package com.openclassrooms.realestatemanager.utils;
 
 import org.junit.Test;
 
@@ -9,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Local unit test on the Utils class
@@ -45,7 +43,7 @@ public class UtilsUnitTest {
      * Test to convert string in MD5
      */
     @Test
-    public void convertStringMd5(){
+    public void convertStringMd5() {
         String valueToHAsh = "Real Estate Manager";
         String expected = "5331cc5722b66cd3ba4e327028f72114";
         assertEquals(expected, Utils.convertStringMd5(valueToHAsh));
@@ -55,7 +53,7 @@ public class UtilsUnitTest {
      * Test to convert double to string dollar format
      */
     @Test
-    public void getPrice(){
+    public void getPrice() {
         Double valueToConvert = 2000000d;
         String expected = "2,000,000";
         assertEquals(expected, Utils.getPrice(valueToConvert));
