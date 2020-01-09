@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.content.ContentValues;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -79,21 +77,12 @@ public class Agent {
         this.id = Utils.convertStringMd5(String.format("%s%s%s", firstName, lastName, email));
     }
 
-    // Content provider
-    public static Agent fromContentValues(ContentValues values) {
-        final Agent agent = new Agent();
-        if (values.containsKey("firstName")) agent.setFirstName(values.getAsString("firstName"));
-        if (values.containsKey("lastName")) agent.setLastName(values.getAsString("lastName"));
-        if (values.containsKey("email")) agent.setEmail(values.getAsString("email"));
-        if (values.containsKey("phone")) agent.setPhone(values.getAsString("phone"));
-        return agent;
-    }
-
-    public String getId() {
+    public @NonNull
+    String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 

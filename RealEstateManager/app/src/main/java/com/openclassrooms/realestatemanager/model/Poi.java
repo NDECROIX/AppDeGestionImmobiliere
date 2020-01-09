@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.content.ContentValues;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,6 +11,7 @@ import java.util.Objects;
 /**
  * Point of interest
  */
+@SuppressWarnings("NullableProblems")
 @Entity
 public class Poi {
 
@@ -56,14 +55,6 @@ public class Poi {
                 new Poi("Nightclub"),
                 new Poi("Casino")
         };
-    }
-
-
-    // Content provider
-    public static Poi fromContentValues(ContentValues values) {
-        final Poi poi = new Poi();
-        if (values.containsKey("name")) poi.setName(values.getAsString("name"));
-        return poi;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.content.ContentValues;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -20,6 +18,7 @@ import java.util.Objects;
 /**
  * representation of a property
  */
+@SuppressWarnings("NullableProblems")
 @Entity
 public class Property implements Serializable {
 
@@ -191,40 +190,6 @@ public class Property implements Serializable {
     public Property() {
     }
 
-    // Content provider
-    public static Property fromContentValues(ContentValues values) {
-        final Property property = new Property();
-        if (values.containsKey("id")) property.setId(values.getAsString("id"));
-        if (values.containsKey("type")) property.setType(values.getAsString("type"));
-        if (values.containsKey("borough")) property.setBorough(values.getAsString("borough"));
-        if (values.containsKey("price")) property.setPrice(values.getAsDouble("price"));
-        if (values.containsKey("surface")) property.setSurface(values.getAsDouble("surface"));
-        if (values.containsKey("rooms")) property.setRooms(values.getAsInteger("rooms"));
-        if (values.containsKey("bathrooms"))
-            property.setBathrooms(values.getAsInteger("bathrooms"));
-        if (values.containsKey("bedrooms")) property.setBedrooms(values.getAsInteger("bedrooms"));
-        if (values.containsKey("description"))
-            property.setDescription(values.getAsString("description"));
-        if (values.containsKey("streetNumber"))
-            property.setStreetNumber(values.getAsInteger("streetNumber"));
-        if (values.containsKey("streetName"))
-            property.setStreetName(values.getAsString("streetName"));
-        if (values.containsKey("addressSupplement"))
-            property.setAddressSupplement(values.getAsString("addressSupplement"));
-        if (values.containsKey("city")) property.setCity(values.getAsString("city"));
-        if (values.containsKey("zip")) property.setZip(values.getAsInteger("zip"));
-        if (values.containsKey("country")) property.setCountry(values.getAsString("country"));
-        if (values.containsKey("sold")) property.setSold(values.getAsBoolean("sold"));
-        if (values.containsKey("entryDate")) property.setEntryDate(values.getAsLong("entryDate"));
-        if (values.containsKey("saleDate")) property.setSaleDate(values.getAsLong("saleDate"));
-        if (values.containsKey("updateDate"))
-            property.setUpdateDate(values.getAsLong("updateDate"));
-        if (values.containsKey("latitude")) property.setLatitude(values.getAsDouble("latitude"));
-        if (values.containsKey("longitude")) property.setLongitude(values.getAsDouble("longitude"));
-        if (values.containsKey("agentID")) property.setAgentID(values.getAsString("agentID"));
-        return property;
-    }
-
     /**
      * New york city borough
      *
@@ -243,7 +208,7 @@ public class Property implements Serializable {
      */
     @Ignore
     @Exclude
-    public String getStringToHash() {
+    private String getStringToHash() {
         return this.getType() +
                 this.getRooms() +
                 this.getPrice() +

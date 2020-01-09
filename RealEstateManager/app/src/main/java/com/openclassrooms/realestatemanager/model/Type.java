@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.content.ContentValues;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,6 +11,7 @@ import java.util.Objects;
 /**
  * Type of property
  */
+@SuppressWarnings("NullableProblems")
 @Entity
 public class Type {
 
@@ -46,13 +45,6 @@ public class Type {
                 new Type("HOA"),
                 new Type("COA")
         };
-    }
-
-    // Content provider
-    public static Type fromContentValues(ContentValues values) {
-        final Type type = new Type();
-        if (values.containsKey("name")) type.setName(values.getAsString("name"));
-        return type;
     }
 
     @Override

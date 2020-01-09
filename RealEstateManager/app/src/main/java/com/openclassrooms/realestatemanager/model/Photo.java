@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.os.Environment;
 import android.os.Parcel;
@@ -22,6 +21,7 @@ import java.util.Objects;
 /**
  * Representation of a photo
  */
+@SuppressWarnings("unused, NullableProblems")
 @Entity(primaryKeys = {"name", "property_id"},
         foreignKeys = @ForeignKey(
                 entity = Property.class,
@@ -47,7 +47,7 @@ public class Photo implements Parcelable {
     /**
      * Constructor
      *
-     * @param name         Path where the photo is located
+     * @param name        Path where the photo is located
      * @param propertyID  Id of the property owner
      * @param description Short photo description
      */
@@ -88,16 +88,6 @@ public class Photo implements Parcelable {
         return splitUri[splitUri.length - 1];
     }
 
-    // Content provider
-    public static Photo fromContentValues(ContentValues values) {
-        final Photo photo = new Photo();
-        if (values.containsKey("name")) photo.setName(values.getAsString("name"));
-        if (values.containsKey("propertyID")) photo.setPropertyID(values.getAsString("propertyID"));
-        if (values.containsKey("description"))
-            photo.setDescription(values.getAsString("description"));
-        return photo;
-    }
-
     // --- GETTER ---
 
     /**
@@ -116,11 +106,13 @@ public class Photo implements Parcelable {
         return uri;
     }
 
-    public String getName() {
+    public @NonNull
+    String getName() {
         return name;
     }
 
-    public String getPropertyID() {
+    public @NonNull
+    String getPropertyID() {
         return propertyID;
     }
 
@@ -154,6 +146,7 @@ public class Photo implements Parcelable {
         dest.writeString(description);
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected Photo(Parcel in) {
         name = in.readString();
         propertyID = in.readString();

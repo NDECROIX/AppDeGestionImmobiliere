@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -19,6 +18,7 @@ import java.util.Objects;
 /**
  * Link point of interest with a property
  */
+@SuppressWarnings("NullableProblems")
 @Entity(primaryKeys = {"property_id", "poi_name"},
         foreignKeys = @ForeignKey(entity = Property.class,
                 parentColumns = "id",
@@ -61,6 +61,7 @@ public class PoiNextProperty implements Parcelable {
         return Utils.convertStringMd5(value);
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected PoiNextProperty(Parcel in) {
         propertyID = in.readString();
         poiName = in.readString();
@@ -78,33 +79,25 @@ public class PoiNextProperty implements Parcelable {
         }
     };
 
-    // Content provider
-    public static PoiNextProperty fromContentValues(ContentValues values) {
-        final PoiNextProperty poiNextProperty = new PoiNextProperty();
-        if (values.containsKey("propertyID"))
-            poiNextProperty.setPropertyID(values.getAsString("propertyID"));
-        if (values.containsKey("poiName"))
-            poiNextProperty.setPoiName(values.getAsString("poiName"));
-        return poiNextProperty;
-    }
-
     // --- GETTER ---
 
-    public String getPropertyID() {
+    public @NonNull
+    String getPropertyID() {
         return propertyID;
     }
 
-    public String getPoiName() {
+    public @NonNull
+    String getPoiName() {
         return poiName;
     }
 
     // --- SETTER ---
 
-    public void setPropertyID(String propertyID) {
+    public void setPropertyID(@NonNull String propertyID) {
         this.propertyID = propertyID;
     }
 
-    public void setPoiName(String poiName) {
+    public void setPoiName(@NonNull String poiName) {
         this.poiName = poiName;
     }
 
