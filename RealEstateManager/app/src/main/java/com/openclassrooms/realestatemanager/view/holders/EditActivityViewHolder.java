@@ -337,15 +337,17 @@ public class EditActivityViewHolder {
             property.setAgentID(agent.getId());
         }
 
-        String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
-                property.getStreetName(), property.getCity(), property.getCountry(),
-                property.getZip());
-        LatLng latLng = Utils.getLocationFromAddress(context, address);
-        if (latLng != null) {
-            property.setLatitude(latLng.latitude);
-            property.setLongitude(latLng.longitude);
-            callback.property(property);
+        if (Utils.isInternetAvailable(context)){
+            String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
+                    property.getStreetName(), property.getCity(), property.getCountry(),
+                    property.getZip());
+            LatLng latLng = Utils.getLocationFromAddress(context, address);
+            if (latLng != null) {
+                property.setLatitude(latLng.latitude);
+                property.setLongitude(latLng.longitude);
+            }
         }
+        callback.property(property);
         return true;
     }
 }

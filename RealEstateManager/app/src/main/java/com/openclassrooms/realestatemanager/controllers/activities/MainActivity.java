@@ -20,6 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.util.Util;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -211,7 +212,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 startActivity(new Intent(this, AgentActivity.class));
                 break;
             case R.id.activity_main_drawer_map:
-                startActivity(new Intent(this, MapsActivity.class));
+                if (Utils.isInternetAvailable(this)){
+                    startActivity(new Intent(this, MapsActivity.class));
+                } else {
+                    customToast(this, "No internet");
+                }
                 break;
             case R.id.activity_main_drawer_synchronize:
                 synchronizeData();

@@ -130,9 +130,11 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
         configRecyclerView();
         getPropertyFromDatabase();
         // Get the map and register for the ready callback
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_detail_map_view);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
+        if (Utils.isInternetAvailable(context)){
+            SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_detail_map_view);
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(this);
+            }
         }
         return view;
     }
@@ -288,6 +290,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
                     property.setLatitude(latLng.latitude);
                     property.setLongitude(latLng.longitude);
                     propertyViewModel.updateProperty(property);
+                } else {
+                    return;
                 }
             }
             LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
