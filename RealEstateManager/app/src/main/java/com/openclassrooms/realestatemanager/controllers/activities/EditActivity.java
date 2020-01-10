@@ -370,7 +370,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     @OnClick(R.id.activity_edit_ib_photo)
-    @AfterPermissionGranted(RC_IMAGE_PERMS)
     public void onClickPhoto() {
         choosePhotoFromDevice();
     }
@@ -378,6 +377,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     /**
      * Get the photo from the device
      */
+    @AfterPermissionGranted(RC_IMAGE_PERMS)
     private void choosePhotoFromDevice() {
         if (EasyPermissions.hasPermissions(this, READ_EXTERNAL_STORAGE)) {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -481,7 +481,6 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     @OnClick(R.id.activity_edit_ib_camera)
-    @AfterPermissionGranted(RC_CAMERA_PERMS)
     public void onClickCamera() {
         if (checkCameraHardware()) {
             takePhotoFromCamera();
@@ -493,6 +492,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     /**
      * Get the photo from the device camera
      */
+    @AfterPermissionGranted(RC_CAMERA_PERMS)
     private void takePhotoFromCamera() {
         if (EasyPermissions.hasPermissions(this, CAMERA)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

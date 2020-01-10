@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager.controllers.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,8 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -52,12 +49,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.INTERNET;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * Property detail
@@ -99,8 +91,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     @BindView(R.id.fragment_detail_tv_empty)
     TextView empty;
 
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 898;
-
     private Context context;
     private PropertyViewModel propertyViewModel;
     private GoogleMap mMap;
@@ -130,7 +120,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
         configRecyclerView();
         getPropertyFromDatabase();
         // Get the map and register for the ready callback
-        if (Utils.isInternetAvailable(context)){
+        if (Utils.isInternetAvailable(context)) {
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_detail_map_view);
             if (mapFragment != null) {
                 mapFragment.getMapAsync(this);
@@ -276,41 +266,25 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
         getPictureAddress();
     }
 
-    @AfterPermissionGranted(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
     private void getPictureAddress() {
-        if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
-            Property property = propertyViewModel.getCurrentProperty().getValue();
-            if (property == null) return;
-            if (property.getLatitude() == null || property.getLatitude() == 0) {
-                String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
-                        property.getStreetName(), property.getCity(), property.getCountry(),
-                        property.getZip());
-                LatLng latLng = Utils.getLocationFromAddress(context, address);
-                if (latLng != null) {
-                    property.setLatitude(latLng.latitude);
-                    property.setLongitude(latLng.longitude);
-                    propertyViewModel.updateProperty(property);
-                } else {
-                    return;
-                }
+        Property property = propertyViewModel.getCurrentProperty().getValue();
+        if (property == null) return;
+        if (property.getLatitude() == null || property.getLatitude() == 0) {
+            String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
+                    property.getStreetName(), property.getCity(), property.getCountry(),
+                    property.getZip());
+            LatLng latLng = Utils.getLocationFromAddress(context, address);
+            if (latLng != null) {
+                property.setLatitude(latLng.latitude);
+                property.setLongitude(latLng.longitude);
+                propertyViewModel.updateProperty(property);
+            } else {
+                return;
             }
-            LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
-        } else {
-            getAccessFineLocationPermission();
         }
-    }
-
-    /**
-     * Get the location permission.
-     */
-    private void getAccessFineLocationPermission() {
-        if (getActivity() != null && ContextCompat.checkSelfPermission(context,
-                ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, INTERNET},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
+        LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
     }
 
     @Override
