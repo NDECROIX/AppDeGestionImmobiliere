@@ -103,9 +103,8 @@
                     android:id="@+id/fragment_agent_dialog_tie_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
                     android:inputType="phone"
-                    android:nextFocusDown="@+id/activity_edit_ib_agent" />
+                    android:imeOptions="actionDone" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,6 +41,7 @@
         </activity>
         <activity
             android:name=".controllers.activities.EditActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:configChanges="orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

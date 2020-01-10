@@ -192,7 +192,11 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private void configToolbar() {
         setSupportActionBar(viewHolder.toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Edit property");
+            if (propertyToUpdate != null) {
+                getSupportActionBar().setTitle("Edit property");
+            } else {
+                getSupportActionBar().setTitle("Create property");
+            }
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
