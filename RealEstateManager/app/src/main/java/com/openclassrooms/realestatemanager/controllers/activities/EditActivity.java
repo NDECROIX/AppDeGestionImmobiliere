@@ -82,7 +82,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         Bundle bundle = new Bundle();
         Intent intent = new Intent(context, EditActivity.class);
         if (property != null) {
-            bundle.putSerializable(PROPERTY, property);
+            bundle.putParcelable(PROPERTY, property);
         }
         if (pois != null) {
             bundle.putParcelableArrayList(POIS, (ArrayList<? extends Parcelable>) pois);
@@ -147,7 +147,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     private void getExtras() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            propertyToUpdate = (Property) bundle.getSerializable(PROPERTY);
+            propertyToUpdate = (Property) bundle.getParcelable(PROPERTY);
             List<PoiNextProperty> bundlePois = bundle.getParcelableArrayList(POIS);
             if (bundlePois != null) {
                 poisNextProperty = new ArrayList<>(bundlePois);

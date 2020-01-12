@@ -1,5 +1,8 @@
 package com.openclassrooms.realestatemanager.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -10,7 +13,6 @@ import androidx.room.PrimaryKey;
 import com.google.firebase.firestore.Exclude;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +22,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("NullableProblems")
 @Entity
-public class Property implements Serializable {
+public class Property implements Parcelable {
 
     /**
      * The unique identifier of property
@@ -189,6 +191,61 @@ public class Property implements Serializable {
     @Ignore
     public Property() {
     }
+
+
+    @SuppressWarnings("ConstantConditions")
+    protected Property(Parcel in) {
+        id = in.readString();
+        type = in.readString();
+        borough = in.readString();
+        if (in.readByte() == 0) {
+            price = null;
+        } else {
+            price = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            surface = null;
+        } else {
+            surface = in.readDouble();
+        }
+        rooms = in.readInt();
+        bathrooms = in.readInt();
+        bedrooms = in.readInt();
+        description = in.readString();
+        streetNumber = in.readInt();
+        streetName = in.readString();
+        addressSupplement = in.readString();
+        city = in.readString();
+        zip = in.readInt();
+        country = in.readString();
+        sold = in.readByte() != 0;
+        entryDate = in.readLong();
+        saleDate = in.readLong();
+        updateDate = in.readLong();
+        if (in.readByte() == 0) {
+            latitude = null;
+        } else {
+            latitude = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            longitude = null;
+        } else {
+            longitude = in.readDouble();
+        }
+        agentID = in.readString();
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     /**
      * New york city borough
@@ -448,5 +505,36 @@ public class Property implements Serializable {
 
     public void setAgentID(String agentID) {
         this.agentID = agentID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(type);
+        parcel.writeString(borough);
+        parcel.writeDouble(price);
+        parcel.writeDouble(surface);
+        parcel.writeInt(rooms);
+        parcel.writeInt(bathrooms);
+        parcel.writeInt(bedrooms);
+        parcel.writeString(description);
+        parcel.writeInt(streetNumber);
+        parcel.writeString(streetName);
+        parcel.writeString(addressSupplement);
+        parcel.writeInt(zip);
+        parcel.writeString(city);
+        parcel.writeString(country);
+        parcel.writeValue(sold);
+        parcel.writeLong(entryDate);
+        parcel.writeLong(saleDate);
+        parcel.writeLong(updateDate);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeString(agentID);
     }
 }

@@ -1,5 +1,8 @@
 package com.openclassrooms.realestatemanager.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +10,7 @@ import java.util.List;
 /**
  * Filter for filtering properties
  */
-public class Filter implements Serializable {
+public class Filter implements Parcelable {
 
     // 0 nothing, 1 On sale, 2 Sold.
     private int status;
@@ -39,6 +42,49 @@ public class Filter implements Serializable {
     public Filter() {
         pois = new ArrayList<>();
     }
+
+    protected Filter(Parcel in) {
+        status = in.readInt();
+        entryDateFrom = in.readLong();
+        entryDateTo = in.readLong();
+        saleDateFrom = in.readLong();
+        saleDateTo = in.readLong();
+        type = in.readString();
+        if (in.readByte() == 0) {
+            minPrice = null;
+        } else {
+            minPrice = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            maxPrice = null;
+        } else {
+            maxPrice = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            minSurface = null;
+        } else {
+            minSurface = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            maxSurface = null;
+        } else {
+            maxSurface = in.readDouble();
+        }
+        nbrPhotos = in.readInt();
+        borough = in.readString();
+    }
+
+    public static final Creator<Filter> CREATOR = new Creator<Filter>() {
+        @Override
+        public Filter createFromParcel(Parcel in) {
+            return new Filter(in);
+        }
+
+        @Override
+        public Filter[] newArray(int size) {
+            return new Filter[size];
+        }
+    };
 
     /**
      * Check if the criteria correlate with the property
@@ -149,5 +195,27 @@ public class Filter implements Serializable {
 
     public void setSaleDateTo(long saleDateTo) {
         this.saleDateTo = saleDateTo;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(status);            //int status;
+        parcel.writeLong(entryDateFrom);            //long entryDateFrom;
+        parcel.writeLong(entryDateTo);            //long entryDateTo;
+        parcel.writeLong(saleDateFrom);            //long saleDateFrom;
+        parcel.writeLong(saleDateTo);            //long saleDateTo;
+        parcel.writeString(type);            //String type;
+        parcel.writeDouble(minPrice);            //Double minPrice;
+        parcel.writeDouble(maxPrice);            //Double maxPrice;
+        parcel.writeDouble(minSurface);            //Double minSurface;
+        parcel.writeDouble(maxSurface);            //Double maxSurface;
+        parcel.writeInt(nbrPhotos);            //int nbrPhotos;
+        parcel.writeString(borough);            //String borough;
+        parcel.writeArray(new List[]{pois});            //List<Poi> pois;
     }
 }

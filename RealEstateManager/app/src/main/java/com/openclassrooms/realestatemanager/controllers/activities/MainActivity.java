@@ -389,7 +389,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         if (frameLayoutDetail != null) {
             getSupportFragmentManager().beginTransaction().remove(detailFragment).commitAllowingStateLoss();
         }
-        outState.putSerializable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
+        outState.putParcelable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
         outState.putSerializable(PHOTOS, (Serializable) propertyViewModel.getCurrentPhotosProperty().getValue());
         outState.putSerializable(POIS, (Serializable) propertyViewModel.getCurrentPoisNextProperty().getValue());
         super.onSaveInstanceState(outState);
