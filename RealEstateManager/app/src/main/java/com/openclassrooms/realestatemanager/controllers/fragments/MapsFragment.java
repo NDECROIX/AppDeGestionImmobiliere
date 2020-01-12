@@ -67,7 +67,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
     // Request permission to fine location
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 898;
+    private static final int PERMISSIONS_REQUEST_LOCATION_CENTRED = 898;
+    private static final int PERMISSIONS_REQUEST_LOCATION_UI = 324;
     private static final int DEFAULT_ZOOM = 18;
 
     // View model
@@ -140,7 +141,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     /**
      * Updating the parameters of the mMap
      */
-    @AfterPermissionGranted(PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+    @AfterPermissionGranted(PERMISSIONS_REQUEST_LOCATION_UI)
     private void updateLocationSetting() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
             mMap.getUiSettings().setMapToolbarEnabled(true);
@@ -152,12 +153,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             propertyViewModel.getProperties().observe(this, this::addMarker);
             getCurrentLocation();
         } else {
-            getAccessFineLocationPermission();
+            getAccessFineLocationPermission(PERMISSIONS_REQUEST_LOCATION_UI);
         }
     }
 
     /**
      * Add a marker where a property is located
+     *
      * @param properties Properties to locate
      */
     private void addMarker(List<Property> properties) {
@@ -183,11 +185,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
 
     /**
      * Display photo from property as marker
+     *
      * @param property Property
      */
     private void addMarkerWithBitmap(Property property) {
         propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos -> {
-            if (!initDetail){
+            if (!initDetail) {
                 initDetail = true;
                 propertyViewModel.setCurrentProperty(property);
                 propertyViewModel.setCurrentPhotos(photos);
@@ -215,7 +218,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                         public void onLoadCleared(@Nullable Drawable placeholder) {
                         }
                     });
-                });
+        });
     }
 
     /**
@@ -231,18 +234,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 }
             });
         } else {
-            getAccessFineLocationPermission();
+            getAccessFineLocationPermission(PERMISSIONS_REQUEST_LOCATION_UI);
         }
     }
 
     /**
      * Get the location permission.
+     *
+     * @param resultCode Result Code
      */
-    private void getAccessFineLocationPermission() {
+    private void getAccessFineLocationPermission(int resultCode) {
         if (ContextCompat.checkSelfPermission(context,
                 ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((MapsActivity) context, new String[]{ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    resultCode);
         }
     }
 
@@ -253,10 +258,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
     @Override
+    @AfterPermissionGranted(PERMISSIONS_REQUEST_LOCATION_CENTRED)
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(getContext(), "Centred", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
+        if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
+            Toast.makeText(getContext(), R.string.maps_fragment_centred, Toast.LENGTH_SHORT).show();
+        } else {
+            getAccessFineLocationPermission(PERMISSIONS_REQUEST_LOCATION_CENTRED);
+        }
         return false;
     }
 }
