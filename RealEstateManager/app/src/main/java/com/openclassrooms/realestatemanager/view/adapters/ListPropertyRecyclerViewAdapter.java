@@ -70,6 +70,10 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
         notifyDataSetChanged();
     }
 
+    public Filter getFilter() {
+        return filter;
+    }
+
     public void setPoisNextProperty(List<PoiNextProperty> poisNextProperty) {
         this.poisNextProperty.clear();
         this.poisNextProperty.addAll(poisNextProperty);
@@ -127,7 +131,7 @@ public class ListPropertyRecyclerViewAdapter extends RecyclerView.Adapter<Proper
     /**
      * Filter the properties
      */
-    private void filterProperty() {
+    public void filterProperty() {
         if (filter == null) {
             return;
         }

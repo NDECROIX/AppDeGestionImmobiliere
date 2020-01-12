@@ -192,7 +192,6 @@ public class Property implements Parcelable {
     public Property() {
     }
 
-
     @SuppressWarnings("ConstantConditions")
     protected Property(Parcel in) {
         id = in.readString();
@@ -517,8 +516,18 @@ public class Property implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(type);
         parcel.writeString(borough);
-        parcel.writeDouble(price);
-        parcel.writeDouble(surface);
+        if (price == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(price);
+        }
+        if (surface == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(surface);
+        }
         parcel.writeInt(rooms);
         parcel.writeInt(bathrooms);
         parcel.writeInt(bedrooms);
@@ -526,15 +535,25 @@ public class Property implements Parcelable {
         parcel.writeInt(streetNumber);
         parcel.writeString(streetName);
         parcel.writeString(addressSupplement);
-        parcel.writeInt(zip);
         parcel.writeString(city);
+        parcel.writeInt(zip);
         parcel.writeString(country);
-        parcel.writeValue(sold);
+        parcel.writeByte((byte) (sold ? 1 : 0));
         parcel.writeLong(entryDate);
         parcel.writeLong(saleDate);
         parcel.writeLong(updateDate);
-        parcel.writeDouble(latitude);
-        parcel.writeDouble(longitude);
+        if (latitude == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(latitude);
+        }
+        if (longitude == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeDouble(longitude);
+        }
         parcel.writeString(agentID);
     }
 }

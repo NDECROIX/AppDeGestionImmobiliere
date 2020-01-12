@@ -20,7 +20,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.bumptech.glide.util.Util;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -33,6 +32,7 @@ import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
 import com.openclassrooms.realestatemanager.database.updates.UpdateData;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
+import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
@@ -52,7 +52,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends BaseActivity implements ListPropertyRecyclerViewAdapter.PropertyOnClickListener,
-        EditActivity.startEditActivityListener, UpdateData.UpdateDataListener {
+        EditActivity.startEditActivityListener, UpdateData.UpdateDataListener, FilterDialogFragment.FilterListener {
 
     // Views
     @BindView(R.id.main_activity_drawer_layout)
@@ -83,6 +83,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     private Property property;
     private List<Photo> photos;
     private List<PoiNextProperty> poiNextProperties;
+    private Filter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +159,10 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             propertyViewModel.setCurrentPoisNextProperty(poiNextProperties);
             propertyViewModel.setCurrentPhotos(photos);
         }
+        if (filter != null){
+            propertyViewModel.setCurrentFilter(filter);
+        }
+        System.out.println("ERRRRRORORORO 2");
     }
 
     private void configToolbar() {
@@ -277,7 +282,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         if (activeFragment != listFragment) {
             return;
         }
-        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, (ListFragment) activeFragment,
+        FilterDialogFragment agentDialogFragment = new FilterDialogFragment(this, this,
                 this.getLayoutInflater(), getSupportFragmentManager());
         agentDialogFragment.show(getSupportFragmentManager(), "dialog");
     }
@@ -384,6 +389,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         super.onResume();
     }
 
+    public static final String FILTER = "filter";
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (frameLayoutDetail != null) {
@@ -392,15 +398,32 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         outState.putParcelable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
         outState.putSerializable(PHOTOS, (Serializable) propertyViewModel.getCurrentPhotosProperty().getValue());
         outState.putSerializable(POIS, (Serializable) propertyViewModel.getCurrentPoisNextProperty().getValue());
+        if (activeFragment == listFragment){
+            outState.putParcelable(FILTER, ((ListFragment) activeFragment).getFilter());
+        }
         super.onSaveInstanceState(outState);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        property = (Property) savedInstanceState.getSerializable(PROPERTY);
+        property = savedInstanceState.getParcelable(PROPERTY);
         photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
         poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
+        filter = savedInstanceState.getParcelable(FILTER);
+        if (propertyViewModel != null) {
+            configViewModel();
+        }
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onApplyFilter(Filter filter) {
+        propertyViewModel.setCurrentFilter(filter);
+    }
+
+    @Override
+    public void filterError(String message) {
+        customToast(this, message);
     }
 }

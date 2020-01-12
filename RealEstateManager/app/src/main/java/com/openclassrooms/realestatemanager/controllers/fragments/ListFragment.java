@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,7 +30,7 @@ import butterknife.Optional;
 /**
  * Display properties from the local database in a recycler view
  */
-public class ListFragment extends Fragment implements FilterDialogFragment.FilterListener {
+public class ListFragment extends Fragment {
 
     // Views
     @BindView(R.id.fragment_list_recycler_view)
@@ -87,9 +86,13 @@ public class ListFragment extends Fragment implements FilterDialogFragment.Filte
      * Get data from database
      */
     private void getDataFromViewModel() {
-        propertyViewModel.getProperties().observe(getViewLifecycleOwner(), adapter::setProperties);
+        propertyViewModel.getProperties().observe(getViewLifecycleOwner(), properties -> {
+            adapter.setProperties(properties);
+            adapter.filterProperty();
+        });
         propertyViewModel.getPhotos().observe(getViewLifecycleOwner(), adapter::setPhotoList);
         propertyViewModel.getPoisNextProperties().observe(getViewLifecycleOwner(), adapter::setPoisNextProperty);
+        propertyViewModel.getCurrentFilter().observe(getViewLifecycleOwner(), adapter::setFilter);
     }
 
     @Optional
@@ -98,13 +101,7 @@ public class ListFragment extends Fragment implements FilterDialogFragment.Filte
         ((EditActivity.startEditActivityListener) context).createProperty();
     }
 
-    @Override
-    public void onApplyFilter(Filter filter) {
-        adapter.setFilter(filter);
-    }
-
-    @Override
-    public void filterError(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    public Filter getFilter() {
+        return adapter.getFilter();
     }
 }

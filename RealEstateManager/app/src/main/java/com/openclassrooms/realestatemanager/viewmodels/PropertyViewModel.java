@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.model.Agent;
+import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
@@ -39,6 +40,7 @@ public class PropertyViewModel extends ViewModel {
     private MutableLiveData<Property> currentProperty;
     private MutableLiveData<List<Photo>> currentPhoto;
     private MutableLiveData<List<PoiNextProperty>> currentPoisNextProperty;
+    private MutableLiveData<Filter> currentFilter;
 
     public PropertyViewModel(PhotoDataRepository photoDataRepository,
                              PoiDataRepository poiDataRepository,
@@ -55,6 +57,7 @@ public class PropertyViewModel extends ViewModel {
         this.currentProperty = new MutableLiveData<>();
         this.currentPhoto = new MutableLiveData<>();
         this.currentPoisNextProperty = new MutableLiveData<>();
+        this.currentFilter = new MutableLiveData<>();
     }
 
     /**
@@ -73,6 +76,22 @@ public class PropertyViewModel extends ViewModel {
      */
     public void setCurrentPhotos(List<Photo> photos) {
         this.currentPhoto.setValue(new ArrayList<>(photos));
+    }
+
+    /**
+     * Change the current filter
+     * @param currentFilter Filter
+     */
+    public void setCurrentFilter(Filter currentFilter) {
+        this.currentFilter.setValue(currentFilter);
+    }
+
+    /**
+     * Get the current filter
+     * @return Filter
+     */
+    public MutableLiveData<Filter> getCurrentFilter() {
+        return currentFilter;
     }
 
     /**
