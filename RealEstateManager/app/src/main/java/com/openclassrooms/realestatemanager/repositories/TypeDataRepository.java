@@ -2,9 +2,7 @@ package com.openclassrooms.realestatemanager.repositories;
 
 import androidx.lifecycle.LiveData;
 
-import com.openclassrooms.realestatemanager.database.dao.PoiDAO;
 import com.openclassrooms.realestatemanager.database.dao.TypeDAO;
-import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.Type;
 
 import java.util.List;
@@ -29,12 +27,4 @@ public class TypeDataRepository {
         return this.typeDAO.getAll();
     }
 
-    /**
-     * Insert a POI in the database
-     *
-     * @param type New POI
-     */
-    public void insertType(Type type) {
-        this.typeDAO.insertType(type);
-    }
 }

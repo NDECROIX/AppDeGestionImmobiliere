@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.database.dao.AgentDao;
 import com.openclassrooms.realestatemanager.model.Agent;
-import com.openclassrooms.realestatemanager.model.Photo;
 
 import java.util.List;
 
@@ -21,6 +20,7 @@ public class AgentDataRepository {
 
     /**
      * Get Agents from the AppDatabase
+     *
      * @return List of all agent
      */
     public LiveData<List<Agent>> getAgents() {
@@ -29,6 +29,7 @@ public class AgentDataRepository {
 
     /**
      * Get an agent from the database
+     *
      * @param agentID Id of the agent
      * @return agent
      */

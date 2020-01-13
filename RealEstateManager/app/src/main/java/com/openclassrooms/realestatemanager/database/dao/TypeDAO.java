@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.openclassrooms.realestatemanager.model.Type;
@@ -20,6 +19,4 @@ public interface TypeDAO {
     @Query("SELECT * FROM Type")
     Cursor getAllWithCursor();
 
-    @Insert
-    void insertType(Type type);
 }

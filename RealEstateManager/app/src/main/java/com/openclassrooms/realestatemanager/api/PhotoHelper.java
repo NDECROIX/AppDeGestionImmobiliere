@@ -29,7 +29,7 @@ public class PhotoHelper {
     /**
      * Add a Photo in the database
      *
-     * @param uid Hash uri
+     * @param uid   Hash uri
      * @param photo Photo to add to the database
      * @return Void task
      */
@@ -43,7 +43,7 @@ public class PhotoHelper {
      * @param uid Hash uri
      * @return DocumentSnapshot photo
      */
-    public static Task<DocumentSnapshot> getPhoto(String uid) {
+    static Task<DocumentSnapshot> getPhoto(String uid) {
         return PhotoHelper.getPhotoCollection().document(uid).get();
     }
 

@@ -134,15 +134,6 @@ public class PropertyViewModel extends ViewModel {
     }
 
     /**
-     * Get property from the application database
-     *
-     * @return Property with id as parameter
-     */
-    public LiveData<Property> getProperty(String propertyID) {
-        return propertyDataRepository.getProperty(propertyID);
-    }
-
-    /**
      * Insert a property in the database
      *
      * @param property New property
@@ -214,15 +205,6 @@ public class PropertyViewModel extends ViewModel {
         return poiDataRepository.getPOIs();
     }
 
-    /**
-     * Insert a point of interest in the AppDatabase
-     *
-     * @param poi Point of interest to add
-     */
-    public void insertPoi(Poi poi) {
-        executor.execute(() -> poiDataRepository.insertPoiNextProperty(poi));
-    }
-
     //---------------
     //--- FOR TYPE ---
     //---------------
@@ -234,15 +216,6 @@ public class PropertyViewModel extends ViewModel {
      */
     public LiveData<List<Type>> getTypes() {
         return typeDataRepository.getTypes();
-    }
-
-    /**
-     * Insert a type in the AppDatabase
-     *
-     * @param type Type to add
-     */
-    public void insertType(Type type) {
-        executor.execute(() -> typeDataRepository.insertType(type));
     }
 
     //-----------------------------

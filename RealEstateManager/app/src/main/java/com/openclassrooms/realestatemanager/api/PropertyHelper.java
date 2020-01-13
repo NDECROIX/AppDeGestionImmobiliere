@@ -55,7 +55,7 @@ public class PropertyHelper {
      * @param id Id of the property to be recovered
      * @return DocumentSnapshot agent
      */
-    public static Task<DocumentSnapshot> getProperty(String id) {
+    static Task<DocumentSnapshot> getProperty(String id) {
         return PropertyHelper.getPropertyCollection().document(id).get();
     }
 

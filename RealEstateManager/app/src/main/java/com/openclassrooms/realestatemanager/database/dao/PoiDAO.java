@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.openclassrooms.realestatemanager.model.Poi;
@@ -20,6 +19,4 @@ public interface PoiDAO {
     @Query("SELECT * FROM Poi")
     Cursor getAllWithCursor();
 
-    @Insert
-    void insertPOI(Poi poi);
 }

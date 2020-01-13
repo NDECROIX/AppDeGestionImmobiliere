@@ -5,7 +5,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 
 /**
@@ -29,6 +28,7 @@ public class PoisNexPropertiesHelper {
 
     /**
      * Add a PoiNextProperty in firebase database
+     *
      * @param poiNextProperty PoiNextProperty to add
      * @return Void task
      */
@@ -38,15 +38,17 @@ public class PoisNexPropertiesHelper {
 
     /**
      * Retrieves a poiNextProperty from firebase database
+     *
      * @param uid PoiNextProperty unique ID
      * @return PoiNextProperty
      */
-    public static Task<DocumentSnapshot> getPoiNextProperty(String uid) {
+    static Task<DocumentSnapshot> getPoiNextProperty(String uid) {
         return PoisNexPropertiesHelper.getPoisNextPropertiesCollection().document(uid).get();
     }
 
     /**
      * Delete a PoiNextProperty from firebase database
+     *
      * @param uid PoiNextProperty unique id
      * @return Void task
      */
@@ -56,6 +58,7 @@ public class PoisNexPropertiesHelper {
 
     /**
      * Get getPoisNextProperties from firebase database
+     *
      * @return List of PoiNetProperty
      */
     public static Task<QuerySnapshot> getPoisNextProperties() {

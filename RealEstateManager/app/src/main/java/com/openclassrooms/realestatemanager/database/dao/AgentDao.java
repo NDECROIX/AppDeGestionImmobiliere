@@ -1,7 +1,5 @@
 package com.openclassrooms.realestatemanager.database.dao;
 
-import android.database.Cursor;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -17,9 +15,6 @@ public interface AgentDao {
 
     @Query("SELECT * FROM Agent")
     LiveData<List<Agent>> getAgents();
-
-    @Query("SELECT * FROM Agent")
-    Cursor getAgentsCursor();
 
     @Query("SELECT * FROM Agent WHERE id LIKE :agentID")
     LiveData<Agent> getAgent(String agentID);

@@ -27,12 +27,4 @@ public class PoiDataRepository {
         return this.poiDAO.getAll();
     }
 
-    /**
-     * Insert a POI in the database
-     *
-     * @param poi New POI
-     */
-    public void insertPoiNextProperty(Poi poi) {
-        this.poiDAO.insertPOI(poi);
-    }
 }
