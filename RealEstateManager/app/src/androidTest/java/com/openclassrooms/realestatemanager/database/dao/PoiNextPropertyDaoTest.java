@@ -78,7 +78,7 @@ public class PoiNextPropertyDaoTest {
      * @return PoiNextProperty test
      */
     @DataPoint
-    private PoiNextProperty createPoiNextProperty(String propertyID) {
+    public static PoiNextProperty createPoiNextProperty(String propertyID) {
         return new PoiNextProperty(propertyID, "Gym");
     }
 

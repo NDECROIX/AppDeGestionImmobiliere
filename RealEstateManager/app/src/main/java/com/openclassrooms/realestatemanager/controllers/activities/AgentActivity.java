@@ -20,13 +20,14 @@ import com.google.android.material.snackbar.Snackbar;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.AgentDialogFragment;
+import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.database.updates.UpdateData;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.AgentActivityRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.List;
 
@@ -38,7 +39,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.openclassrooms.realestatemanager.controllers.activities.MainActivity.RC_READ_WRITE;
 
 public class AgentActivity extends BaseActivity implements AgentActivityRecyclerViewAdapter.OnClickAgentListener,
         AgentDialogFragment.CreateAgentListener, UpdateData.UpdateDataListener {
@@ -99,7 +99,7 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
      * Configure the property view model
      */
     private void configViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(AppDatabase.getInstance(this));
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
         configObserver();
     }

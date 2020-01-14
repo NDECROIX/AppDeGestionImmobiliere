@@ -37,7 +37,7 @@ import com.openclassrooms.realestatemanager.controllers.activities.MapsActivity;
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

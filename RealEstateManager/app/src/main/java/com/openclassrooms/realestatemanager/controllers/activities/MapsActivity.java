@@ -17,15 +17,15 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.MapsFragment;
+import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Display a google map with properties as marker
@@ -83,7 +83,7 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
 
     // Configure view model
     private void configViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(AppDatabase.getInstance(this));
         propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
     }
 

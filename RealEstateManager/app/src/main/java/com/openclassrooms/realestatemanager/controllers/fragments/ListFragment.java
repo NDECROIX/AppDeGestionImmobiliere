@@ -20,7 +20,7 @@ import com.openclassrooms.realestatemanager.controllers.activities.EditActivity;
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

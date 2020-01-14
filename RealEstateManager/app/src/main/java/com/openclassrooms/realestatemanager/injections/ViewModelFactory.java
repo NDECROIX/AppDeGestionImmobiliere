@@ -10,7 +10,7 @@ import com.openclassrooms.realestatemanager.repositories.PoiDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiNextPropertyDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
 import com.openclassrooms.realestatemanager.repositories.TypeDataRepository;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.concurrent.Executor;
 

@@ -1,25 +1,18 @@
 package com.openclassrooms.realestatemanager.database.updates;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
-import com.google.firebase.storage.StorageReference;
 import com.openclassrooms.realestatemanager.api.PhotoHelper;
 import com.openclassrooms.realestatemanager.api.StoragePhotoHelper;
 import com.openclassrooms.realestatemanager.model.Photo;
-import com.openclassrooms.realestatemanager.utils.UtilsPhoto;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Synchronize local database photos with the firebase database photos

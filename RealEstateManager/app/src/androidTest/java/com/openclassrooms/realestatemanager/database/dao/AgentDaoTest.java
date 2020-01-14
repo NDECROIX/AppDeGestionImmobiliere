@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.database.dao;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
@@ -40,6 +41,7 @@ public class AgentDaoTest {
      */
     @Before
     public void initDb() {
+        ApplicationProvider.getApplicationContext().deleteDatabase("DatabaseREM.db");
         this.database = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase.class)
                 .allowMainThreadQueries()
                 .addCallback(AppDatabase.prePopulateDatabase())

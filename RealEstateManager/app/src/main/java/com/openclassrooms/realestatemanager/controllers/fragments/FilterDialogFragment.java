@@ -27,7 +27,7 @@ import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.model.Type;
 import com.openclassrooms.realestatemanager.view.holders.FilterViewHolder;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

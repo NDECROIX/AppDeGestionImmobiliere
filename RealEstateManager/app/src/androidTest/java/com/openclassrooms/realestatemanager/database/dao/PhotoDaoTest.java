@@ -58,7 +58,7 @@ public class PhotoDaoTest {
      * @return Property test
      */
     @DataPoint
-    private Property createProperty() {
+    public static Property createProperty() {
         Property property = new Property();
         property.setType("test");
         property.setRooms(10);
@@ -78,7 +78,7 @@ public class PhotoDaoTest {
      * @return Photo test
      */
     @DataPoint
-    private Photo createPhoto(String propertyId) {
+    public static Photo createPhoto(String propertyId) {
         return new Photo("test", propertyId, "test");
     }
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer;
 
 import com.openclassrooms.realestatemanager.api.AgentHelper;
 import com.openclassrooms.realestatemanager.model.Agent;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -29,6 +29,7 @@ import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DetailFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.FilterDialogFragment;
 import com.openclassrooms.realestatemanager.controllers.fragments.ListFragment;
+import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.database.updates.UpdateData;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
@@ -38,7 +39,7 @@ import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.view.adapters.ListPropertyRecyclerViewAdapter;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -152,7 +153,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
      * Init the property view model
      */
     private void configViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(AppDatabase.getInstance(this));
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
         if (property != null) {
             propertyViewModel.setCurrentProperty(property);
@@ -162,7 +163,6 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         if (filter != null){
             propertyViewModel.setCurrentFilter(filter);
         }
-        System.out.println("ERRRRRORORORO 2");
     }
 
     private void configToolbar() {

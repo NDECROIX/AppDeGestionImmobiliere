@@ -24,8 +24,8 @@ public class Injection {
      * @param context Activity context
      * @return PhotoDataRepository
      */
-    private static PhotoDataRepository providePhotoDataSource(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
+    private static PhotoDataRepository providePhotoDataSource(AppDatabase context) {
+        AppDatabase database = context;
         return new PhotoDataRepository(database.photoDAO());
     }
 
@@ -35,8 +35,8 @@ public class Injection {
      * @param context Activity context
      * @return PoiDataRepository
      */
-    private static PoiDataRepository providePoiDataSource(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
+    private static PoiDataRepository providePoiDataSource(AppDatabase context) {
+        AppDatabase database = context;
         return new PoiDataRepository(database.poiDAO());
     }
 
@@ -46,8 +46,8 @@ public class Injection {
      * @param context Activity context
      * @return TypeDataRepository
      */
-    private static TypeDataRepository provideTypeDataSource(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
+    private static TypeDataRepository provideTypeDataSource(AppDatabase context) {
+        AppDatabase database = context;
         return new TypeDataRepository(database.typeDAO());
     }
 
@@ -57,8 +57,8 @@ public class Injection {
      * @param context Activity context
      * @return PoiNextPropertyDataRepository
      */
-    private static PoiNextPropertyDataRepository providePoiNextPropertyDataSource(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
+    private static PoiNextPropertyDataRepository providePoiNextPropertyDataSource(AppDatabase context) {
+        AppDatabase database = context;
         return new PoiNextPropertyDataRepository(database.poiNextPropertyDAO());
     }
 
@@ -68,8 +68,8 @@ public class Injection {
      * @param context Activity source
      * @return PropertyDataRepository
      */
-    private static PropertyDataRepository providePropertyDataSource(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
+    private static PropertyDataRepository providePropertyDataSource(AppDatabase context) {
+        AppDatabase database = context;
         return new PropertyDataRepository(database.propertyDAO());
     }
 
@@ -79,8 +79,8 @@ public class Injection {
      * @param context Activity context
      * @return AgentDataRepository
      */
-    private static AgentDataRepository provideAgentDataSource(Context context) {
-        AppDatabase database = AppDatabase.getInstance(context);
+    private static AgentDataRepository provideAgentDataSource(AppDatabase context) {
+        AppDatabase database = context;
         return new AgentDataRepository(database.agentDAO());
     }
 
@@ -96,16 +96,16 @@ public class Injection {
     /**
      * Provide a view model factory
      *
-     * @param context Activity context
+     * @param appDatabase Activity context
      * @return ViewModelFactory
      */
-    public static ViewModelFactory provideViewModelFactory(Context context) {
-        PhotoDataRepository photoDataRepository = providePhotoDataSource(context);
-        PoiDataRepository poiDataRepository = providePoiDataSource(context);
-        TypeDataRepository typeDataRepository = provideTypeDataSource(context);
-        PoiNextPropertyDataRepository poiNextPropertyDataRepository = providePoiNextPropertyDataSource(context);
-        PropertyDataRepository dataSourceProperty = providePropertyDataSource(context);
-        AgentDataRepository agentDataRepository = provideAgentDataSource(context);
+    public static ViewModelFactory provideViewModelFactory(AppDatabase appDatabase) {
+        PhotoDataRepository photoDataRepository = providePhotoDataSource(appDatabase);
+        PoiDataRepository poiDataRepository = providePoiDataSource(appDatabase);
+        TypeDataRepository typeDataRepository = provideTypeDataSource(appDatabase);
+        PoiNextPropertyDataRepository poiNextPropertyDataRepository = providePoiNextPropertyDataSource(appDatabase);
+        PropertyDataRepository dataSourceProperty = providePropertyDataSource(appDatabase);
+        AgentDataRepository agentDataRepository = provideAgentDataSource(appDatabase);
         Executor executor = provideExecutor();
         return new ViewModelFactory(photoDataRepository, poiDataRepository, typeDataRepository, poiNextPropertyDataRepository, dataSourceProperty, agentDataRepository, executor);
     }

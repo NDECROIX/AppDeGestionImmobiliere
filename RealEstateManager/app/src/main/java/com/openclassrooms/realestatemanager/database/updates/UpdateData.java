@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LifecycleOwner;
 
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

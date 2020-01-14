@@ -32,6 +32,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.base.BaseActivity;
 import com.openclassrooms.realestatemanager.controllers.fragments.DatePickerFragment;
+import com.openclassrooms.realestatemanager.database.AppDatabase;
 import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.model.Agent;
@@ -43,7 +44,7 @@ import com.openclassrooms.realestatemanager.model.Type;
 import com.openclassrooms.realestatemanager.utils.UtilsPhoto;
 import com.openclassrooms.realestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
 import com.openclassrooms.realestatemanager.view.holders.EditActivityViewHolder;
-import com.openclassrooms.realestatemanager.viewmodels.PropertyViewModel;
+import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -266,7 +267,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     private void configViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(AppDatabase.getInstance(this));
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
     }
 
