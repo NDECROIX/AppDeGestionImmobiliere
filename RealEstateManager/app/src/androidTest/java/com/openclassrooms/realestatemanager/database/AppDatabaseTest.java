@@ -23,7 +23,6 @@ import static org.junit.Assert.assertFalse;
 /**
  * Test the application database
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class AppDatabaseTest {
 

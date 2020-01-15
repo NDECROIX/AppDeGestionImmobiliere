@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test PoisNextPropertiesHelper
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class PoisNextPropertiesHelperTest {
 

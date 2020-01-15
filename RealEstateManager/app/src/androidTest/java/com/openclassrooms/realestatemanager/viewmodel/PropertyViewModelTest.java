@@ -22,9 +22,7 @@ import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +45,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test property view model
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class PropertyViewModelTest {
     @Rule
@@ -57,32 +54,34 @@ public class PropertyViewModelTest {
      * Required for asynchronous task
      */
     private final static CountingIdlingResource callOnApiIdl = new CountingIdlingResource(PropertyViewModelTest.class.getName());
+
     private PropertyViewModel viewModel;
-    private AppDatabase database;
 
-    @BeforeClass
-    public static void beforeClass() {
-        IdlingRegistry.getInstance().register(callOnApiIdl);
-    }
-
+    /**
+     * Set up the view model and the local database
+     * Init idlingResource to wait asyncTask
+     */
     @Before
     public void setUp() {
+        IdlingRegistry.getInstance().register(callOnApiIdl);
         assertFalse("Stop internet before perform test", Utils.isInternetAvailable(rule.getActivity()));
         this.rule.getActivity().deleteDatabase("DatabaseREM.db");
-        this.database = AppDatabase.getInstance(this.rule.getActivity());
         this.viewModel = ViewModelProviders.of(this.rule.getActivity()).get(PropertyViewModel.class);
     }
 
+    /**
+     * Close database for memory leaks.
+     * Unregister IdlingResource after tests
+     */
     @After
     public void closeDb() {
-        this.database.close();
-    }
-
-    @AfterClass
-    public static void afterClass() {
+        AppDatabase.getInstance(this.rule.getActivity()).close();
         IdlingRegistry.getInstance().unregister(callOnApiIdl);
     }
 
+    /**
+     * Test set and get current property
+     */
     @Test
     @UiThreadTest
     public void setGetCurrentProperty() {
@@ -92,6 +91,9 @@ public class PropertyViewModelTest {
         assertEquals(property, propertyResult);
     }
 
+    /**
+     * Test set and get current photos
+     */
     @Test
     @UiThreadTest
     public void setGetCurrentPhotos() {
@@ -102,6 +104,9 @@ public class PropertyViewModelTest {
         assertEquals(photo, photos.get(0));
     }
 
+    /**
+     * Test set and get point of interest next a property
+     */
     @Test
     @UiThreadTest
     public void setGetPoiNextProperty() {
@@ -113,6 +118,9 @@ public class PropertyViewModelTest {
         assertEquals(poiNextProperty, poisNextProperties.get(0));
     }
 
+    /**
+     * Test set and get current filter
+     */
     @Test
     @UiThreadTest
     public void setGetCurrentFilter() {
@@ -123,6 +131,9 @@ public class PropertyViewModelTest {
         assertEquals(filter, filterResult);
     }
 
+    /**
+     * Insert property in the local database from the view model
+     */
     @Test
     public void insertProperty() {
         Property propertyTest = createTestProperty();
@@ -139,6 +150,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Retrieve properties from the local database by the view model
+     */
     @Test
     public void getProperties() {
         Property propertyTest = createTestProperty();
@@ -156,6 +170,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Update the property in the local database from the view model
+     */
     @Test
     public void updateProperty() {
         Property propertyTest = createTestProperty();
@@ -175,6 +192,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Insert a property photo in the local database from the view model
+     */
     @Test
     public void insertPropertyPhoto() {
         Property propertyTest = createProperty();
@@ -194,6 +214,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Get the property photos from the local database by the view model
+     */
     @Test
     public void getPropertyPhotos() {
         Property propertyTest = createProperty();
@@ -214,6 +237,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Delete a photo from the local database by the view model
+     */
     @Test
     public void deletePhoto() {
         Property propertyTest = createProperty();
@@ -235,6 +261,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * insert a point of interest next a property in the local database from the view model
+     */
     @Test
     public void insertPoiNextPropertyTest() {
         Property propertyTest = createProperty();
@@ -255,6 +284,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Retrieves points of interest next a property from the local database by the view model
+     */
     @Test
     public void getPoisNextPropertiesTest() {
         Property propertyTest = createProperty();
@@ -274,6 +306,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Delete a point of interest from the local database by the view model
+     */
     @Test
     public void deletePoiNextProperty() {
         Property propertyTest = createProperty();
@@ -295,6 +330,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Insert an agent in the database from the view model
+     */
     @Test
     public void insertAgent() {
         Agent agentTest = createTestAgent();
@@ -311,6 +349,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Retrieve an agent from the local database by the view model
+     */
     @Test
     public void getAgent() {
         Agent agentTest = createTestAgent();
@@ -327,6 +368,9 @@ public class PropertyViewModelTest {
         onIdle();
     }
 
+    /**
+     * Update an agent from the local database by the view model
+     */
     @Test
     public void updateAgent() {
         Agent agentTest = createTestAgent();

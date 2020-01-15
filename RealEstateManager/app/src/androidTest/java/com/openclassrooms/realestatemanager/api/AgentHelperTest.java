@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test AgentHelper
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class AgentHelperTest {
 

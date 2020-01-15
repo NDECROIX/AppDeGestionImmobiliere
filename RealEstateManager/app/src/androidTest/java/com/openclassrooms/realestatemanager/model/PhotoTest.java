@@ -15,6 +15,9 @@ import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Perform tests on the photo class
+ */
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class PhotoTest {
 

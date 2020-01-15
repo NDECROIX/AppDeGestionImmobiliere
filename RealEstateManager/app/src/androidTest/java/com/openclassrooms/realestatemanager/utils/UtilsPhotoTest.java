@@ -37,7 +37,6 @@ public class UtilsPhotoTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private Context context;
-    private String uriTest;
 
     @Before
     public void setup() {
@@ -103,7 +102,7 @@ public class UtilsPhotoTest {
     @Test
     public void saveBitmapToThePath() {
         Context context = ApplicationProvider.getApplicationContext();
-        uriTest = getImageUri();
+        String uriTest = getImageUri();
         String newPath = UtilsPhoto.saveBitmapToThePath(context, Uri.parse(uriTest));
         assertTrue(Files.exists(Paths.get(newPath)));
         deleteImageFromUri(uriTest);

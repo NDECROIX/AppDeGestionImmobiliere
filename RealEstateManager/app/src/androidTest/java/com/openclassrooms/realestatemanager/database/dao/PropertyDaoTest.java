@@ -25,7 +25,6 @@ import static org.junit.Assert.assertFalse;
 /**
  * Test the property data access object
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class PropertyDaoTest {
 

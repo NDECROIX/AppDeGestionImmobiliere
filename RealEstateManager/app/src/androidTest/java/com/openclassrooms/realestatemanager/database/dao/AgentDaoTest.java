@@ -26,7 +26,6 @@ import static org.junit.Assert.assertFalse;
 /**
  * Test the agent data access object
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class AgentDaoTest {
 

@@ -34,7 +34,6 @@ import static org.junit.Assert.fail;
 /**
  * Test StoragePhotoHelper
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class StoragePhotoHelperTest {
 

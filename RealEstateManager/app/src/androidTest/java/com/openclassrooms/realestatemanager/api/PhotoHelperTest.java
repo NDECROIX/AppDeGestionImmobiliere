@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test PhotoHelper
  */
-@LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class PhotoHelperTest {
 
