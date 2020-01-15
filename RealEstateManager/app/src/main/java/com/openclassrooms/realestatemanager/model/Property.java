@@ -192,60 +192,6 @@ public class Property implements Parcelable {
     public Property() {
     }
 
-    @SuppressWarnings("ConstantConditions")
-    protected Property(Parcel in) {
-        id = in.readString();
-        type = in.readString();
-        borough = in.readString();
-        if (in.readByte() == 0) {
-            price = null;
-        } else {
-            price = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            surface = null;
-        } else {
-            surface = in.readDouble();
-        }
-        rooms = in.readInt();
-        bathrooms = in.readInt();
-        bedrooms = in.readInt();
-        description = in.readString();
-        streetNumber = in.readInt();
-        streetName = in.readString();
-        addressSupplement = in.readString();
-        city = in.readString();
-        zip = in.readInt();
-        country = in.readString();
-        sold = in.readByte() != 0;
-        entryDate = in.readLong();
-        saleDate = in.readLong();
-        updateDate = in.readLong();
-        if (in.readByte() == 0) {
-            latitude = null;
-        } else {
-            latitude = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            longitude = null;
-        } else {
-            longitude = in.readDouble();
-        }
-        agentID = in.readString();
-    }
-
-    public static final Creator<Property> CREATOR = new Creator<Property>() {
-        @Override
-        public Property createFromParcel(Parcel in) {
-            return new Property(in);
-        }
-
-        @Override
-        public Property[] newArray(int size) {
-            return new Property[size];
-        }
-    };
-
     /**
      * New york city borough
      *
@@ -505,6 +451,64 @@ public class Property implements Parcelable {
     public void setAgentID(String agentID) {
         this.agentID = agentID;
     }
+
+    // ----------
+    // PARCELABLE
+    // ----------
+
+    @SuppressWarnings("ConstantConditions")
+    protected Property(Parcel in) {
+        id = in.readString();
+        type = in.readString();
+        borough = in.readString();
+        if (in.readByte() == 0) {
+            price = null;
+        } else {
+            price = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            surface = null;
+        } else {
+            surface = in.readDouble();
+        }
+        rooms = in.readInt();
+        bathrooms = in.readInt();
+        bedrooms = in.readInt();
+        description = in.readString();
+        streetNumber = in.readInt();
+        streetName = in.readString();
+        addressSupplement = in.readString();
+        city = in.readString();
+        zip = in.readInt();
+        country = in.readString();
+        sold = in.readByte() != 0;
+        entryDate = in.readLong();
+        saleDate = in.readLong();
+        updateDate = in.readLong();
+        if (in.readByte() == 0) {
+            latitude = null;
+        } else {
+            latitude = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            longitude = null;
+        } else {
+            longitude = in.readDouble();
+        }
+        agentID = in.readString();
+    }
+
+    public static final Creator<Property> CREATOR = new Creator<Property>() {
+        @Override
+        public Property createFromParcel(Parcel in) {
+            return new Property(in);
+        }
+
+        @Override
+        public Property[] newArray(int size) {
+            return new Property[size];
+        }
+    };
 
     @Override
     public int describeContents() {

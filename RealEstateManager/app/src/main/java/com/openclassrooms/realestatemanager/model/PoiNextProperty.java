@@ -61,24 +61,6 @@ public class PoiNextProperty implements Parcelable {
         return Utils.convertStringMd5(value);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    protected PoiNextProperty(Parcel in) {
-        propertyID = in.readString();
-        poiName = in.readString();
-    }
-
-    public static final Creator<PoiNextProperty> CREATOR = new Creator<PoiNextProperty>() {
-        @Override
-        public PoiNextProperty createFromParcel(Parcel in) {
-            return new PoiNextProperty(in);
-        }
-
-        @Override
-        public PoiNextProperty[] newArray(int size) {
-            return new PoiNextProperty[size];
-        }
-    };
-
     // --- GETTER ---
 
     public @NonNull
@@ -102,17 +84,6 @@ public class PoiNextProperty implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(propertyID);
-        dest.writeString(poiName);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -125,4 +96,37 @@ public class PoiNextProperty implements Parcelable {
     public int hashCode() {
         return Objects.hash(propertyID, poiName);
     }
+
+    // ----------
+    // PARCELABLE
+    // ----------
+
+    @SuppressWarnings("ConstantConditions")
+    protected PoiNextProperty(Parcel in) {
+        propertyID = in.readString();
+        poiName = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(propertyID);
+        dest.writeString(poiName);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<PoiNextProperty> CREATOR = new Creator<PoiNextProperty>() {
+        @Override
+        public PoiNextProperty createFromParcel(Parcel in) {
+            return new PoiNextProperty(in);
+        }
+
+        @Override
+        public PoiNextProperty[] newArray(int size) {
+            return new PoiNextProperty[size];
+        }
+    };
 }

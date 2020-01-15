@@ -46,6 +46,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <TextView
+            android:id="@+id/activity_agent_tv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No Agents"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/activity_agent_swipe_refresh_view"
             android:layout_width="match_parent"

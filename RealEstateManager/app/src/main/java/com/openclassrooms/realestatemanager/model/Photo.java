@@ -135,16 +135,21 @@ public class Photo implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return name.equals(photo.name);
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(propertyID);
-        dest.writeString(description);
+    public int hashCode() {
+        return Objects.hash(name);
     }
+
+    // ----------
+    // PARCELABLE
+    // ----------
 
     @SuppressWarnings("ConstantConditions")
     protected Photo(Parcel in) {
@@ -166,15 +171,14 @@ public class Photo implements Parcelable {
     };
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Photo photo = (Photo) o;
-        return name.equals(photo.name);
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(propertyID);
+        parcel.writeString(description);
     }
 }

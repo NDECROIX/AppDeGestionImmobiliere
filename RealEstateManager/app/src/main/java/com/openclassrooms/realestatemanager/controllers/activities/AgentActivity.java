@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -54,6 +55,8 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.agent_activity_progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.activity_agent_tv_empty)
+    TextView noAgantsText;
 
     // Agent RecyclerView adapter
     private AgentActivityRecyclerViewAdapter adapter;
@@ -110,6 +113,9 @@ public class AgentActivity extends BaseActivity implements AgentActivityRecycler
     private void configObserver() {
         propertyViewModel.getAgents().observe(this, agents -> {
             this.agents = agents;
+            if (this.agents == null || !this.agents.isEmpty()){
+                noAgantsText.setVisibility(View.GONE);
+            }
             adapter.setAgents(agents);
         });
     }
