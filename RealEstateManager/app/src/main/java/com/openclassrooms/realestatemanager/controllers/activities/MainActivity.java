@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -223,6 +224,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                     customToast(this, "No internet");
                 }
                 break;
+            case R.id.activity_main_drawer_settings:
+                startActivity(SettingsActivity.newIntent(this));
+                break;
             case R.id.activity_main_drawer_synchronize:
                 synchronizeData();
                 drawerLayout.closeDrawers();
@@ -238,20 +242,27 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
      * Subscribe to topics to be notified when new agent or property is added on firebase
      */
     private void subscribeToTopics() {
-        FirebaseMessaging.getInstance().subscribeToTopic("newAgent")
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        showToastMessage(this, "Fail to subscribe on new agents");
-                    }
-                    customToast(this, "Subscribe to new agents");
-                });
-        FirebaseMessaging.getInstance().subscribeToTopic("newProperty")
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        showToastMessage(this, "Fail to subscribe on new properties");
-                    }
-                    customToast(this, "Subscribe to new properties");
-                });
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean subProperties = sharedPreferences.getBoolean(getString(R.string.key_subscribe_properties), true);
+        boolean subAgents = sharedPreferences.getBoolean(getString(R.string.key_subscribe_agents), true);
+        if (subProperties) {
+            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.subscribe_new_agent))
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            showToastMessage(this, getString(R.string.subscribe_new_agent_fail));
+                        }
+                        customToast(this, getString(R.string.subscribe_new_agent_success));
+                    });
+        }
+        if (subAgents){
+            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.subscribe_new_property))
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            showToastMessage(this, getString(R.string.subscribe_new_property_fail));
+                        }
+                        customToast(this, getString(R.string.subscribe_new_property_success));
+                    });
+        }
     }
 
     /**
@@ -260,6 +271,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     @AfterPermissionGranted(RC_READ_WRITE)
     public void synchronizeData() {
         if (progressBar != null && progressBar.getVisibility() != View.GONE) {
+            return;
+        }
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean autoSync = sharedPreferences.getBoolean(getString(R.string.key_auto_sync), true);
+        if (!autoSync) {
             return;
         }
         if (!Utils.isInternetAvailable(this)) {

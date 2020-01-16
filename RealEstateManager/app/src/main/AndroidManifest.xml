@@ -47,6 +47,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.openclassrooms.realestatemanager.controllers.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".controllers.activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".controllers.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.openclassrooms.realestatemanager.controllers.activities.MainActivity" />
+        </activity>
         <activity android:name=".controllers.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -5,13 +5,17 @@
     <item
         android:id="@+id/activity_main_drawer_agent"
         android:icon="@drawable/ic_person_add_24"
-        android:title="Agents"/>
+        android:title="@string/activity_main_drawer_agent"/>
     <item
         android:id="@+id/activity_main_drawer_map"
         android:icon="@drawable/ic_map_24"
-        android:title="Map"/>
+        android:title="@string/activity_main_drawer_map"/>
     <item
         android:id="@+id/activity_main_drawer_synchronize"
         android:icon="@drawable/ic_sync_24"
-        android:title="Synchronize"/>
+        android:title="@string/activity_main_drawer_synchronize"/>
+    <item
+        android:id="@+id/activity_main_drawer_settings"
+        android:icon="@drawable/ic_settings_applications_24"
+        android:title="@string/activity_main_drawer_settings"/>
 </menu>
