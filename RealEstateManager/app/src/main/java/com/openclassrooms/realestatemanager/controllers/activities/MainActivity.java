@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             propertyViewModel.setCurrentPoisNextProperty(poiNextProperties);
             propertyViewModel.setCurrentPhotos(photos);
         }
-        if (filter != null){
+        if (filter != null) {
             propertyViewModel.setCurrentFilter(filter);
         }
     }
@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                 startActivity(new Intent(this, AgentActivity.class));
                 break;
             case R.id.activity_main_drawer_map:
-                if (Utils.isInternetAvailable(this)){
+                if (Utils.isInternetAvailable(this)) {
                     startActivity(new Intent(this, MapsActivity.class));
                 } else {
                     customToast(this, "No internet");
@@ -331,6 +331,11 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
             propertyViewModel.setCurrentProperty(property);
             propertyViewModel.setCurrentPhotos(photos);
         }
+        if (frameLayoutDetail != null && detailFragment.getView() != null
+                && detailFragment.getView().getVisibility() == View.GONE) {
+            detailFragment.getView()
+                    .findViewById(R.id.fragment_detail_main_layout).setVisibility(View.VISIBLE);
+        }
     }
 
     // Notified an empty recycler view
@@ -390,6 +395,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     public static final String FILTER = "filter";
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         if (frameLayoutDetail != null) {
@@ -398,7 +404,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         outState.putParcelable(PROPERTY, propertyViewModel.getCurrentProperty().getValue());
         outState.putSerializable(PHOTOS, (Serializable) propertyViewModel.getCurrentPhotosProperty().getValue());
         outState.putSerializable(POIS, (Serializable) propertyViewModel.getCurrentPoisNextProperty().getValue());
-        if (activeFragment == listFragment){
+        if (activeFragment == listFragment) {
             outState.putParcelable(FILTER, ((ListFragment) activeFragment).getFilter());
         }
         super.onSaveInstanceState(outState);

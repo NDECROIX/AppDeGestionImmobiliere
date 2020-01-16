@@ -258,13 +258,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     }
 
     @Override
-    @AfterPermissionGranted(PERMISSIONS_REQUEST_LOCATION_CENTRED)
     public boolean onMyLocationButtonClick() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
             Toast.makeText(getContext(), R.string.maps_fragment_centred, Toast.LENGTH_SHORT).show();
         } else {
             getAccessFineLocationPermission(PERMISSIONS_REQUEST_LOCATION_CENTRED);
         }
-        return false;
+        return true;
     }
 }
