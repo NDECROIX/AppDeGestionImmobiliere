@@ -101,7 +101,7 @@
     <string name="fragment_list_item_photo">photo property</string>
     <string name="fragment_list_item_type">Penthouse</string>
     <string name="fragment_list_item_borough">Brooklyn</string>
-    <string name="fragment_list_item_price">41,480</string>
+    <string name="fragment_list_item_price">41,480,888,888,888</string>
     <string name="fragment_list_item_bathroom">2</string>
     <string name="fragment_list_item_bedroom">4</string>
     <string name="fragment_list_item_home">8</string>

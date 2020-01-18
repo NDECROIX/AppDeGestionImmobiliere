@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -74,22 +73,13 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
      *
      * @param context  Activity context
      * @param property Property to update
-     * @param pois     Pois of the property to be updated
-     * @param photos   Photo of the property to be updated
      * @return Intent
      */
-    public static Intent newIntent(Context context, @Nullable Property property, @Nullable List<PoiNextProperty> pois,
-                                   @Nullable List<Photo> photos) {
+    public static Intent newIntent(Context context, @Nullable Property property) {
         Bundle bundle = new Bundle();
         Intent intent = new Intent(context, EditActivity.class);
         if (property != null) {
             bundle.putParcelable(PROPERTY, property);
-        }
-        if (pois != null) {
-            bundle.putParcelableArrayList(POIS, (ArrayList<? extends Parcelable>) pois);
-        }
-        if (photos != null) {
-            bundle.putParcelableArrayList(PHOTOS, (ArrayList<? extends Parcelable>) photos);
         }
         intent.putExtras(bundle);
         return intent;
@@ -135,8 +125,8 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         getExtras();
         pois = new ArrayList<>();
         property = new Property();
-        configRecyclerView();
         configViewModel();
+        configRecyclerView();
         configToolbar();
         configObserver();
         configViews();
@@ -149,23 +139,12 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             propertyToUpdate = bundle.getParcelable(PROPERTY);
-            List<PoiNextProperty> bundlePois = bundle.getParcelableArrayList(POIS);
-            if (bundlePois != null) {
-                poisNextProperty = new ArrayList<>(bundlePois);
-                poisPropertyName = new ArrayList<>();
-                for (PoiNextProperty poi : poisNextProperty) {
-                    poisPropertyName.add(poi.getPoiName());
-                }
-            }
-            List<Photo> bundlePhotos = bundle.getParcelableArrayList(PHOTOS);
-            if (bundlePhotos != null) {
-                propertyPhotos = new ArrayList<>(bundlePhotos);
-            }
         }
     }
 
     // Complete view
     private void configViews() {
+        updateTypeRadioBtn();
         displayBoroughRadioBtn();
         if (propertyToUpdate != null) {
             completeFieldsWithProperty(propertyToUpdate);
@@ -185,8 +164,11 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
         viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new EditActivityPhotoRecyclerViewAdapter(this);
         viewHolder.recyclerView.setAdapter(adapter);
-        if (propertyPhotos != null) {
-            adapter.setPhotos(propertyPhotos);
+        if (propertyToUpdate != null) {
+            propertyViewModel.getPropertyPhotos(propertyToUpdate.getId()).observe(this, photos -> {
+                adapter.setPhotos(photos);
+                propertyPhotos = new ArrayList<>(photos);
+            });
         }
     }
 
@@ -272,8 +254,18 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     }
 
     private void configObserver() {
-        propertyViewModel.getTypes().observe(this, this::updateTypeRadioBtn);
-        propertyViewModel.getAllPoi().observe(this, this::updatePoiCheckBox);
+        if (propertyToUpdate != null) {
+            propertyViewModel.getPoisNextProperty(this.propertyToUpdate.getId()).observe(this, poiNextProperties -> {
+                this.poisNextProperty = new ArrayList<>(poiNextProperties);
+                this.poisPropertyName = new ArrayList<>();
+                for (PoiNextProperty poi : this.poisNextProperty) {
+                    this.poisPropertyName.add(poi.getPoiName());
+                }
+                updatePoiCheckBox();
+            });
+        } else {
+            updatePoiCheckBox();
+        }
         propertyViewModel.getProperties().observe(this, properties -> this.properties = properties);
         propertyViewModel.getAgents().observe(this, agents -> this.agents = agents);
     }
@@ -281,12 +273,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
     /**
      * Display all types as a radio button in the group radio and
      * switch between left and right
-     *
-     * @param types all types from the database
      */
-    private void updateTypeRadioBtn(List<Type> types) {
+    private void updateTypeRadioBtn() {
         boolean left = true;
-        for (Type type : types) {
+        for (Type type : Type.getAllTypes()) {
             RadioButton radioButton = new RadioButton(getApplicationContext());
             radioButton.setText(type.getName());
             radioButton.setOnClickListener(l -> {
@@ -343,12 +333,10 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     /**
      * Display all poi as check box and switch between left and right
-     *
-     * @param POIs All POIs from the database
      */
-    private void updatePoiCheckBox(List<Poi> POIs) {
+    private void updatePoiCheckBox() {
         boolean left = true;
-        for (Poi poi : POIs) {
+        for (Poi poi : Poi.getAllPoi()) {
             CheckBox checkBox = new CheckBox(getApplicationContext());
             checkBox.setText(poi.getName());
             checkBox.setOnCheckedChangeListener((btn, checked) -> {
@@ -364,7 +352,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 viewHolder.checkBoxGrpRight.addView(checkBox);
             }
             left = !left;
-            if (poisPropertyName != null && poisPropertyName.contains(poi.getName())) {
+            if ((poisPropertyName != null) && poisPropertyName.contains(poi.getName())) {
                 checkBox.setChecked(true);
             }
         }

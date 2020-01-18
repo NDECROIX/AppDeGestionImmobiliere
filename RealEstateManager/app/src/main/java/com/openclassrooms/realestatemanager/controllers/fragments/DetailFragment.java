@@ -232,16 +232,16 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
         }
         propertyViewModel.getCurrentProperty().observe(getViewLifecycleOwner(), property -> {
             displayPropertyData(property);
-            propertyViewModel.getPoisNextProperty(property.getId())
-                    .observe(getViewLifecycleOwner(), this::displayPoi);
             if (nestedScrollView != null && nestedScrollView.getVisibility() == View.GONE) {
                 nestedScrollView.setVisibility(View.VISIBLE);
             }
         });
+        propertyViewModel.getCurrentPoisNextProperty()
+                .observe(getViewLifecycleOwner(), this::displayPoi);
     }
 
     private void displayPoi(List<PoiNextProperty> poiNextProperty) {
-        propertyViewModel.setCurrentPoisNextProperty(poiNextProperty);
+        //propertyViewModel.setCurrentPoisNextProperty(poiNextProperty);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(10, 10, 10, 10);
         poiGrpRight.removeAllViews();
@@ -283,6 +283,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
             }
         }
         LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+        mMap.clear();
         mMap.addMarker(new MarkerOptions().position(latLng));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f));
     }

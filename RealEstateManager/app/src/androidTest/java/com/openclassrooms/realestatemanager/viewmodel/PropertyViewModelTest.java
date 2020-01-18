@@ -87,35 +87,8 @@ public class PropertyViewModelTest {
     public void setGetCurrentProperty() {
         Property property = createTestProperty();
         this.viewModel.setCurrentProperty(property);
-        Property propertyResult = this.viewModel.getCurrentProperty().getValue();
+        Property propertyResult = this.viewModel.getCurrentProperty(rule.getActivity()).getValue();
         assertEquals(property, propertyResult);
-    }
-
-    /**
-     * Test set and get current photos
-     */
-    @Test
-    @UiThreadTest
-    public void setGetCurrentPhotos() {
-        Photo photo = createPhoto("test");
-        this.viewModel.setCurrentPhotos(Collections.singletonList(photo));
-        List<Photo> photos = this.viewModel.getCurrentPhotosProperty().getValue();
-        if (photos == null) fail("Fail to set photo in property view model");
-        assertEquals(photo, photos.get(0));
-    }
-
-    /**
-     * Test set and get point of interest next a property
-     */
-    @Test
-    @UiThreadTest
-    public void setGetPoiNextProperty() {
-        PoiNextProperty poiNextProperty = createPoiNextProperty("test");
-        this.viewModel.setCurrentPoisNextProperty(Collections.singletonList(poiNextProperty));
-        List<PoiNextProperty> poisNextProperties = this.viewModel.getCurrentPoisNextProperty().getValue();
-        if (poisNextProperties == null)
-            fail("Fail to get the points of interest next the current property");
-        assertEquals(poiNextProperty, poisNextProperties.get(0));
     }
 
     /**

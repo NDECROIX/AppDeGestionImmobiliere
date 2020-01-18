@@ -104,8 +104,8 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
         if (markerObject == null) {
             return false;
         }
-        propertyViewModel.setCurrentProperty(markerObject.property);
-        propertyViewModel.setCurrentPhotos(new ArrayList<>(markerObject.photos));
+        propertyViewModel.setCurrentProperty(markerObject.property, this);
+        //propertyViewModel.setCurrentPhotos(new ArrayList<>(markerObject.photos));
         if (frameLayoutDetail == null) {
             currentFragment = detailFragment;
             getSupportFragmentManager().beginTransaction()

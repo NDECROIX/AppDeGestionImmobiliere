@@ -157,9 +157,9 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(AppDatabase.getInstance(this));
         this.propertyViewModel = ViewModelProviders.of(this, viewModelFactory).get(PropertyViewModel.class);
         if (property != null) {
-            propertyViewModel.setCurrentProperty(property);
-            propertyViewModel.setCurrentPoisNextProperty(poiNextProperties);
-            propertyViewModel.setCurrentPhotos(photos);
+            propertyViewModel.setCurrentProperty(property, this);
+            //propertyViewModel.setCurrentPoisNextProperty(poiNextProperties);
+            //propertyViewModel.setCurrentPhotos(photos);
         }
         if (filter != null) {
             propertyViewModel.setCurrentFilter(filter);
@@ -308,8 +308,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
      */
     private void editProperty() {
         if (propertyViewModel.getCurrentProperty() != null) {
-            startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue(),
-                    propertyViewModel.getCurrentPoisNextProperty().getValue(), propertyViewModel.getCurrentPhotosProperty().getValue()));
+            startActivity(EditActivity.newIntent(this, propertyViewModel.getCurrentProperty().getValue()));
         } else {
             showToastMessage(this, "No property to edit!");
         }
@@ -329,8 +328,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     // Display the details of the selected property
     @Override
     public void onClickPropertyListener(Property property, List<Photo> photos) {
-        propertyViewModel.setCurrentProperty(property);
-        propertyViewModel.setCurrentPhotos(photos);
+        propertyViewModel.setCurrentProperty(property, this);
+        //propertyViewModel.setCurrentPhotos(photos);
         if (frameLayoutDetail == null) {
             activeFragment = detailFragment;
             getSupportFragmentManager().beginTransaction()
@@ -344,8 +343,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     public void firstPropertyAdded(Property property, List<Photo> photos) {
         noProperty.setVisibility(View.GONE);
         if (this.property == null) {
-            propertyViewModel.setCurrentProperty(property);
-            propertyViewModel.setCurrentPhotos(photos);
+            propertyViewModel.setCurrentProperty(property, this);
+            //propertyViewModel.setCurrentPhotos(photos);
         }
         if (frameLayoutDetail != null && detailFragment.getView() != null
                 && detailFragment.getView().getVisibility() == View.GONE) {
@@ -392,7 +391,7 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     // Start Edit activity to create a property
     @Override
     public void createProperty() {
-        startActivity(EditActivity.newIntent(this, null, null, null));
+        startActivity(EditActivity.newIntent(this, null));
     }
 
     @Override

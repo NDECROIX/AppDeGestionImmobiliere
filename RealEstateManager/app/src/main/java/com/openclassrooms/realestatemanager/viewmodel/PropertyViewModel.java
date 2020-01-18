@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.viewmodel;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,18 +8,13 @@ import androidx.lifecycle.ViewModel;
 import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Filter;
 import com.openclassrooms.realestatemanager.model.Photo;
-import com.openclassrooms.realestatemanager.model.Poi;
 import com.openclassrooms.realestatemanager.model.PoiNextProperty;
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.model.Type;
 import com.openclassrooms.realestatemanager.repositories.AgentDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PhotoDataRepository;
-import com.openclassrooms.realestatemanager.repositories.PoiDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PoiNextPropertyDataRepository;
 import com.openclassrooms.realestatemanager.repositories.PropertyDataRepository;
-import com.openclassrooms.realestatemanager.repositories.TypeDataRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -29,8 +25,6 @@ public class PropertyViewModel extends ViewModel {
 
     // REPOSITORY
     private final PhotoDataRepository photoDataRepository;
-    private final PoiDataRepository poiDataRepository;
-    private final TypeDataRepository typeDataRepository;
     private final PoiNextPropertyDataRepository poiNextPropertyDataRepository;
     private final PropertyDataRepository propertyDataRepository;
     private final AgentDataRepository agentDataRepository;
@@ -43,13 +37,9 @@ public class PropertyViewModel extends ViewModel {
     private MutableLiveData<Filter> currentFilter;
 
     public PropertyViewModel(PhotoDataRepository photoDataRepository,
-                             PoiDataRepository poiDataRepository,
-                             TypeDataRepository typeDataRepository,
                              PoiNextPropertyDataRepository poiNextPropertyDataRepository,
                              PropertyDataRepository propertyDataRepository, AgentDataRepository agentDataRepository, Executor executor) {
         this.photoDataRepository = photoDataRepository;
-        this.poiDataRepository = poiDataRepository;
-        this.typeDataRepository = typeDataRepository;
         this.poiNextPropertyDataRepository = poiNextPropertyDataRepository;
         this.propertyDataRepository = propertyDataRepository;
         this.agentDataRepository = agentDataRepository;
@@ -65,21 +55,18 @@ public class PropertyViewModel extends ViewModel {
      *
      * @param property Current property
      */
-    public void setCurrentProperty(Property property) {
-        this.currentProperty.setValue(property);
-    }
-
-    /**
-     * Photos from the current property
-     *
-     * @param photos Photos
-     */
-    public void setCurrentPhotos(List<Photo> photos) {
-        this.currentPhoto.setValue(new ArrayList<>(photos));
+    public void setCurrentProperty(Property property, LifecycleOwner lifecycleOwner) {
+        propertyDataRepository.getProperty(property.getId())
+                .observe(lifecycleOwner, propertyO -> currentProperty.setValue(propertyO));
+        poiNextPropertyDataRepository.getPoisNextProperty(property.getId())
+                .observe(lifecycleOwner, poiNextProperties -> currentPoisNextProperty.setValue(poiNextProperties));
+        photoDataRepository.getPropertyPhotos(property.getId())
+                .observe(lifecycleOwner, photos -> currentPhoto.setValue(photos));
     }
 
     /**
      * Change the current filter
+     *
      * @param currentFilter Filter
      */
     public void setCurrentFilter(Filter currentFilter) {
@@ -88,6 +75,7 @@ public class PropertyViewModel extends ViewModel {
 
     /**
      * Get the current filter
+     *
      * @return Filter
      */
     public MutableLiveData<Filter> getCurrentFilter() {
@@ -114,10 +102,6 @@ public class PropertyViewModel extends ViewModel {
 
     public MutableLiveData<List<PoiNextProperty>> getCurrentPoisNextProperty() {
         return currentPoisNextProperty;
-    }
-
-    public void setCurrentPoisNextProperty(List<PoiNextProperty> currentPoisNextProperty) {
-        this.currentPoisNextProperty.setValue(currentPoisNextProperty);
     }
 
     //--------------------
@@ -190,32 +174,6 @@ public class PropertyViewModel extends ViewModel {
      */
     public void deletePhoto(Photo photo) {
         executor.execute(() -> photoDataRepository.deletePhoto(photo));
-    }
-
-    //---------------
-    //--- FOR POI ---
-    //---------------
-
-    /**
-     * Get all Points of interest from the AppDatabase
-     *
-     * @return All Points of interest
-     */
-    public LiveData<List<Poi>> getAllPoi() {
-        return poiDataRepository.getPOIs();
-    }
-
-    //---------------
-    //--- FOR TYPE ---
-    //---------------
-
-    /**
-     * Get all Type from the AppDatabase
-     *
-     * @return All types
-     */
-    public LiveData<List<Type>> getTypes() {
-        return typeDataRepository.getTypes();
     }
 
     //-----------------------------
