@@ -257,7 +257,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 } else {
                     customToast(this, "No change");
                 }
-                startActivity(new Intent(this, MainActivity.class));
+                this.finish();
             } else if (propertyToUpdate != null) {
                 showToastMessage(this, "Property already exist!");
             } else {
@@ -676,6 +676,7 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
 
     @Override
     public void onBackPressed() {
+        this.finish();
         super.onBackPressed();
     }
 }

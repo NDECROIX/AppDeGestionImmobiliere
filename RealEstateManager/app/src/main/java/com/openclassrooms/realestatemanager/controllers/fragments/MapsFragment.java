@@ -76,7 +76,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private GoogleMap mMap;
 
     // Init detail with first property
-    private boolean initDetail;
 
     // Activity context
     private Context context;
@@ -190,11 +189,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
      */
     private void addMarkerWithBitmap(Property property) {
         propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos -> {
-            if (!initDetail) {
-                initDetail = true;
-                propertyViewModel.setCurrentProperty(property);
-                propertyViewModel.setCurrentPhotos(photos);
-            }
             Glide.with(this)
                     .asBitmap()
                     .load(photos.get(0).getUri(context))

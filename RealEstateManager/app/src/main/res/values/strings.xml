@@ -121,7 +121,7 @@
     <string name="subscribe_new_agent">newAgent</string>
     <string name="subscribe_new_agent_fail">Fail to subscribe on new agents</string>
     <string name="subscribe_new_agent_success">Subscribe to new agents</string>
-    <string name="subscribe_new_property">Subscribe to new properties</string>
+    <string name="subscribe_new_property">newProperty</string>
     <string name="subscribe_new_property_fail">Fail to subscribe on new properties</string>
     <string name="subscribe_new_property_success">Subscribe to new properties</string>
     <string name="unsubscribe_new_property_fail">Fail to Unsubscribe on new properties</string>

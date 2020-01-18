@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.controllers.activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -111,6 +112,8 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
                     .replace(R.id.activity_maps_frame_layout, currentFragment)
                     .addToBackStack(null)
                     .commit();
+        } else {
+            frameLayoutDetail.setVisibility(View.VISIBLE);
         }
         return true;
     }
@@ -121,7 +124,11 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
             currentFragment = mapFragment;
             getSupportFragmentManager().popBackStack();
             return;
+        } else if (frameLayoutDetail != null && frameLayoutDetail.getVisibility() == View.VISIBLE){
+            frameLayoutDetail.setVisibility(View.GONE);
+            return;
         }
+        this.finish();
         super.onBackPressed();
     }
 

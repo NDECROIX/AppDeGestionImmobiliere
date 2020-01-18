@@ -255,10 +255,10 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
                     });
         }
         if (subAgents){
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.subscribe_new_property))
+            FirebaseMessaging.getInstance().subscribeToTopic(this.getResources().getString(R.string.subscribe_new_property))
                     .addOnCompleteListener(task -> {
                         if (!task.isSuccessful()) {
-                            showToastMessage(this, getString(R.string.subscribe_new_property_fail));
+                            showToastMessage(this, this.getResources().getString(R.string.subscribe_new_property_fail));
                         }
                         customToast(this, getString(R.string.subscribe_new_property_success));
                     });

@@ -100,7 +100,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                             if (!task.isSuccessful()) {
                                 Toast.makeText(context, context.getString(R.string.subscribe_new_property_fail), Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(context, context.getString(R.string.subscribe_new_property), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, context.getString(R.string.subscribe_new_property_success), Toast.LENGTH_SHORT).show();
                         });
             } else {
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(context.getString(R.string.subscribe_new_property))
