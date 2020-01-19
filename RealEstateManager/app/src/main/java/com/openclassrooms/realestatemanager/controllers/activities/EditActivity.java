@@ -58,6 +58,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static com.openclassrooms.realestatemanager.notification.NotificationHelper.displayNotification;
 
 public class EditActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, EditActivityPhotoRecyclerViewAdapter.OnClickPhotoListener, EditActivityViewHolder.CheckFieldsListener {
 
@@ -235,13 +236,15 @@ public class EditActivity extends BaseActivity implements DatePickerDialog.OnDat
                 insertPoiInDatabase();
                 insertPhotoInDatabase();
                 if (dataHasBeenChanged) {
-                    customToast(this, type + ((propertyToUpdate == null) ? " added!" : " updated!"));
+                    if (propertyToUpdate == null){
+                        displayNotification(property, this);
+                    } else {
+                        customToast(this, type + " updated!");
+                    }
                 } else {
                     customToast(this, "No change");
                 }
                 this.finish();
-            } else if (propertyToUpdate != null) {
-                showToastMessage(this, "Property already exist!");
             } else {
                 showToastMessage(this, "Property already exist!");
             }

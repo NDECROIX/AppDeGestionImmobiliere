@@ -67,7 +67,7 @@ public class NotificationService extends FirebaseMessagingService {
         inboxStyle.addLine(messageBody);
 
         // Create a Channel (Android 8)
-        String channelId = "Firebase notification";
+        String channelId = getString(R.string.firebase_notification_channel_id);
 
         // Build a Notification object
         NotificationCompat.Builder notificationBuilder =

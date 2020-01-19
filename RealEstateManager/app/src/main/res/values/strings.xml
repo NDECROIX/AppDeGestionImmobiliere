@@ -146,4 +146,8 @@
     <string name="subscribe_properties_title">Properties</string>
     <string name="subscribe_agents_title">Agents</string>
     <string name="auto_sync_title">Automatic synchronization</string>
+    <string name="local_notification_channel_name">Notify property created</string>
+    <string name="local_notification_channel_description">Notify when a property is added</string>
+    <string name="local_notification_channel_id">Local notification</string>
+    <string name="firebase_notification_channel_id">Firebase notification</string>
 </resources>
