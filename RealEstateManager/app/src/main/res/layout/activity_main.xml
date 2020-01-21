@@ -30,7 +30,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

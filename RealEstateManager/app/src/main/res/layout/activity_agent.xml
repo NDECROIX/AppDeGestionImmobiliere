@@ -6,7 +6,7 @@
     android:id="@+id/activity_agent_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".controllers.activities.AgentActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +14,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:fitsSystemWindows="true"
             android:id="@+id/activity_agent_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
