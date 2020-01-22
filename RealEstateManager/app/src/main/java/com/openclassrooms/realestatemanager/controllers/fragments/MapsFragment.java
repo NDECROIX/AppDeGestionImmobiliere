@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,8 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 /**
  * Display a google map view
  */
-public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
+public class MapsFragment extends Fragment implements OnMapReadyCallback,
+        GoogleMap.OnMyLocationButtonClickListener {
 
     /**
      * Object as a tag in the marker that contains property and photos
@@ -149,7 +151,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             mMap.setOnMarkerClickListener((GoogleMap.OnMarkerClickListener) context);
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
-            propertyViewModel.getProperties().observe(this, this::addMarker);
+            propertyViewModel.getProperties().observe(getViewLifecycleOwner(), this::addMarker);
             getCurrentLocation();
         } else {
             getAccessFineLocationPermission(PERMISSIONS_REQUEST_LOCATION_UI);
@@ -188,31 +190,30 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
      * @param property Property
      */
     private void addMarkerWithBitmap(Property property) {
-        propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos -> {
-            Glide.with(this)
-                    .asBitmap()
-                    .load(photos.get(0).getUri(context))
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(new CustomTarget<Bitmap>(80, 80) {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            // Get position
-                            LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
-                            markerOptions.position(latLng);
-                            // Get bitmap
-                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resource));
-                            // Add marker on the map
-                            Marker marker = mMap.addMarker(markerOptions);
-                            MarkerObject markerObject = new MarkerObject(property, photos);
-                            marker.setTag(markerObject);
-                        }
+        propertyViewModel.getPropertyPhotos(property.getId()).observe(this, photos ->
+                Glide.with(this)
+                        .asBitmap()
+                        .load(photos.get(0).getUri(context))
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(new CustomTarget<Bitmap>(80, 80) {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                // Get position
+                                LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
+                                markerOptions.position(latLng);
+                                // Get bitmap
+                                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(resource));
+                                // Add marker on the map
+                                Marker marker = mMap.addMarker(markerOptions);
+                                MarkerObject markerObject = new MarkerObject(property, photos);
+                                marker.setTag(markerObject);
+                            }
 
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                        }
-                    });
-        });
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        }));
     }
 
     /**
@@ -254,7 +255,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public boolean onMyLocationButtonClick() {
         if (EasyPermissions.hasPermissions(context, ACCESS_FINE_LOCATION)) {
-            Toast.makeText(getContext(), R.string.maps_fragment_centred, Toast.LENGTH_SHORT).show();
+            getCurrentLocation();
         } else {
             getAccessFineLocationPermission(PERMISSIONS_REQUEST_LOCATION_CENTRED);
         }
