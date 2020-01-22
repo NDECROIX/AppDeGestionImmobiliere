@@ -83,8 +83,6 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
 
     // Save on rotation
     private Property property;
-    private List<Photo> photos;
-    private List<PoiNextProperty> poiNextProperties;
     private Filter filter;
 
     @Override
@@ -426,11 +424,8 @@ public class MainActivity extends BaseActivity implements ListPropertyRecyclerVi
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         property = savedInstanceState.getParcelable(PROPERTY);
-        photos = (List<Photo>) savedInstanceState.getSerializable(PHOTOS);
-        poiNextProperties = (List<PoiNextProperty>) savedInstanceState.getSerializable(POIS);
         filter = savedInstanceState.getParcelable(FILTER);
         if (propertyViewModel != null) {
             configViewModel();

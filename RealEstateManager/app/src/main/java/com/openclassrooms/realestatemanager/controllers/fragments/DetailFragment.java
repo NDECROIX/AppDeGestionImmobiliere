@@ -269,7 +269,7 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     private void getPictureAddress() {
         Property property = propertyViewModel.getCurrentProperty().getValue();
         if (property == null) return;
-        if (property.getLatitude() == null || property.getLatitude() == 0) {
+        if (property.getLatitude() == null || property.getLatitude() == 0 && Utils.isInternetAvailable(context)) {
             String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
                     property.getStreetName(), property.getCity(), property.getCountry(),
                     property.getZip());

@@ -188,7 +188,7 @@
                 android:layout_marginTop="@dimen/gutter"
                 android:text="@string/fragment_detail_tv_poi"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                app:layout_constraintEnd_toStartOf="@id/fragment_detail_map_view"
+                app:layout_constraintEnd_toStartOf="@id/fragment_detail_map_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_address" />
 
@@ -209,24 +209,36 @@
                 android:layout_marginStart="@dimen/gutter"
                 android:layout_marginTop="@dimen/gutter"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toStartOf="@id/fragment_detail_map_view"
+                app:layout_constraintEnd_toStartOf="@id/fragment_detail_map_layout"
                 app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_poi_left"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_poi" />
 
-            <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/fragment_detail_map_view"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+            <LinearLayout
+                android:id="@+id/fragment_detail_map_layout"
                 android:layout_width="250dp"
-                android:layout_height="250dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/gutter"
+                android:background="@drawable/map_background_shadow"
+                android:paddingStart="2dp"
+                android:paddingTop="1dp"
+                android:paddingEnd="1dp"
+                android:paddingBottom="2dp"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_address"
-                app:layout_constraintTop_toTopOf="@id/fragment_detail_tv_address"
-                map:liteMode="true"
-                map:mapType="normal"
-                tools:context=".DetailFragment" />
+                app:layout_constraintTop_toTopOf="@id/fragment_detail_tv_address">
+
+                <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/fragment_detail_map_view"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    map:liteMode="true"
+                    map:mapType="normal"
+                    tools:context=".DetailFragment" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/fragment_detail_tv_date"
@@ -239,7 +251,7 @@
                 android:textColor="@color/colorAccent"
                 app:layout_constraintBottom_toTopOf="@+id/fragment_detail_tv_agent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragment_detail_map_view" />
+                app:layout_constraintTop_toBottomOf="@id/fragment_detail_map_layout" />
 
             <TextView
                 android:id="@+id/fragment_detail_tv_agent"
