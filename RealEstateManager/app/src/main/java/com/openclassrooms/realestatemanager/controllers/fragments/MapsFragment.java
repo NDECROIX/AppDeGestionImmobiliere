@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +40,7 @@ import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -171,13 +170,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
                         property.getStreetName(), property.getCity(), property.getCountry(),
                         property.getZip());
-                LatLng latLng = Utils.getLocationFromAddress(getContext(), address);
-                if (latLng != null) {
-                    property.setLatitude(latLng.latitude);
-                    property.setLongitude(latLng.longitude);
-                    propertyViewModel.updateProperty(property);
-                    addMarkerWithBitmap(property);
-                }
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    LatLng latLng = Utils.getLocationFromAddress(context, address);
+                    if (latLng != null) {
+                        property.setLatitude(latLng.latitude);
+                        property.setLongitude(latLng.longitude);
+                        propertyViewModel.updateProperty(property);
+                    }
+                });
             } else {
                 addMarkerWithBitmap(property);
             }

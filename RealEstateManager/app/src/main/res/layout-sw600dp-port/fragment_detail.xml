@@ -104,6 +104,7 @@
                 android:drawableStart="@drawable/ic_surface_24"
                 android:gravity="bottom"
                 android:text="@string/fragment_detail_tv_surface"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_price" />
 
@@ -115,6 +116,7 @@
                 android:drawableStart="@drawable/ic_home_24"
                 android:gravity="bottom"
                 android:text="@string/fragment_detail_tv_room"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_surface" />
 
@@ -126,6 +128,7 @@
                 android:drawableStart="@drawable/ic_bedroom_24"
                 android:gravity="bottom"
                 android:text="@string/fragment_detail_tv_bedroom"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_room" />
 
@@ -137,6 +140,7 @@
                 android:drawableStart="@drawable/ic_bathroom_24"
                 android:gravity="bottom"
                 android:text="@string/fragment_detail_tv_bathroom"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_detail_tv_bedroom" />
 
@@ -159,6 +163,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="4dp"
                 android:text="@string/fragment_detail_tv_address_dummy"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintStart_toEndOf="@id/fragment_detail_tv_location"
                 app:layout_constraintTop_toTopOf="@id/fragment_detail_tv_location" />
 

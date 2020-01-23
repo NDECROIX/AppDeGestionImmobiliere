@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.view.holders;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -10,12 +9,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.textfield.TextInputEditText;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.utils.Utils;
 import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
 import java.text.DecimalFormat;
@@ -88,11 +85,9 @@ public class EditActivityViewHolder {
     public TextView tvAgent;
 
     public Property property;
-    private Context context;
 
     public EditActivityViewHolder(Activity source) {
         property = new Property();
-        this.context = source;
         ButterKnife.bind(this, source);
     }
 
@@ -163,8 +158,6 @@ public class EditActivityViewHolder {
         if (agent != null) {
             property.setAgentID(agent.getId());
         }
-
-        getLatLng();
 
         callback.property(property);
         return true;
@@ -381,18 +374,5 @@ public class EditActivityViewHolder {
             return false;
         }
         return true;
-    }
-
-    private void getLatLng() {
-        if (Utils.isInternetAvailable(context)) {
-            String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
-                    property.getStreetName(), property.getCity(), property.getCountry(),
-                    property.getZip());
-            LatLng latLng = Utils.getLocationFromAddress(context, address);
-            if (latLng != null) {
-                property.setLatitude(latLng.latitude);
-                property.setLongitude(latLng.longitude);
-            }
-        }
     }
 }

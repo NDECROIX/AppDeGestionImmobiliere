@@ -46,6 +46,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -223,7 +224,6 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
             propertyViewModel.getAgent(property.getAgentID()).observe(getViewLifecycleOwner(), agent ->
                     this.agent.setText(String.format("%s %s", agent.getFirstName(), agent.getLastName())));
         }
-        if (mMap != null) getPictureAddress();
     }
 
     private void getPropertyFromDatabase() {
@@ -263,24 +263,23 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback, Deta
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getPictureAddress();
+        propertyViewModel.getCurrentProperty().observe(getViewLifecycleOwner(), this::getPictureAddress);
     }
 
-    private void getPictureAddress() {
-        Property property = propertyViewModel.getCurrentProperty().getValue();
-        if (property == null) return;
+    private void getPictureAddress(Property property) {
         if (property.getLatitude() == null || property.getLatitude() == 0 && Utils.isInternetAvailable(context)) {
             String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
                     property.getStreetName(), property.getCity(), property.getCountry(),
                     property.getZip());
-            LatLng latLng = Utils.getLocationFromAddress(context, address);
-            if (latLng != null) {
-                property.setLatitude(latLng.latitude);
-                property.setLongitude(latLng.longitude);
-                propertyViewModel.updateProperty(property);
-            } else {
-                return;
-            }
+            Executors.newSingleThreadExecutor().execute(() -> {
+                LatLng latLng = Utils.getLocationFromAddress(context, address);
+                if (latLng != null) {
+                    property.setLatitude(latLng.latitude);
+                    property.setLongitude(latLng.longitude);
+                    propertyViewModel.updateProperty(property);
+                }
+            });
+            return;
         }
         LatLng latLng = new LatLng(property.getLatitude(), property.getLongitude());
         mMap.clear();
