@@ -31,11 +31,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="@dimen/gutter"
             android:maxLines="1"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/gutter"
             android:text="@string/fragment_list_item_type"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toStartOf="@id/fragment_list_item_price"
             app:layout_constraintStart_toEndOf="@id/fragment_list_item_photo"
             app:layout_constraintTop_toTopOf="@id/fragment_list_item_photo" />
 
@@ -52,12 +52,12 @@
 
         <TextView
             android:id="@+id/fragment_list_item_price"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_dollar_24"
-            android:maxLines="1"
             android:ellipsize="end"
             android:gravity="end"
+            android:maxLines="1"
             android:text="@string/fragment_list_item_price"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/colorAccent"
