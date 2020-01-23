@@ -23,8 +23,6 @@ import com.openclassrooms.realestatemanager.injections.Injection;
 import com.openclassrooms.realestatemanager.injections.ViewModelFactory;
 import com.openclassrooms.realestatemanager.viewmodel.PropertyViewModel;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -76,7 +74,7 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (currentFragment == mapFragment){
+        if (currentFragment == mapFragment) {
             currentFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -124,7 +122,7 @@ public class MapsActivity extends BaseActivity implements GoogleMap.OnMarkerClic
             currentFragment = mapFragment;
             getSupportFragmentManager().popBackStack();
             return;
-        } else if (frameLayoutDetail != null && frameLayoutDetail.getVisibility() == View.VISIBLE){
+        } else if (frameLayoutDetail != null && frameLayoutDetail.getVisibility() == View.VISIBLE) {
             frameLayoutDetail.setVisibility(View.GONE);
             return;
         }

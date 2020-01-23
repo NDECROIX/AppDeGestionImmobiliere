@@ -144,6 +144,40 @@ public class EditActivityViewHolder {
      * @return That's true if it's all right
      */
     public boolean champNotEmpty(CheckFieldsListener callback, int items, Agent agent, String type, String borough) {
+        // Check price - rooms - description - surface
+        if (!checkBase(callback, type)) return false;
+
+        // Check if we have at least one photo
+        if (items == 0) {
+            callback.error("You need at least one photo");
+            return false;
+        }
+
+        // Check the address
+        if (!checkAddress(callback, borough)) return false;
+
+        // Check dates
+        if (!checkDates(callback)) return false;
+
+        // Check agent
+        if (agent != null) {
+            property.setAgentID(agent.getId());
+        }
+
+        getLatLng();
+
+        callback.property(property);
+        return true;
+    }
+
+    /**
+     * Check price - rooms - description - surface
+     *
+     * @param callback return message
+     * @param type     property type
+     * @return true if all ok
+     */
+    private boolean checkBase(CheckFieldsListener callback, String type) {
         // Check than at least one type is selected.
         if (type == null) {
             callback.error("Please add a type");
@@ -225,12 +259,17 @@ public class EditActivityViewHolder {
             property.setDescription(tieDescription.getText().toString());
         }
 
-        // Check if we have at least one photo
-        if (items == 0) {
-            callback.error("You need at least one photo");
-            return false;
-        }
+        return true;
+    }
 
+    /**
+     * Check the address
+     *
+     * @param callback Return error message
+     * @param borough  Property borough
+     * @return True if all ok
+     */
+    private boolean checkAddress(CheckFieldsListener callback, String borough) {
         // Check street number
         if (tieStreetNumber.getText() == null || tieStreetNumber.getText().toString().isEmpty()) {
             callback.error("Please add a street number");
@@ -294,6 +333,16 @@ public class EditActivityViewHolder {
             property.setBorough(borough);
         }
 
+        return true;
+    }
+
+    /**
+     * Check dates
+     *
+     * @param callback Return error message
+     * @return True if all ok
+     */
+    private boolean checkDates(CheckFieldsListener callback) {
         // Check entry date
         if (tieEntryDate.getText() == null || tieEntryDate.getText().toString().isEmpty()) {
             callback.error("Please choose a date");
@@ -331,13 +380,11 @@ public class EditActivityViewHolder {
             callback.error("Error between dates");
             return false;
         }
+        return true;
+    }
 
-        // Check agent
-        if (agent != null) {
-            property.setAgentID(agent.getId());
-        }
-
-        if (Utils.isInternetAvailable(context)){
+    private void getLatLng() {
+        if (Utils.isInternetAvailable(context)) {
             String address = String.format("%s %s, %s, %s, %s", property.getStreetNumber(),
                     property.getStreetName(), property.getCity(), property.getCountry(),
                     property.getZip());
@@ -347,7 +394,5 @@ public class EditActivityViewHolder {
                 property.setLongitude(latLng.longitude);
             }
         }
-        callback.property(property);
-        return true;
     }
 }

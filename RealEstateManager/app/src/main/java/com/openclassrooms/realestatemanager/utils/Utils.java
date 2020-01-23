@@ -24,6 +24,7 @@ import java.util.Locale;
 /**
  * Useful function
  */
+@SuppressWarnings("SameParameterValue")
 public class Utils {
 
     /**
@@ -32,7 +33,7 @@ public class Utils {
      * @param dollars value in dollars to be converted into euros
      * @return euros
      */
-    public static int convertDollarToEuro(int dollars) {
+    static int convertDollarToEuro(int dollars) {
         return (int) Math.round(dollars * 0.812);
     }
 
@@ -42,7 +43,7 @@ public class Utils {
      * @param euros value in euros to be converted into dollars
      * @return dollars
      */
-    public static int convertEuroToDollar(int euros) {
+    static int convertEuroToDollar(int euros) {
         return (int) Math.round(euros / 0.812);
     }
 
@@ -51,7 +52,7 @@ public class Utils {
      *
      * @return date into dd/MM/yyyy format
      */
-    public static String getTodayDate() {
+    static String getTodayDate() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return dateFormat.format(new Date());
     }

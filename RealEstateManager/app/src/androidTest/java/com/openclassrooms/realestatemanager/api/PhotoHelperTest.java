@@ -2,12 +2,10 @@ package com.openclassrooms.realestatemanager.api;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
-import com.openclassrooms.realestatemanager.model.Agent;
 import com.openclassrooms.realestatemanager.model.Photo;
 
 import org.junit.After;

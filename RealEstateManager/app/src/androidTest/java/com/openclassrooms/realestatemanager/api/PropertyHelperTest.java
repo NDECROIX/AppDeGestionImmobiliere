@@ -8,7 +8,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.openclassrooms.realestatemanager.controllers.activities.MainActivity;
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.utils.Utils;
 
 import org.junit.After;
 import org.junit.Before;

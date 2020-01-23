@@ -40,7 +40,9 @@ public class Type {
         return new Type[]{
                 new Type("Apartment"),
                 new Type("House"),
+                new Type("Manor"),
                 new Type("Penthouse"),
+                new Type("Loft"),
                 new Type("Duplex"),
                 new Type("HOA"),
                 new Type("COA")

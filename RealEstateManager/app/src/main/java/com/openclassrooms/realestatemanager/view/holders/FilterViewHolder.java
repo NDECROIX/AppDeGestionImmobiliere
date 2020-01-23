@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,7 +118,7 @@ public class FilterViewHolder {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieSaleDateFrom.getText().toString());
-                filter.setSaleDateFrom(date.getTime());
+                filter.setSaleDateFrom(Objects.requireNonNull(date).getTime());
             } catch (ParseException p) {
                 errorCallback.filterError("Error on the sale idCalendar from");
                 return false;
@@ -129,7 +130,7 @@ public class FilterViewHolder {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieSaleDateTo.getText().toString());
-                filter.setSaleDateTo(date.getTime());
+                filter.setSaleDateTo(Objects.requireNonNull(date).getTime());
             } catch (ParseException p) {
                 errorCallback.filterError("Error on the sale idCalendar to");
                 return false;
@@ -141,7 +142,7 @@ public class FilterViewHolder {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieEntryDateFrom.getText().toString());
-                filter.setEntryDateFrom(date.getTime());
+                filter.setEntryDateFrom(Objects.requireNonNull(date).getTime());
             } catch (ParseException p) {
                 errorCallback.filterError("Error on the entry idCalendar from");
                 return false;
@@ -153,7 +154,7 @@ public class FilterViewHolder {
             try {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
                 Date date = simpleDateFormat.parse(tieEntryDateTo.getText().toString());
-                filter.setEntryDateTo(date.getTime());
+                filter.setEntryDateTo(Objects.requireNonNull(date).getTime());
             } catch (ParseException p) {
                 errorCallback.filterError("Error on the entry idCalendar from");
                 return false;

@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.test.annotation.UiThreadTest;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.idling.CountingIdlingResource;
-import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
@@ -27,16 +26,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Collections;
-import java.util.List;
-
 import static androidx.test.espresso.Espresso.onIdle;
 import static com.openclassrooms.realestatemanager.database.dao.AgentDaoTest.createTestAgent;
 import static com.openclassrooms.realestatemanager.database.dao.PhotoDaoTest.createPhoto;
 import static com.openclassrooms.realestatemanager.database.dao.PhotoDaoTest.createProperty;
 import static com.openclassrooms.realestatemanager.database.dao.PoiNextPropertyDaoTest.createPoiNextProperty;
 import static com.openclassrooms.realestatemanager.database.dao.PropertyDaoTest.createTestProperty;
-import static junit.framework.Assert.fail;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -86,8 +81,8 @@ public class PropertyViewModelTest {
     @UiThreadTest
     public void setGetCurrentProperty() {
         Property property = createTestProperty();
-        this.viewModel.setCurrentProperty(property);
-        Property propertyResult = this.viewModel.getCurrentProperty(rule.getActivity()).getValue();
+        this.viewModel.setCurrentProperty(property, rule.getActivity());
+        Property propertyResult = this.viewModel.getCurrentProperty().getValue();
         assertEquals(property, propertyResult);
     }
 
