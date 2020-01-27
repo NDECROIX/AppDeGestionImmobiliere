@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.openclassrooms.realestatemanager">
+    package="com.openclassrooms.nycrealestatemanager">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:required="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,7 +16,7 @@
         android:required="false" />
 
     <application
-        android:name=".RealEstateManager"
+        android:name="com.openclassrooms.nycrealestatemanager.RealEstateManager"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -27,35 +24,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".controllers.activities.MapsActivity"
+            android:name="com.openclassrooms.nycrealestatemanager.controllers.activities.MapsActivity"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.openclassrooms.realestatemanager.controllers.activities.MainActivity" />
+                android:value="com.openclassrooms.nycrealestatemanager.controllers.activities.MainActivity" />
         </activity>
-        <activity
-            android:name=".controllers.activities.AgentActivity">
+        <activity android:name="com.openclassrooms.nycrealestatemanager.controllers.activities.AgentActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.openclassrooms.realestatemanager.controllers.activities.MainActivity" />
+                android:value="com.openclassrooms.nycrealestatemanager.controllers.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".controllers.activities.EditActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan"
-            android:configChanges="orientation|screenSize">
+            android:name="com.openclassrooms.nycrealestatemanager.controllers.activities.ManagePropertyActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateVisible|adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.openclassrooms.realestatemanager.controllers.activities.MainActivity" />
+                android:value="com.openclassrooms.nycrealestatemanager.controllers.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".controllers.activities.SettingsActivity"
+            android:name="com.openclassrooms.nycrealestatemanager.controllers.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".controllers.activities.MainActivity">
+            android:parentActivityName="com.openclassrooms.nycrealestatemanager.controllers.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.openclassrooms.realestatemanager.controllers.activities.MainActivity" />
+                android:value="com.openclassrooms.nycrealestatemanager.controllers.activities.MainActivity" />
         </activity>
-        <activity android:name=".controllers.activities.MainActivity">
+        <activity android:name="com.openclassrooms.nycrealestatemanager.controllers.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -65,28 +61,29 @@
         </activity>
 
         <provider
-            android:name=".provider.PropertyContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.PropertyContentProvider"
+            android:name="com.openclassrooms.nycrealestatemanager.provider.PropertyContentProvider"
+            android:authorities="com.openclassrooms.nycrealestatemanager.PropertyContentProvider"
             android:exported="false" />
         <provider
-            android:name=".provider.PoiNextPropertyContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.PoiNextPropertyContentProvider"
+            android:name="com.openclassrooms.nycrealestatemanager.provider.PoiNextPropertyContentProvider"
+            android:authorities="com.openclassrooms.nycrealestatemanager.PoiNextPropertyContentProvider"
             android:exported="false" />
         <provider
-            android:name=".provider.PhotoContentProvider"
-            android:authorities="com.openclassrooms.realestatemanager.PhotoContentProvider"
+            android:name="com.openclassrooms.nycrealestatemanager.provider.PhotoContentProvider"
+            android:authorities="com.openclassrooms.nycrealestatemanager.PhotoContentProvider"
             android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.openclassrooms.realestatemanager.fileprovider"
+            android:authorities="com.openclassrooms.nycrealestatemanager.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <service
-            android:name=".notification.NotificationService"
+            android:name="com.openclassrooms.nycrealestatemanager.notification.NotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -99,6 +96,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

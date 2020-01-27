@@ -8,6 +8,46 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:197340937957:android:d0949e1234238afd3fde0c",
+        "android_client_info": {
+          "package_name": "com.openclassrooms.nycrealestatemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197340937957-2svm9ibfvl1h153gsevkpfif8g4ftql4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.openclassrooms.nycrealestatemanager",
+            "certificate_hash": "dd70a17f046e9de33609c5847bb13edcac12ffc3"
+          }
+        },
+        {
+          "client_id": "197340937957-8e4ir8q4p42ntr9hhivjgdprit5h97e1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyyHL3Gey1r02zb9JNsNDzi-Qdm-fWC94"
+        },
+        {
+          "current_key": "AIzaSyAomAoE-lELKIkXS9nbTBfvzAKX5XAKtYc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197340937957-8e4ir8q4p42ntr9hhivjgdprit5h97e1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:197340937957:android:265de25e56da0dfa3fde0c",
         "android_client_info": {
           "package_name": "com.openclassrooms.realestatemanager"
@@ -28,6 +68,9 @@
         }
       ],
       "api_key": [
+        {
+          "current_key": "AIzaSyAyyHL3Gey1r02zb9JNsNDzi-Qdm-fWC94"
+        },
         {
           "current_key": "AIzaSyAomAoE-lELKIkXS9nbTBfvzAKX5XAKtYc"
         }

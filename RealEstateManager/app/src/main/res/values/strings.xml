@@ -106,7 +106,7 @@
     <string name="fragment_list_item_bedroom">4</string>
     <string name="fragment_list_item_home">8</string>
     <string name="fragment_list_item_surface">750</string>
-    <string name="activity_edit_authority_uri">com.openclassrooms.realestatemanager.fileprovider</string>
+    <string name="activity_edit_authority_uri">com.openclassrooms.nycrealestatemanager.fileprovider</string>
     <string name="notification_service_new_agent_topic_name">newAgent</string>
     <string name="notification_service_new_agent_title">New agent</string>
     <string name="notification_service_new_agent_first_name_key">firstName</string>
