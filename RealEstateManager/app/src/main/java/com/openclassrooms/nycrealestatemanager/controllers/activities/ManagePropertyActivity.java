@@ -42,7 +42,7 @@ import com.openclassrooms.nycrealestatemanager.model.Property;
 import com.openclassrooms.nycrealestatemanager.model.Type;
 import com.openclassrooms.nycrealestatemanager.utils.UtilsPhoto;
 import com.openclassrooms.nycrealestatemanager.view.adapters.EditActivityPhotoRecyclerViewAdapter;
-import com.openclassrooms.nycrealestatemanager.view.holders.EditActivityViewHolder;
+import com.openclassrooms.nycrealestatemanager.view.holders.ManagePropertyActivityViewHolder;
 import com.openclassrooms.nycrealestatemanager.viewmodel.PropertyViewModel;
 
 import java.io.File;
@@ -60,7 +60,7 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.openclassrooms.nycrealestatemanager.notification.NotificationHelper.displayNotification;
 
-public class ManagePropertyActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, EditActivityPhotoRecyclerViewAdapter.OnClickPhotoListener, EditActivityViewHolder.CheckFieldsListener {
+public class ManagePropertyActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, EditActivityPhotoRecyclerViewAdapter.OnClickPhotoListener, ManagePropertyActivityViewHolder.CheckFieldsListener {
 
     /**
      * Callback that allows a fragment to start this fragment by its activity
@@ -87,7 +87,7 @@ public class ManagePropertyActivity extends BaseActivity implements DatePickerDi
     }
 
     // Views
-    private EditActivityViewHolder viewHolder;
+    private ManagePropertyActivityViewHolder viewHolder;
 
     // View Model
     private PropertyViewModel propertyViewModel;
@@ -121,7 +121,7 @@ public class ManagePropertyActivity extends BaseActivity implements DatePickerDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        viewHolder = new EditActivityViewHolder(this);
+        viewHolder = new ManagePropertyActivityViewHolder(this);
         ButterKnife.bind(this);
         getExtras();
         pois = new ArrayList<>();
