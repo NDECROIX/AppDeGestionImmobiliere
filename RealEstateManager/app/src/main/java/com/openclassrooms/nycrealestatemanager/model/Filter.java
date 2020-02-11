@@ -58,16 +58,16 @@ public class Filter implements Parcelable {
                 return false;
             }
         }
-        if (entryDateFrom != 0 && property.getEntryDate() < entryDateFrom) {
+        if (entryDateFrom != 0 && property.getEntryDate() <= entryDateFrom) {
             return false;
         }
-        if (entryDateFrom != 0 && property.getEntryDate() > entryDateTo) {
+        if (entryDateTo != 0 && property.getEntryDate() >= entryDateTo) {
             return false;
         }
-        if (saleDateFrom != 0 && property.getSaleDate() < saleDateFrom) {
+        if (saleDateFrom != 0 && property.getSaleDate() <= saleDateFrom) {
             return false;
         }
-        if (saleDateTo != 0 && property.getSaleDate() > saleDateTo) {
+        if (saleDateTo != 0 && property.getSaleDate() >= saleDateTo) {
             return false;
         }
         if (type != null && !type.isEmpty() && !property.getType().equals(type)) {
